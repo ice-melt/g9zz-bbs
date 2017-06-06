@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+$this->post('register', 'Auth\MyRegisterController@store')->name('register.store');
+$this->post('login', 'Auth\MyLoginController@login');
+
+Route::get('auth/{service}', 'Auth\MyLoginController@redirectToProvider');
+Route::get('auth/{service}/callback', 'Auth\MyLoginController@handleProviderCallback');

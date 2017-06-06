@@ -12,13 +12,30 @@
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
-$factory->define(App\User::class, function (Faker\Generator $faker) {
+$a = $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
+    $faker = \Faker\Factory::create('zh_CN');
     static $password;
-
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
-        'remember_token' => str_random(10),
+        'hid' => '',
+        'avatar' => ''
     ];
 });
+
+$factory->define(\App\Models\Nodes::class,function(){
+    $faker = \Faker\Factory::create('zh_CN');
+    return [
+        'hid' => '',
+        'parent_hid' => 0,
+        'weight' => 0,
+        'level' => 0,
+        'name' => 'default-node',
+        'display_name' => "默认节点",
+        'description' => "这是默认节点,创建时自动创建",
+    ];
+});
+
+
+

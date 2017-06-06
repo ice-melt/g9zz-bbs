@@ -12,7 +12,31 @@ use Bosnadev\Repositories\Contracts\RepositoryInterface as Repository;
 
 interface BaseRepositoryInterface extends Repository
 {
-    public function find($hid, $columns = array('*'));
-    public function update(array $data, $hid);
-    public function delete($hid);
+
+    /**
+     * @param $id
+     * @param array $columns
+     * @return mixed
+     */
+    public function find($id, $columns = array('*'));
+
+    /**
+     * @param $hid
+     * @return mixed
+     */
+    public function hidFind($hid);
+
+    /**
+     * @param array $data
+     * @param $hid
+     * @param string $attribute
+     * @return mixed
+     */
+    public function hidUpdate(array $data, $hid, $attribute = "hid");
+
+    /**
+     * @param $hid
+     * @return mixed
+     */
+    public function hidDelete($hid);
 }

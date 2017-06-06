@@ -20,6 +20,10 @@ class Handler extends ExceptionHandler
         \Illuminate\Database\Eloquent\ModelNotFoundException::class,
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
+        ValidatorException::class,
+        DataNullException::class,
+        CodeException::class,
+        TryException::class,
     ];
 
     /**
@@ -40,10 +44,36 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof ValidatorException) {
+            $code = $exception->getCode();
+            if ($code == 0) $code = 400000000;
+            $content = config('message.'.$code);
+            return \Response::json(['message' => $content,'code' => $code,'data' => (object)null],200);
+        }
+
+        if ($exception instanceof DataNullException) {
+            $code = $exception->getCode();
+            if ($code == 0) $code = 400000001;
+            $content = config('message.'.$code);
+            return \Response::json(['message' => $content,'code' => $code,'data' => (object)null],200);
+        }
+
+        if ($exception instanceof CodeException) {
+            $code = $exception->getCode();
+            $content = config('message.'.$code);
+            return \Response::json(['message' => $content,'code' => $code,'data' => (object)null],200);
+        }
+
+        if ($exception instanceof TryException) {
+            $codeMessage = $exception->getMessage();
+            $content = config('message.400000002');
+            return \Response::json(['message' => $content,'code' => 400000002,'code_message' => $codeMessage,'data' => (object)null],200);
+        }
+
         return parent::render($request, $exception);
     }
 

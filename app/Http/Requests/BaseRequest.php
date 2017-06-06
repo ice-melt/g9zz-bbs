@@ -29,18 +29,7 @@ abstract class BaseRequest extends FormRequest
             //
         ];
     }
-//    /**
-//     * 解密hid
-//     * @param $hid
-//     * @param $connection
-//     * @return mixed
-//     */
-//    public function changeHidToId($hid,$connection)
-//    {
-//        $result = Hashids::connection($connection)->decode($hid);
-//        if (empty($result)) throw new DataNullException();
-//        return $result[0];
-//    }
+
     /**
      * 重写message，验证信息自定义
      * @return array|mixed
