@@ -175,4 +175,13 @@ class UserService extends BaseService
     {
         return $this->userRepository->findUserByGithubId($githubId);
     }
+
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    public function findUserByToken($userId)
+    {
+        return $this->userRepository->first($userId);
+    }
 }

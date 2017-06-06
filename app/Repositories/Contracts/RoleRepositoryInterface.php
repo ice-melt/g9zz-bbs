@@ -39,5 +39,10 @@ interface RoleRepositoryInterface extends BaseRepositoryInterface
      */
     public function syncRelationship($permissions,$id);
 
-
+    /**
+     * 通过角色获取权限列表
+     * @param $roleId
+     * @return mixed
+     */
+    public function getPermissionsByRoleId($roleId);
 }

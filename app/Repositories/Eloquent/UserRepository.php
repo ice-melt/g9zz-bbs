@@ -94,4 +94,19 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         }
     }
 
+    /**
+     * 根据userId 获取user
+     * @param $userId
+     * @return mixed
+     */
+    public function first($userId)
+    {
+        return $this->model->whereId($userId)->first();
+    }
+
+    public function getRoleByUserId($authId)
+    {
+        return $this->model->find($authId)->role()->first();
+    }
+
 }

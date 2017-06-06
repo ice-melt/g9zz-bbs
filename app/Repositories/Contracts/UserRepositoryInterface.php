@@ -34,4 +34,17 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      */
     public function syncRelationship($role,$id);
 
+    /**
+     * 根据userId 获取user
+     * @param $userId
+     * @return mixed
+     */
+    public function first($userId);
+
+    /**
+     * 通过id获取其对应的角色
+     * @param $authId
+     * @return mixed
+     */
+    public function getRoleByUserId($authId);
 }

@@ -10,6 +10,7 @@ return [
     'default' => [
         'some.error' => 400000000,
         'data.null' => 400000001,
+        'need.login' => 400000002,
     ],
     'post' => [
         'title.required' =>  401000000,
@@ -61,6 +62,7 @@ return [
         'displayName.required' => 407000002,
         'displayName.unique' => 407000003,
         'description.max' => 407000004,
+        'permission.forbidden' => 407000005,
     ],
     'role' => [
         'name.required' => 408000000,

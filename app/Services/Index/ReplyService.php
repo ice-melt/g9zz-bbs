@@ -40,7 +40,7 @@ class ReplyService extends BaseService
     {
         $create = [
             'post_hid' => $request->get('postHid'),
-            'user_hid' => "p983GK32LY",//TODO::修改为登录者的id
+            'user_hid' => $request->get('g9zz_user_hid'),
             'body_original' => $request->get('content'),
         ];
 

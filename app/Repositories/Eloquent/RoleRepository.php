@@ -91,4 +91,13 @@ class RoleRepository extends BaseRepository implements RoleRepositoryInterface
         return true;
     }
 
+    /**
+     * 通过角色获取对应权限列表
+     * @param $roleId
+     * @return mixed
+     */
+    public function getPermissionsByRoleId($roleId)
+    {
+        return $this->model->find($roleId)->permission()->get(['name']);
+    }
 }

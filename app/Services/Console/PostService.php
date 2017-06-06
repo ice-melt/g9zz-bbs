@@ -103,7 +103,7 @@ class PostService extends BaseService
         ];
         if (!empty($request->get('isTop'))) $create['is_top'] = $request->get('isTop')== 'yes' ? 'yes' :'no';
 
-        $create['user_hid'] = 'p983GK32LY';//TODO::需要修改
+        $create['user_hid'] = $request->get('g9zz_user_hid');
         $parser = new Parser();
         $create['content'] = $parser->makeHtml($create['body_original']);
         $this->log('service.request to '.__METHOD__,['create' => $create]);
@@ -144,7 +144,6 @@ class PostService extends BaseService
      */
     public function hidUpdate($request,$hid)
     {
-//        $id = parent::changeHidToId($hid,'post');
         $update = [
             'title' => $request->get('title'),
             'body_original' => $request->get('content')
@@ -155,9 +154,10 @@ class PostService extends BaseService
         try {
             \DB::beginTransaction();
             $result = $this->postRepository->hidUpdate($update,$hid);
-//            $nodeId = Hashids::connection('node')->decode($request->get('nodeHid'));//TODO::帖子相关节点
-//            $this->log('"service.error" to listener "' . __METHOD__ . '".', ['nodeId' => $nodeId]);
-//            $this->postRepository->updateAttachNode($id,$nodeId[0]);
+            $nodeId = Hashids::connection('node')->decode($request->get('nodeHid'));
+            $this->log('"service.error" to listener "' . __METHOD__ . '".', ['nodeId' => $nodeId]);
+            $result->node_hid = $nodeId[0];
+            $result->save();
             \DB::commit();
         } catch (\Exception $e) {
             $this->log('"service.error" to listener "' . __METHOD__ . '".', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()]);

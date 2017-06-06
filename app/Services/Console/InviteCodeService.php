@@ -12,14 +12,18 @@ namespace App\Services\Console;
 
 use App\Repositories\Contracts\InviteCodeRepositoryInterface;
 use App\Services\BaseService;
+use Illuminate\Http\Request;
 use Vinkla\Hashids\Facades\Hashids;
 
 class InviteCodeService extends BaseService
 {
     protected $inviteCodeRepository;
-    public function __construct(InviteCodeRepositoryInterface $inviteCodeRepository)
+    protected $request;
+    public function __construct(InviteCodeRepositoryInterface $inviteCodeRepository,
+                                Request $request)
     {
         $this->inviteCodeRepository = $inviteCodeRepository;
+        $this->request = $request;
     }
 
     /**
@@ -43,11 +47,11 @@ class InviteCodeService extends BaseService
     }
 
     /**
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse|mixed
      */
     public function store()
     {
-        $authHid = "p983GK32LY";//TODO::修改成登录这个人的ID
+        $authHid = $this->request->get('g9zz_user_hid');
         $maxNum = config('g9zz.invite_code.max_num');
         $hasNum = $this->inviteCodeRepository->getNumByAuthHid($authHid);//return int
         if ($hasNum >= $maxNum) {
@@ -71,7 +75,7 @@ class InviteCodeService extends BaseService
      */
     public function getOwnCode()
     {
-        $authHid = 'p983GK32LY';//TODO::修改为登录者HID
+        $authHid = $this->request->get('g9zz_user_hid');
         return $this->inviteCodeRepository->getAllCodeByInviterHid($authHid);
     }
 

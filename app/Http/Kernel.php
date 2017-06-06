@@ -2,7 +2,9 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\G9zz;
 use App\Http\Middleware\IdDecode;
+use App\Http\Middleware\Permission;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -58,5 +60,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'idDecode' => IdDecode::class,
+        'g9zz' => G9zz::class,
+        'permission' => Permission::class,
     ];
 }

@@ -48,8 +48,7 @@ class AppendService extends BaseService
         $parse = new Parser();
         $create['content'] = $parse->makeHtml($content);
 
-//        $authId = $request->get('g9zz_user_hid');//TODO::登录者的ID
-        $authId = "p983GK32LY";
+        $authId = $request->get('g9zz_user_hid');
         $postHid = $request->get('postHid');
         //检查是否 是作者自己
         $post = $this->postRepository->hidFind($postHid);

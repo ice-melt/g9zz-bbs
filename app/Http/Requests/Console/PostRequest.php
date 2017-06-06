@@ -16,7 +16,7 @@ class PostRequest extends BaseRequest
         $rule = [
             'title' => 'required|max:150',
             'content' => 'required',
-//            'nodeHid' => 'required|exists:nodes,hid'//TODO::去掉注释
+            'nodeHid' => 'required|exists:nodes,hid'
         ];
         return $rule;
     }
