@@ -94,3 +94,13 @@ function hide_star($str)
 function testTest() {
     echo '测试函数';
 }
+
+/**
+ * 是否是本地环境
+ *
+ * @return string
+ */
+function is_local()
+{
+    return \App::environment('local');
+}

@@ -61,4 +61,11 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function getReplyByUser($userHid);
+
+    /**
+     * 通过ID获取用户
+     * @param $id
+     * @return mixed
+     */
+    public function getUserById($id);
 }

@@ -28,6 +28,11 @@ Route::group(['middleware' => ['g9zz','permission']],function(){
 
         Route::get('/{userId}/post','Console\UserController@getPostByUser')->name('console.all.post.by.user');
         Route::get('/{userId}/reply','Console\UserController@getReplyByUser')->name('console.all.reply.by.user');
+
+        //点击获取 验证链接
+        Route::get('/verify','Auth\MyLoginController@getVerifyToken')->name('console.user.get.verify.token');
+
+
     });
 
     Route::group(['prefix' => 'post'],function() {

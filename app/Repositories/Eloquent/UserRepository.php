@@ -148,4 +148,12 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return $this->replyRepository->models()->whereUserHid($userHid);
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getUserById($id)
+    {
+        return $this->model->whereId($id)->first();
+    }
 }

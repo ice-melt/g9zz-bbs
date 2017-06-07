@@ -61,6 +61,57 @@ class MyLoginController extends Controller
 
     /**
      * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getVerifyToken(Request $request)
+    {
+        $authId = $request->get('g9zz_user_id');
+        $user = $this->userService->getUserById($authId);
+        if ($user->verified) {
+            $this->setCode(config('validation.login')['had.verified']);
+            return $this->response();
+        }
+        $result = $this->userService->verifyEmail($user->email,$user->name,$user->id);
+        return $this->response();
+    }
+
+    /**
+     * 点击邮箱里校验链接进行校验
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function verify(Request $request)
+    {
+        $token = $request->get('token');
+        $message = Hashids::connection('code')->decode($token);
+        //返回的code不对..校验失败
+        if (empty($message)) return $this->returnError();
+
+        //返回的code类型不对,校验失败
+        if ($message[2] != 3) return $this->returnError();
+
+        //超时,校验失败
+        $now = time();
+        $validTime = config('g9zz.verify.valid_time');
+        if ($now - $message[1] > $validTime) return $this->returnError();
+
+        //查无此人,校验失败
+        $user = $this->userService->getUserById($message[0]);
+        if (empty($user)) return $this->returnError();
+
+        $result = $this->userService->updateVerify($message[0]);
+
+        $this->response();
+    }
+
+    public function returnError()
+    {
+        $this->setCode(config('validation.login')['verify.failed']);
+        return $this->response();
+    }
+
+    /**
+     * @param Request $request
      * @param $service
      * @return mixed
      */
@@ -96,6 +147,11 @@ class MyLoginController extends Controller
 
     }
 
+    /**
+     * 用github登录
+     * @param $user
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function loginByGithub($user)
     {
         $isGithub = $this->userService->checkIsGithub($user->id);

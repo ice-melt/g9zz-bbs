@@ -104,5 +104,7 @@ return [
         'password.string' => 412000001,
         'login.error' => 412000000,
         'loginWay.error' =>  412000002,
+        'verify.failed' => 412000003,
+        'had.verified' => 412000004,
     ],
 ];

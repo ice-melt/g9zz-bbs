@@ -15,11 +15,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/test','TestController@index');
+
+
 $this->post('register', 'Auth\MyRegisterController@store')->name('register.store');
 $this->post('login', 'Auth\MyLoginController@login');
 
 Route::get('auth/{service}', 'Auth\MyLoginController@redirectToProvider');
 Route::get('auth/{service}/callback', 'Auth\MyLoginController@handleProviderCallback');
+
+//激活账号
+Route::get('/verify','Auth\MyLoginController@verify')->name('index.auth.login.verify.account');
+
 
 Route::group([],function(){
     Route::group(['prefix' => 'user','middleware' => 'idDecode'],function(){
@@ -27,6 +34,7 @@ Route::group([],function(){
 //        Route::post('/{userId}/role/{roleId}','Console\UserController@attachRole')->name('console.user.attach.role');
         Route::get('/{userId}/post','Console\UserController@getPostByUser')->name('index.all.post.by.user');
         Route::get('/{userId}/reply','Console\UserController@getReplyByUser')->name('index.all.reply.by.user');
+
 
     });
 

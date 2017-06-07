@@ -10,6 +10,7 @@
 namespace App\Services\Auth;
 
 use App\Exceptions\TryException;
+use App\Jobs\SendMail;
 use App\Repositories\Contracts\GithubUserRepositoryInterface;
 use App\Repositories\Contracts\InviteCodeRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
@@ -49,10 +50,8 @@ class UserService extends BaseService
         try {
             \DB::beginTransaction();
             $user = $this->userRepository->create($create);
-            $update['hid'] = Hashids::connection('user')->encode($user->id);
-            $this->log('service.request to '.__METHOD__,['user_update' => $update]);
-            $this->userRepository->update($update,$user->id);
-
+            $user->hid = Hashids::connection('user')->encode($user->id);
+            $user->save();
             if ($this->isInvite) {
                 $inviteCode = $this->inviteCodeRepository->getInviteCodeByCode($other['invite_code']);
                 if (empty($inviteCode)) {
@@ -68,14 +67,52 @@ class UserService extends BaseService
                 $this->inviteCodeRepository->update($inviteCodeUpdate,$inviteCode->id);
             }
 
-            $result = $this->userRepository->find($user->id);
+            $this->verifyEmail($create['email'],$create['name'],$user->id);
+
             \DB::commit();
         } catch (\Exception $e) {
             $this->log('"service.error" to listener "' . __METHOD__ . '".', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()]);
             \DB::rollBack();
             throw new TryException(json_encode($e->getMessage()),(int)$e->getCode());
         }
-        return $result;
+        return $user;
+    }
+
+    /**
+     * @param $email
+     * @param $name
+     * @param $id
+     * @return bool
+     */
+    public function verifyEmail($email,$name,$id)
+    {
+        $message = [$id,time(),3];
+        $param = Hashids::connection('code')->encode($message);
+        dispatch(new SendMail('verify_account',
+//            is_local() ? 'g9zz@g9zz.com' : $email,//TODO::修改正式的
+                'g9zz@g9zz.com',
+            "邮箱激活",
+            $name,
+            'http://www.g9zz-bbs.dev/verify?token='.$param));
+        return true;
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getUserById($id)
+    {
+        return $this->userRepository->getUserById($id);
+    }
+
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    public function updateVerify($userId)
+    {
+        return $this->userRepository->update(['verified' => 'true'],$userId);
     }
 
     /**
@@ -150,7 +187,8 @@ class UserService extends BaseService
                 'github_id' => $result->id,
                 'name' => empty($create['display_name']) ? $create['github_name'] : $create['display_name'],
                 'avatar' => $create['avatar'],
-                'register_source' => 'github'
+                'register_source' => 'github',
+                'verified' => 'true'
             ];
             $this->log('service.request to '.__METHOD__,['user_create' => $userCreate]);
             $userResult = $this->userRepository->create($userCreate);

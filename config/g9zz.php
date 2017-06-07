@@ -21,5 +21,8 @@ return [
     'token' => [
         'valid_time' => 12 * 60 * 60,  //秒数
         'login_way'  => ['github'],//'weixin','qq','weibo',''
+    ],
+    'verify' => [
+        'valid_time' => 24 * 60 * 60
     ]
 ];
