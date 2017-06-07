@@ -54,8 +54,11 @@ class Tags extends Model
         'weight',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function post()
     {
-        return $this->belongsToMany(Posts::class,'post_tag','tag_hid','post_hid');
+        return $this->belongsToMany(Posts::class,'post_tag','tag_id','post_id');
     }
 }

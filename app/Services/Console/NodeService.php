@@ -184,4 +184,13 @@ class NodeService extends BaseService
         }
         return true;
     }
+
+    /**
+     * @param $nodeHid
+     * @return mixed
+     */
+    public function getPost($nodeHid)
+    {
+        return $this->nodeRepository->getPost($nodeHid)->paginate(per_page());
+    }
 }

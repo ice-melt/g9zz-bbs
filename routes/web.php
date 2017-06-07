@@ -25,6 +25,9 @@ Route::group([],function(){
     Route::group(['prefix' => 'user','middleware' => 'idDecode'],function(){
 //        Route::get('/','Console\UserController@index')->name('console.user.index');
 //        Route::post('/{userId}/role/{roleId}','Console\UserController@attachRole')->name('console.user.attach.role');
+        Route::get('/{userId}/post','Console\UserController@getPostByUser')->name('index.all.post.by.user');
+        Route::get('/{userId}/reply','Console\UserController@getReplyByUser')->name('index.all.reply.by.user');
+
     });
 
     Route::group(['prefix' => 'post'],function() {
@@ -36,6 +39,9 @@ Route::group([],function(){
     Route::group(['prefix' => 'node'],function() {
         Route::get('/','Console\NodeController@index')->name('index.node.index');
         Route::get('/{hid}','Console\NodeController@show')->name('index.node.show');
+
+        Route::get('/{hid}/post','Console\NodeController@getPostByNode')->name('index.get.post.by.node');
+
     });
 
     Route::group(['prefix' => 'tag'],function() {

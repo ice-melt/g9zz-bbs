@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Console;
 
 use App\Services\Console\UserService;
+use App\Transformers\PostListTransformer;
+use App\Transformers\ReplyTransformer;
 use App\Transformers\UserTransformer;
 use App\Http\Controllers\Controller;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
@@ -42,4 +44,30 @@ class UserController extends Controller
         return $this->response();
     }
 
+
+    /**
+     * @param $userHid
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getPostByUser($userHid)
+    {
+        $result = $this->userService->getPostByUser($userHid);
+        $resource = new Collection($result,new PostListTransformer());
+        $resource->setPaginator(new IlluminatePaginatorAdapter($result));
+        $this->setData($resource);
+        return $this->response();
+    }
+
+    /**
+     * @param $userHid
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getReplyByUser($userHid)
+    {
+        $result = $this->userService->getReplyByUser($userHid);
+        $resource = new Collection($result,new ReplyTransformer());
+        $resource->setPaginator(new IlluminatePaginatorAdapter($result));
+        $this->setData($resource);
+        return $this->response();
+    }
 }

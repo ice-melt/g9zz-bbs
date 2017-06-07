@@ -61,4 +61,11 @@ abstract class BaseRepository extends Repository
         return $this->model->whereHid($hid)->delete();
     }
 
+    /**
+     * @return mixed
+     */
+    public function models()
+    {
+        return $this->model;
+    }
 }

@@ -6,6 +6,8 @@ use App\Http\Requests\Console\NodeRequest;
 use App\Services\Console\NodeService;
 use App\Transformers\NodeTransformer;
 use App\Http\Controllers\Controller;
+use App\Transformers\PostListTransformer;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 
@@ -77,5 +79,18 @@ class NodeController extends Controller
     {
         $result =  $this->nodeService->hidDelete($hid);
         if ($result) return $this->response();
+    }
+
+    /**
+     * @param $nodeHid
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getPostByNode($nodeHid)
+    {
+        $result = $this->nodeService->getPost($nodeHid);
+        $resource = new Collection($result,new PostListTransformer());
+        $resource->setPaginator(new IlluminatePaginatorAdapter($result));
+        $this->setData($resource);
+        return $this->response();
     }
 }

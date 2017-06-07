@@ -47,4 +47,18 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function getRoleByUserId($authId);
+
+    /**
+     * 通过用户的hid 获取其相关的帖子
+     * @param $userHid
+     * @return mixed
+     */
+    public function getPostByUser($userHid);
+
+    /**
+     * 通过用户的hid 获取其相关回复
+     * @param $userHid
+     * @return mixed
+     */
+    public function getReplyByUser($userHid);
 }

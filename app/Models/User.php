@@ -66,6 +66,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $deleted_at
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereDeletedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Roles[] $role
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Posts[] $post
  */
 class User extends Model
 {
@@ -100,5 +101,12 @@ class User extends Model
         return $this->belongsToMany(Roles::class,'role_user','user_id','role_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function post()
+    {
+        return $this->hasMany(Posts::class,'user_hid','hid');
+    }
 
 }

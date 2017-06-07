@@ -23,4 +23,11 @@ interface NodeRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function detachPostNode($hid);
+
+    /**
+     * 获取节点下所有帖子
+     * @param $nodeHid
+     * @return mixed
+     */
+    public function getPost($nodeHid);
 }

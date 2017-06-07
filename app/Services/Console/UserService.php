@@ -55,4 +55,21 @@ class UserService extends BaseService
         $this->userRepository->find($userId);
         return $this->userRepository->syncRelationship($roleId,$userId);
     }
+
+    /**
+     * @param $userHid
+     */
+    public function getPostByUser($userHid)
+    {
+        return $this->userRepository->getPostByUser($userHid)->paginate(per_page());
+    }
+
+    /**
+     * @param $userHid
+     * @return mixed
+     */
+    public function getReplyByUser($userHid)
+    {
+        return $this->userRepository->getReplyByUser($userHid)->paginate(per_page());
+    }
 }

@@ -70,4 +70,13 @@ class NodeRepository extends BaseRepository implements NodeRepositoryInterface
         }
 
     }
+
+    /**
+     * @param $nodeHid
+     * @return mixed
+     */
+    public function getPost($nodeHid)
+    {
+        return $this->postRepository->models()->whereNodeHid($nodeHid);
+    }
 }

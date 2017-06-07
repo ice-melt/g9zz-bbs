@@ -39,4 +39,9 @@ interface BaseRepositoryInterface extends Repository
      * @return mixed
      */
     public function hidDelete($hid);
+
+    /**
+     * @return mixed
+     */
+    public function models();
 }

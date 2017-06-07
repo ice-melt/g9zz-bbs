@@ -25,6 +25,9 @@ Route::group(['middleware' => ['g9zz','permission']],function(){
     Route::group(['prefix' => 'user','middleware' => 'idDecode'],function(){
         Route::get('/','Console\UserController@index')->name('console.user.index');
         Route::post('/{userId}/role/{roleId}','Console\UserController@attachRole')->name('console.user.attach.role');
+
+        Route::get('/{userId}/post','Console\UserController@getPostByUser')->name('console.all.post.by.user');
+        Route::get('/{userId}/reply','Console\UserController@getReplyByUser')->name('console.all.reply.by.user');
     });
 
     Route::group(['prefix' => 'post'],function() {
@@ -41,6 +44,9 @@ Route::group(['middleware' => ['g9zz','permission']],function(){
         Route::get('/{hid}','Console\NodeController@show')->name('console.node.show');
         Route::put('/{hid}','Console\NodeController@update')->name('console.node.put');
         Route::delete('/{hid}','Console\NodeController@destroy')->name('console.node.destroy');
+
+        //节点下所有帖子
+        Route::get('/{hid}/post','Console\NodeController@getPostByNode')->name('console.get.post.by.node');
     });
 
     Route::group(['prefix' => 'tag'],function() {

@@ -11,10 +11,27 @@ namespace App\Repositories\Eloquent;
 
 
 use App\Models\User;
+use App\Repositories\Contracts\PostRepositoryInterface;
+use App\Repositories\Contracts\ReplyRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use Illuminate\Container\Container as App;
+use Illuminate\Support\Collection;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
+    protected $postRepository;
+    protected $replyRepository;
+    public function __construct(App $app,
+                                Collection $collection,
+                                PostRepositoryInterface $postRepository,
+                                ReplyRepositoryInterface $replyRepository)
+    {
+        $this->postRepository = $postRepository;
+        $this->replyRepository = $replyRepository;
+        parent::__construct($app, $collection);
+    }
+
+
     public function model()
     {
         return User::class;
@@ -104,9 +121,31 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return $this->model->whereId($userId)->first();
     }
 
+    /**
+     * @param $authId
+     * @return mixed
+     */
     public function getRoleByUserId($authId)
     {
         return $this->model->find($authId)->role()->first();
+    }
+
+    /**
+     * @param $userHid
+     * @return mixed
+     */
+    public function getPostByUser($userHid)
+    {
+        return $this->postRepository->models()->whereUserHid($userHid);
+    }
+
+    /**
+     * @param $userHid
+     * @return mixed
+     */
+    public function getReplyByUser($userHid)
+    {
+        return $this->replyRepository->models()->whereUserHid($userHid);
     }
 
 }
