@@ -12,6 +12,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * App\Models\User
@@ -67,10 +68,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereDeletedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Roles[] $role
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Posts[] $post
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  */
 class User extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes,Notifiable;
     protected $table = 'users';
     protected $fillable = [
         'hid',

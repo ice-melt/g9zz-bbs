@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Console;
 
+use App\Services\Console\NotifyService;
 use App\Services\Console\UserService;
+use App\Transformers\NotifyTransformer;
 use App\Transformers\PostListTransformer;
 use App\Transformers\ReplyTransformer;
 use App\Transformers\UserTransformer;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
@@ -14,9 +17,12 @@ use League\Fractal\Resource\Item;
 class UserController extends Controller
 {
     protected $userService;
-    public function __construct(UserService $userService)
+    protected $notifyService;
+    public function __construct(UserService $userService,
+                                NotifyService $notifyService)
     {
         $this->userService = $userService;
+        $this->notifyService = $notifyService;
     }
 
     /**
@@ -70,4 +76,8 @@ class UserController extends Controller
         $this->setData($resource);
         return $this->response();
     }
+
+
+
+
 }
