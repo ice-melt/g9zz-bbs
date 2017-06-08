@@ -107,4 +107,7 @@ return [
         'verify.failed' => 412000003,
         'had.verified' => 412000004,
     ],
+    'notify' => [
+        'noSet.other' => 413000000
+    ]
 ];

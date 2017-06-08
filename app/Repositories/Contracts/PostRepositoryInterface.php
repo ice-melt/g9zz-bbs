@@ -16,4 +16,11 @@ interface PostRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function models();
+
+    /**
+     * 通过帖子HID获取 帖子作者的ID
+     * @param $postHid
+     * @return mixed
+     */
+    public function getAuthorByPostHid($postHid);
 }

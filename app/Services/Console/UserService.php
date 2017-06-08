@@ -13,17 +13,21 @@ namespace App\Services\Console;
 use App\Repositories\Contracts\RoleRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Services\BaseService;
+use Illuminate\Http\Request;
 
 class UserService extends BaseService
 {
 
     protected $userRepository;
     protected $roleRepository;
+    protected $request;
     public function __construct(UserRepositoryInterface $userRepository,
-                                RoleRepositoryInterface $roleRepository)
+                                RoleRepositoryInterface $roleRepository,
+                                Request $request)
     {
         $this->userRepository = $userRepository;
         $this->roleRepository = $roleRepository;
+        $this->request = $request;
     }
 
     /**
@@ -72,4 +76,5 @@ class UserService extends BaseService
     {
         return $this->userRepository->getReplyByUser($userHid)->paginate(per_page());
     }
+
 }

@@ -32,8 +32,19 @@ Route::group(['middleware' => ['g9zz','permission']],function(){
         //点击获取 验证链接
         Route::get('/verify','Auth\MyLoginController@getVerifyToken')->name('console.user.get.verify.token');
 
-
     });
+
+    Route::group(['prefix' => 'notify'],function() {
+        //获取所有通知
+        Route::get('/','Console\NotifyController@getNotify')->name('console.user.get.notify');
+//        Route::get('/notify/unread','Console\NotifyController@getUnReadNotify')->name('console.user.get.unread.notify');
+//        Route::get('/notify/read','Console\NotifyController@getHadReadNotify')->name('console.user.get.had.read.notify');
+        //标记某个通知已读
+        Route::post('/set/{notifyId}/read','Console\NotifyController@setNotifyRead')->name('console.user.set.notify.read');
+        //标记所有通知已读
+        Route::post('/set/allRead','Console\NotifyController@setAllNotifyRead')->name('console.user.set.all.notify.read');
+    });
+
 
     Route::group(['prefix' => 'post'],function() {
         Route::get('/','Console\PostController@index')->name('console.post.index');

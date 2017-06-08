@@ -20,8 +20,20 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
         return Posts::class;
     }
 
+    /**
+     * @return mixed
+     */
     public function models()
     {
         return $this->model;
+    }
+
+    /**
+     * @param $postHid
+     * @return mixed
+     */
+    public function getAuthorByPostHid($postHid)
+    {
+        return $this->hidFind($postHid);
     }
 }
