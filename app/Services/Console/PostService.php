@@ -107,13 +107,12 @@ class PostService extends BaseService
         $parser = new Parser();
         $create['content'] = $parser->makeHtml($create['body_original']);
         $this->log('service.request to '.__METHOD__,['create' => $create]);
-//dd($create);
+
         try {
             \DB::beginTransaction();
             $result = $this->postRepository->create($create);
             $result->hid = Hashids::connection('post')->encode($result->id);
-            $nodeId = Hashids::connection('node')->decode($request->get('nodeHid'));
-            $result->node_hid = $nodeId[0];
+            $result->node_hid = $request->get('nodeHid');
             $result->save();
             \DB::commit();
         } catch (\Exception $e) {
