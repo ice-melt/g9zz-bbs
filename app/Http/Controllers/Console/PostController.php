@@ -91,4 +91,18 @@ class PostController extends Controller
         if ($result) return $this->response();
     }
 
+    /**
+     * @param $postHid
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getReply($postHid)
+    {
+        $paginate = $this->postService->getReply($postHid);
+        $resource = new Collection($paginate,new PostTransformer());
+        $resource->setPaginator(new IlluminatePaginatorAdapter($paginate));
+        $this->setData($resource);
+        return $this->response();
+    }
+
+
 }

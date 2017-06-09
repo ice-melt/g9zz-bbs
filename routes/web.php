@@ -42,6 +42,9 @@ Route::group([],function(){
         Route::get('/','Console\PostController@index')->name('index.post.index');
         Route::post('/','Console\PostController@store')->name('index.post.store');
         Route::get('/{hid}','Console\PostController@show')->name('index.post.show');
+
+        Route::get('/{postHid}/reply','Console\PostController@getReply')->name('index.post.get.reply');
+
     });
 
     Route::group(['prefix' => 'node'],function() {

@@ -52,6 +52,8 @@ Route::group(['middleware' => ['g9zz','permission']],function(){
         Route::get('/{hid}','Console\PostController@show')->name('console.post.show');
         Route::put('/{hid}','Console\PostController@update')->name('console.post.put');
         Route::delete('/{hid}','Console\PostController@destroy')->name('console.post.destroy');
+
+        Route::get('/{postHid}/reply','Console\PostController@getReply')->name('console.post.get.reply');
     });
 
     Route::group(['prefix' => 'node'],function() {

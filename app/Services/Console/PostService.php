@@ -12,6 +12,7 @@ namespace App\Services\Console;
 
 use App\Exceptions\TryException;
 use App\Repositories\Contracts\PostRepositoryInterface;
+use App\Repositories\Contracts\ReplyRepositoryInterface;
 use App\Services\BaseService;
 use HyperDown\Parser;
 use Vinkla\Hashids\Facades\Hashids;
@@ -19,10 +20,13 @@ use Vinkla\Hashids\Facades\Hashids;
 class PostService extends BaseService
 {
     protected $postRepository;
+    protected $replyRepository;
 
-    public function __construct(PostRepositoryInterface $postRepository)
+    public function __construct(PostRepositoryInterface $postRepository,
+                                ReplyRepositoryInterface $replyRepository)
     {
         $this->postRepository = $postRepository;
+        $this->replyRepository = $replyRepository;
     }
 
     /**
@@ -33,7 +37,7 @@ class PostService extends BaseService
     public function paginate($request)
     {
         if (empty($request)) {
-            return $this->postRepository->models()->orderBy('created_at','desc')->paginate(per_page());
+            return $this->postRepository->models()->orderBy('updated_at','desc')->paginate(per_page());
         }
         $request['replyCount']= $this->order($request,'replyCount');
         $request['viewCount']= $this->order($request,'viewCount');
@@ -182,4 +186,14 @@ class PostService extends BaseService
     {
         return $this->postRepository->hidDelete($hid);
     }
+
+    /**
+     * @param $postHid
+     * @return mixed
+     */
+    public function getReply($postHid)
+    {
+        return $this->replyRepository->getReply($postHid);
+    }
+
 }
