@@ -19,6 +19,7 @@ use App\Repositories\Contracts\ReplyRepositoryInterface;
 use App\Repositories\Contracts\RoleRepositoryInterface;
 use App\Repositories\Contracts\TagRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\WeiBoUserRepositoryInterface;
 use App\Repositories\Eloquent\AppendRepository;
 use App\Repositories\Eloquent\GithubUserRepository;
 use App\Repositories\Eloquent\InviteCodeRepository;
@@ -30,6 +31,7 @@ use App\Repositories\Eloquent\ReplyRepository;
 use App\Repositories\Eloquent\RoleRepository;
 use App\Repositories\Eloquent\TagRepository;
 use App\Repositories\Eloquent\UserRepository;
+use App\Repositories\Eloquent\WeiBoUserRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -61,5 +63,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PermissionRepositoryInterface::class,PermissionRepository::class);
         $this->app->bind(RoleRepositoryInterface::class,RoleRepository::class);
         $this->app->bind(NotifyRepositoryInterface::class,NotifyRepository::class);
+        $this->app->bind(WeiBoUserRepositoryInterface::class,WeiBoUserRepository::class);
     }
 }

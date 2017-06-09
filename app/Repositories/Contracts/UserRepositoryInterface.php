@@ -68,4 +68,11 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function getUserById($id);
+
+    /**
+     * 通过weibo_user 的id 查找user 表里数据
+     * @param $weiboId
+     * @return mixed
+     */
+    public function findUserByWeiboId($weiboId);
 }
