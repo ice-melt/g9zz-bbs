@@ -111,13 +111,10 @@ class PostService extends BaseService
         try {
             \DB::beginTransaction();
             $result = $this->postRepository->create($create);
-            $update['hid'] = Hashids::connection('post')->encode($result->id);
-            $this->log('service.request to '.__METHOD__,['update' => $update]);
-            $this->postRepository->update($update,$result->id);
-//            dd(22);
-//            $nodeId = Hashids::connection('node')->decode($request->get('nodeHid'));
-//            $this->postRepository->attachNode($result->id,$nodeId);
-
+            $result->hid = Hashids::connection('post')->encode($result->id);
+            $nodeId = Hashids::connection('node')->decode($request->get('nodeHid'));
+            $result->node_hid = $nodeId[0];
+            $result->save();
             \DB::commit();
         } catch (\Exception $e) {
             $this->log('"service.error" to listener "' . __METHOD__ . '".', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()]);
@@ -125,7 +122,7 @@ class PostService extends BaseService
             throw new TryException(json_encode($e->getMessage()),(int)$e->getCode());
         }
 
-        return $this->postRepository->find($result->id);
+        return $result;
     }
 
     /**
