@@ -60,6 +60,7 @@ class PostController extends Controller
     public function show($hid)
     {
         $data = $this->postService->hidFind($hid);
+        $this->postService->readAdd($data);
         $resource = new Item($data,new PostTransformer());
         $this->setData($resource);
         return $this->response();

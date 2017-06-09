@@ -138,6 +138,17 @@ class PostService extends BaseService
     }
 
     /**
+     * @param $post
+     * @return mixed
+     */
+    public function readAdd($post)
+    {
+        $post->view_count++;
+        return $post->save();
+    }
+
+
+    /**
      * @param $request
      * @param $hid
      * @return mixed

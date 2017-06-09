@@ -82,7 +82,6 @@ class ReplyService extends BaseService
     public function replyNotify($create,$request)
     {
         $notify = new \stdClass();
-
         $notify->post_hid = $create['post_hid'];//帖子ID
         $notify->from_id = $request->get('g9zz_user_id');//回复者
         $notify->type = 'reply';//类型
@@ -90,7 +89,14 @@ class ReplyService extends BaseService
         $notify->body_original = $create['body_original'];//回复原内容
 
         $author = $this->postRepository->getAuthorByPostHid($create['post_hid']);
-        $notify->to_id = $author->id;
+        $authorHid = $author->user_hid;
+        $authorId = Hashids::connection('user')->decode($authorHid);
+        $notify->to_id = $authorId[0];
+
+        $author->reply_count++;//post里 回复数添加1
+        $author->last_reply_user_hid = $request->get('g9zz_user_hid');//更新post里  最后一个回复的人hid
+        $author->save();
+
         $user = $this->userRepository->getUserById($notify->to_id);
         if (!empty($user)) {
             $user->notify(new ReplyNotify($notify));
