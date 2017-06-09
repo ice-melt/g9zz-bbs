@@ -33,7 +33,7 @@ class PostService extends BaseService
     public function paginate($request)
     {
         if (empty($request)) {
-            return $this->postRepository->paginate(per_page());
+            return $this->postRepository->orderBy('created_at','desc')->paginate(per_page());
         }
         $request['replyCount']= $this->order($request,'replyCount');
         $request['viewCount']= $this->order($request,'viewCount');
