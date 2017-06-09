@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Console;
 use App\Http\Requests\Console\PostRequest;
 use App\Services\Console\PostService;
 use App\Transformers\PostTransformer;
+use App\Transformers\ReplyTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
@@ -98,7 +99,7 @@ class PostController extends Controller
     public function getReply($postHid)
     {
         $paginate = $this->postService->getReply($postHid);
-        $resource = new Collection($paginate,new PostTransformer());
+        $resource = new Collection($paginate,new ReplyTransformer());
         $resource->setPaginator(new IlluminatePaginatorAdapter($paginate));
         $this->setData($resource);
         return $this->response();
