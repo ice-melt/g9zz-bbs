@@ -118,17 +118,15 @@ class MyLoginController extends Controller
     public function redirectToProvider(Request $request,$service)
     {
         if (!in_array($service,config('g9zz.token.login_way'))) {
-            $this->setCode(config('validation.validation.default')['some.error']);
+            $this->setCode(config('validation.default')['some.error']);
             return $this->response();
         }
-
         return Socialite::driver($service)->redirect();
     }
 
     public function handleProviderCallback(Request $request,$service)
     {
         $user = Socialite::driver($service)->stateless()->user();
-
         switch ($service)
         {
             case 'github':
@@ -166,7 +164,7 @@ class MyLoginController extends Controller
         } else {
             $result = $this->userService->findUserByGithubId($isGithub->id);
             if (empty($result)) {
-                $this->setCode(config('validation.validation.default')['some.error']);
+                $this->setCode(config('validation.default')['some.error']);
                 return $this->response();
             }
         }
@@ -185,6 +183,26 @@ class MyLoginController extends Controller
     public function loginByWeibo($user)
     {
 
+        $isWeibo = $this->userService->checkIsWeibo($user->id);
+        //第一次授权
+        if (empty($isWeibo)) {
+            if ($this->isInvite) {
+                $this->setCode(config('validation.register')['needInvite.notSocialite']);
+                return $this->response();
+            }
+
+            $result = $this->userService->storeWeibo($user);
+        } else {
+            $result = $this->userService->findUserByWeiboId($isWeibo->id);
+            if (empty($result)) {
+                $this->setCode(config('validation.default')['some.error']);
+                return $this->response();
+            }
+        }
+
+        $now = time();
+        $auth = [$result->id, $now];
+        return $this->makeToken($auth,$result->hid);
     }
 
     public function loginByEmail()

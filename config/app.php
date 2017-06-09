@@ -172,7 +172,8 @@ return [
         //hashids
         Vinkla\Hashids\HashidsServiceProvider::class,
         //socialite
-        Laravel\Socialite\SocialiteServiceProvider::class,
+//        Laravel\Socialite\SocialiteServiceProvider::class,
+        \SocialiteProviders\Manager\ServiceProvider::class,
         /*
          * Application Service Providers...
          */

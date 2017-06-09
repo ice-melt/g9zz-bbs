@@ -14,6 +14,7 @@ use App\Jobs\SendMail;
 use App\Repositories\Contracts\GithubUserRepositoryInterface;
 use App\Repositories\Contracts\InviteCodeRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\WeiBoUserRepositoryInterface;
 use App\Services\BaseService;
 use Vinkla\Hashids\Facades\Hashids;
 
@@ -22,17 +23,21 @@ class UserService extends BaseService
 
     protected $inviteCodeRepository;
     protected $githubUserRepository;
+    protected $weiBoUserRepository;
     protected $userRepository;
     protected $isInvite;
 
     public function __construct(UserRepositoryInterface $userRepository,
+                                WeiBoUserRepositoryInterface $weiBoUserRepository,
                                 InviteCodeRepositoryInterface $inviteCodeRepository,
                                 GithubUserRepositoryInterface $githubUserRepository
+
     )
     {
         $this->isInvite = config('g9zz.invite_code.is_invite');
         $this->inviteCodeRepository = $inviteCodeRepository;
         $this->githubUserRepository = $githubUserRepository;
+        $this->weiBoUserRepository = $weiBoUserRepository;
         $this->userRepository = $userRepository;
 
     }
@@ -147,6 +152,16 @@ class UserService extends BaseService
     }
 
     /**
+     * @param $weiboId
+     * @return mixed
+     */
+    public function checkIsWeibo($weiboId)
+    {
+        return $this->weiBoUserRepository->getWeibo($weiboId);
+    }
+
+
+    /**
      * @param $user
      * @return mixed
      */
@@ -205,6 +220,43 @@ class UserService extends BaseService
         return $this->userRepository->find($userResult->id);
     }
 
+
+    public function storeWeibo($user)
+    {
+        $data = $user->user;
+
+        $data['weibo_id'] = $data['id'];
+        $data['weibo_idstr'] = $data['idstr'];
+        $data['weibo_created_at'] = date('Y-m-d H:i:s',strtotime($data['created_at']));
+
+        try {
+            \DB::beginTransaction();
+            $this->log('service.request to '.__METHOD__,['weibo_create' => $data]);
+            $result = $this->weiBoUserRepository->create($data);
+
+            $userCreate = [
+                'email' => isset($user->email) ? $user->email : null,
+                'weibo_id' => $result->id,
+                'name' => empty($data['name']) ? $data['name'] : $data['screen_name'],
+                'avatar' => empty($user->avatar) ? $data['profile_image_url'] : $user->avatar,
+                'register_source' => 'weibo',
+                'verified' => 'true'
+            ];
+            $this->log('service.request to '.__METHOD__,['user_create' => $userCreate]);
+            $userResult = $this->userRepository->create($userCreate);
+            $userResult->hid = Hashids::connection('user')->encode($userResult->id);
+            $userResult->save();
+            \DB::commit();
+        } catch (\Exception $e) {
+            $this->log('"service.error" to listener "' . __METHOD__ . '".', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()]);
+            \DB::rollBack();
+            throw new TryException(json_encode($e->getMessage()),(int)$e->getCode());
+        }
+        return $userResult;
+    }
+
+
+
     /**
      * @param $githubId
      * @return mixed
@@ -212,6 +264,15 @@ class UserService extends BaseService
     public function findUserByGithubId($githubId)
     {
         return $this->userRepository->findUserByGithubId($githubId);
+    }
+
+    /**
+     * @param $weiboId
+     * @return mixed
+     */
+    public function findUserByWeiboId($weiboId)
+    {
+        return $this->userRepository->findUserByWeiboId($weiboId);
     }
 
     /**

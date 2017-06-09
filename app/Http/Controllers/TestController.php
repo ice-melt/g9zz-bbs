@@ -13,8 +13,9 @@ class TestController extends Controller
     public function index()
     {
 
-
-
+        $dd = strtotime('Tue May 10 11:37:42 +0800 2011');
+        $aa = date('Y-m-d H:i:s',$dd);
+dd($dd,$aa);
 
 
         $user = User::find(1);
