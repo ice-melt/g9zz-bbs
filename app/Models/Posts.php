@@ -84,6 +84,7 @@ class Posts extends Model
         'view_count',
         'vote_count',
         'last_reply_user_hid',
+        'last_reply_actived_at',
         'order',
         'is_top',
         'is_excellent',
