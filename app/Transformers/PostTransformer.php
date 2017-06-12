@@ -34,8 +34,11 @@ class PostTransformer extends BaseTransformer
             'bodyOriginal' => $posts->body_original,
 //            'excerpt' => $posts->excerpt,
 //            'isTagged' => $posts->is_tagged,
+
             'createdAt' => rfc_3339($posts->created_at),
             'created' => $posts->created_at->diffForHumans(),
+            'lastReplyActivedAt' => rfc_3339($posts->last_reply_actived_at),
+            'lastReplyActived' => $posts->last_reply_actived_at->diffForHumans(),
         ];
 
         if ($posts->user_hid) {
