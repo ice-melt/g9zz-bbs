@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 
+
 /**
  * App\Models\Posts
  *
@@ -29,6 +30,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $view_count 查看数
  * @property int $vote_count 点赞数
  * @property string $last_reply_user_hid 最后回复人的HID
+ * @property string $last_reply_actived_at 最后回复的时间
  * @property int $order
  * @property string $is_top 是否置顶
  * @property string $is_excellent 是否加精
@@ -56,6 +58,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Posts whereIsExcellent($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Posts whereIsTagged($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Posts whereIsTop($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Posts whereLastReplyActivedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Posts whereLastReplyUserHid($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Posts whereNodeHid($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Posts whereOrder($value)
@@ -67,8 +70,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Posts whereViewCount($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Posts whereVoteCount($value)
  * @mixin \Eloquent
- * @property \Carbon\Carbon $last_reply_actived_at 最后回复的时间
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Posts whereLastReplyActivedAt($value)
  */
 class Posts extends Model
 {
