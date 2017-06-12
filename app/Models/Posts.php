@@ -67,6 +67,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Posts whereViewCount($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Posts whereVoteCount($value)
  * @mixin \Eloquent
+ * @property \Carbon\Carbon $last_reply_actived_at 最后回复的时间
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Posts whereLastReplyActivedAt($value)
  */
 class Posts extends Model
 {
