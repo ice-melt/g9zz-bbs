@@ -25,7 +25,7 @@ class CreatePostsTable extends Migration
             $table->integer('view_count')->unsigned()->comment('查看数')->default(0)->index();
             $table->integer('vote_count')->default(0)->comment('点赞数')->index();
             $table->string('last_reply_user_hid')->comment('最后回复人的HID')->default('')->index();
-            $table->timestamp('last_reply_actived_at')->nullable()->comment('最后回复的时间');
+            $table->timestamp('last_reply_actived_at')->default(DB::raw('CURRENT_TIMESTAMP'))->nullable()->comment('最后回复的时间');
             $table->integer('order')->default(0)->index();
             $table->enum('is_top', ['yes',  'no'])->comment('是否置顶')->default('no')->index();
             $table->enum('is_excellent', ['yes',  'no'])->comment('是否加精')->default('no')->index();
