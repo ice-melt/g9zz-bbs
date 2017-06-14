@@ -98,7 +98,7 @@ class UserService extends BaseService
                 'g9zz@g9zz.com',
             "邮箱激活",
             $name,
-            'http://www.g9zz-bbs.dev/verify?token='.$param));
+            config('app.url').'/verify?token='.$param));
         return true;
     }
 
