@@ -98,7 +98,7 @@ class UserService extends BaseService
                 'g9zz@g9zz.com',
             "邮箱激活",
             $name,
-            config('app.url').'/verify?token='.$param));
+            config('app.url').'/verify?token='.$param))->onQueue('send-email');
         return true;
     }
 
