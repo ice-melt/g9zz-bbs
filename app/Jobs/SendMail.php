@@ -33,13 +33,11 @@ class SendMail implements ShouldQueue
      */
     public function handle()
     {
-        \Mail::raw('他妈的,好像有人在DDO你网站啊,要不要看看？', function ($m) {
-            $m->to('g9zz@g9zz.com', '叶落山城')->subject('有坏淫，撸翻它');
-        });
-//        switch ($this->type){
-//            case 'verify_account':
-//                \Mail::to($this->user)->send(new VerifyAccount($this->subject,$this->userName,$this->verifyUrl));
-//                break;
-//        }
+
+        switch ($this->type){
+            case 'verify_account':
+                \Mail::to($this->user)->send(new VerifyAccount($this->subject,$this->userName,$this->verifyUrl));
+                break;
+        }
     }
 }
