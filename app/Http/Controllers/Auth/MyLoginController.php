@@ -21,6 +21,21 @@ class MyLoginController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getLogin(Request $request)
+    {
+        $auth = $request->get('auth');
+
+        $data = new \stdClass();
+        $data->auth = $auth;
+        $this->setData($data);
+        $this->setCode(200);
+        return $this->response();
+    }
+
+    /**
      * @param ConsoleLoginRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -160,12 +175,15 @@ class MyLoginController extends Controller
                 return $this->response();
             }
 
-            $result = $this->userService->storeGithub($user);
+            return $this->userService->storeGithub($user);
         } else {
             $result = $this->userService->findUserByGithubId($isGithub->id);
             if (empty($result)) {
-                $this->setCode(config('validation.default')['some.error']);
-                return $this->response();
+                $now = time();
+                $param = [$isGithub->id,$now];
+                $auth = Hashids::connection('user')->encode($param);
+
+                return redirect()->route('web.get.login',['auth' => $auth]);
             }
         }
 

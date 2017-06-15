@@ -197,27 +197,31 @@ class UserService extends BaseService
             $this->log('service.request to '.__METHOD__,['github_create' => $create]);
             $result = $this->githubUserRepository->create($create);
 
-            $userCreate = [
-                'email' => $create['email'],
-                'github_id' => $result->id,
-                'name' => empty($create['display_name']) ? $create['github_name'] : $create['display_name'],
-                'avatar' => $create['avatar'],
-                'register_source' => 'github',
-                'verified' => 'true'
-            ];
-            $this->log('service.request to '.__METHOD__,['user_create' => $userCreate]);
-            $userResult = $this->userRepository->create($userCreate);
-            $update['hid'] = Hashids::connection('user')->encode($userResult->id);
-            $this->log('service.request to '.__METHOD__,['user_update' => $update]);
-            $this->userRepository->update($update,$userResult->id);
+//            $userCreate = [
+//                'email' => $create['email'],
+//                'github_id' => $result->id,
+//                'name' => empty($create['display_name']) ? $create['github_name'] : $create['display_name'],
+//                'avatar' => $create['avatar'],
+//                'register_source' => 'github',
+//                'verified' => 'true'
+//            ];
+//            $this->log('service.request to '.__METHOD__,['user_create' => $userCreate]);
+//            $userResult = $this->userRepository->create($userCreate);
+//            $userResult->hid = Hashids::connection('user')->encode($userResult->id);
+//            $this->log('service.request to '.__METHOD__,['user_update' => $update]);
+//            $this->userRepository->update($update,$userResult->id);
+//            $userResult->save();
             \DB::commit();
         } catch (\Exception $e) {
             $this->log('"service.error" to listener "' . __METHOD__ . '".', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()]);
             \DB::rollBack();
             throw new TryException(json_encode($e->getMessage()),(int)$e->getCode());
         }
+        $now = time();
+        $param = [$result->id,$now];
+        $auth = Hashids::connection('user')->encode($param);
 
-        return $this->userRepository->find($userResult->id);
+        return redirect()->route('web.get.login',['auth' => $auth]);
     }
 
 
