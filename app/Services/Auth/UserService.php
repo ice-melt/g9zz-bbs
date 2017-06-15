@@ -93,6 +93,10 @@ class UserService extends BaseService
     {
         $message = [$id,time(),3];
         $param = Hashids::connection('code')->encode($message);
+        \Mail::raw('他妈的,好像有人在DDO你网站啊,要不要看看？', function ($m) {
+            $m->to('g9zz@g9zz.com', '叶落山城')->subject('有坏淫，撸翻它');
+        });
+        dd(33);
         dispatch(new SendMail('verify_account',
 //            is_local() ? 'g9zz@g9zz.com' : $email,//TODO::修改正式的
                 'g9zz@g9zz.com',
