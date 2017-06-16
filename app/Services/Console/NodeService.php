@@ -193,4 +193,12 @@ class NodeService extends BaseService
     {
         return $this->nodeRepository->getPost($nodeHid)->paginate(per_page());
     }
+
+    /**
+     * @return mixed
+     */
+    public function getShowNode()
+    {
+        return $this->nodeRepository->getShowNode();
+    }
 }

@@ -30,4 +30,9 @@ interface NodeRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function getPost($nodeHid);
+
+    /**
+     * @return mixed
+     */
+    public function getShowNode();
 }

@@ -93,4 +93,15 @@ class NodeController extends Controller
         $this->setData($resource);
         return $this->response();
     }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getShowNode()
+    {
+        $result = $this->nodeService->getShowNode();
+        $resource = new Collection($result,new NodeTransformer());
+        $this->setData($resource);
+        return $this->response();
+    }
 }
