@@ -60,6 +60,10 @@ class PostService extends BaseService
         $query = $this->allOrderBy($request,$query,'isBlocked');
         $query = $this->allOrderBy($request,$query,'isTagged');
 
+        if (!empty($request->get('node'))) {
+            $query =  $query->whereNodeHid($request->get('node'));
+        }
+        
         return $query->paginate(per_page());
 
     }
