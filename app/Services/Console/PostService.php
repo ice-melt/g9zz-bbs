@@ -15,16 +15,20 @@ use App\Repositories\Contracts\PostRepositoryInterface;
 use App\Repositories\Contracts\ReplyRepositoryInterface;
 use App\Services\BaseService;
 use HyperDown\Parser;
+use Illuminate\Http\Request;
 use Vinkla\Hashids\Facades\Hashids;
 
 class PostService extends BaseService
 {
+    protected $request;
     protected $postRepository;
     protected $replyRepository;
 
-    public function __construct(PostRepositoryInterface $postRepository,
+    public function __construct(Request $request,
+                                PostRepositoryInterface $postRepository,
                                 ReplyRepositoryInterface $replyRepository)
     {
+        $this->request = $request;
         $this->postRepository = $postRepository;
         $this->replyRepository = $replyRepository;
     }
@@ -36,6 +40,7 @@ class PostService extends BaseService
      */
     public function paginate($request)
     {
+
         if (empty($request)) {
             return $this->postRepository->models()
                 ->orderBy('last_reply_actived_at','desc')
@@ -60,10 +65,10 @@ class PostService extends BaseService
         $query = $this->allOrderBy($request,$query,'isBlocked');
         $query = $this->allOrderBy($request,$query,'isTagged');
 
-        if (!empty($request->get('node'))) {
-            $query =  $query->whereNodeHid($request->get('node'));
+        if (!empty($this->request->get('node'))) {
+            $query =  $query->whereNodeHid($this->request->get('node'));
         }
-        
+
         return $query->paginate(per_page());
 
     }
