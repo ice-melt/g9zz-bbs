@@ -53,7 +53,7 @@ Route::group([],function(){
         Route::get('/{hid}','Console\NodeController@show')->name('index.node.show');
 
         Route::get('/{hid}/post','Console\NodeController@getPostByNode')->name('index.get.post.by.node');
-        Route::get('/showNode','Console\NodeController@getShowNode')->name('index.get.show.node');
+        Route::get('/all/showNode','Console\NodeController@getShowNode')->name('index.get.show.node');
     });
 
     Route::group(['prefix' => 'tag'],function() {
