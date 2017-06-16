@@ -24,5 +24,24 @@ return [
     ],
     'verify' => [
         'valid_time' => 24 * 60 * 60
+    ],
+    'oauth' => [
+        'login' => [
+            1 => 'github_id',
+            2 => 'weibo_id',
+            3 => 'weixin_id',
+            4 => 'qq_id',
+            5 => 'xcx_id',
+            6 => 'douban_id',
+        ],
+        'auth' => [
+            'github' => 1,
+            'weibo' => 2,
+            'weixin' => 3,
+            'qq' => 4,
+            'xcx' => 5,
+            'douban' => 6,
+        ],
+
     ]
 ];

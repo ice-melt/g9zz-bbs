@@ -52,10 +52,67 @@ class MyLoginController extends Controller
         $requestPwd = $request->get('password');
         $this->userService->checkPwd($requestPwd,$user->password);
 
+        //如果授权登录
+        $authorization = $request->get('auth');
+        if (!empty($authorization)) {
+            $oauth = Hashids::connection('user')->decode($authorization);
+            if (empty($oauth)) {
+                $this->setCode(config('validation.login')['oauth.failed']);
+                return $this->response();
+            }
+
+            $verifyTime = config('g9zz.verify.valid_time');
+            $now = time();
+            if ( $now - $oauth[1] > $verifyTime ) {
+                $this->setCode(config('validation.login')['oauth.failed']);
+                return $this->response();
+            }
+
+            $login = config('g9zz.oauth.login.'.$oauth[2]);
+            $result = $this->userService->checkExistsOauth($oauth[0],$login);
+            if (!empty($result)) {
+                $this->setCode(config('validation.login')['had.oauth']);
+                return $this->response();
+            }
+            $user = $this->saveOauth($login,$user,$oauth);
+            $user->save();
+        }
+
         $now = time();
         $auth = [$user->id, $now];
         $hid = $user->hid;
         return $this->makeToken($auth,$hid);
+    }
+
+    /**
+     * @param $login
+     * @param $user
+     * @param $oauth
+     * @return mixed
+     */
+    public function saveOauth($login,$user,$oauth)
+    {
+        switch ($login) {
+            case 'github_id':
+                $user->github_id = $oauth[0];
+                break;
+            case 'weibo_id':
+                $user->weibo_id = $oauth[0];
+                break;
+            case 'weixin_id':
+                $user->weixin_id = $oauth[0];
+                break;
+            case 'qq_id':
+                $user->qq_id = $oauth[0];
+                break;
+            case 'xcx_id':
+                $user->xcx_id = $oauth[0];
+                break;
+            case 'douban_id':
+                $user->douban_id = $oauth[0];
+                break;
+        }
+        return $user;
     }
 
     /**
@@ -139,6 +196,12 @@ class MyLoginController extends Controller
         return Socialite::driver($service)->redirect();
     }
 
+    /**
+     * 授权回调页面
+     * @param Request $request
+     * @param $service
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|mixed|void
+     */
     public function handleProviderCallback(Request $request,$service)
     {
         $user = Socialite::driver($service)->stateless()->user();
@@ -180,7 +243,9 @@ class MyLoginController extends Controller
             $result = $this->userService->findUserByGithubId($isGithub->id);
             if (empty($result)) {
                 $now = time();
-                $param = [$isGithub->id,$now];
+                $oauth = config('g9zz.oauth.auth.github');
+                $param = [$isGithub->id,$now,$oauth];
+
                 $auth = Hashids::connection('user')->encode($param);
 
                 return redirect()->route('web.get.login',['auth' => $auth]);
@@ -198,6 +263,10 @@ class MyLoginController extends Controller
 
     }
 
+    /**
+     * @param $user
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|mixed
+     */
     public function loginByWeibo($user)
     {
 
@@ -209,12 +278,17 @@ class MyLoginController extends Controller
                 return $this->response();
             }
 
-            $result = $this->userService->storeWeibo($user);
+            return $this->userService->storeWeibo($user);
         } else {
             $result = $this->userService->findUserByWeiboId($isWeibo->id);
             if (empty($result)) {
-                $this->setCode(config('validation.default')['some.error']);
-                return $this->response();
+                $now = time();
+                $oauth = config('g9zz.oauth.auth.weibo');
+                $param = [$isWeibo->id,$now,$oauth];
+
+                $auth = Hashids::connection('user')->encode($param);
+
+                return redirect()->route('web.get.login',['auth' => $auth]);
             }
         }
 

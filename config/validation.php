@@ -106,6 +106,8 @@ return [
         'loginWay.error' =>  412000002,
         'verify.failed' => 412000003,
         'had.verified' => 412000004,
+        'oauth.failed' => 412000005,
+        'had.oauth' => 412000006,
     ],
     'notify' => [
         'noSet.other' => 413000000

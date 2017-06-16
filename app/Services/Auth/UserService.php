@@ -197,20 +197,6 @@ class UserService extends BaseService
             $this->log('service.request to '.__METHOD__,['github_create' => $create]);
             $result = $this->githubUserRepository->create($create);
 
-//            $userCreate = [
-//                'email' => $create['email'],
-//                'github_id' => $result->id,
-//                'name' => empty($create['display_name']) ? $create['github_name'] : $create['display_name'],
-//                'avatar' => $create['avatar'],
-//                'register_source' => 'github',
-//                'verified' => 'true'
-//            ];
-//            $this->log('service.request to '.__METHOD__,['user_create' => $userCreate]);
-//            $userResult = $this->userRepository->create($userCreate);
-//            $userResult->hid = Hashids::connection('user')->encode($userResult->id);
-//            $this->log('service.request to '.__METHOD__,['user_update' => $update]);
-//            $this->userRepository->update($update,$userResult->id);
-//            $userResult->save();
             \DB::commit();
         } catch (\Exception $e) {
             $this->log('"service.error" to listener "' . __METHOD__ . '".', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()]);
@@ -218,13 +204,17 @@ class UserService extends BaseService
             throw new TryException(json_encode($e->getMessage()),(int)$e->getCode());
         }
         $now = time();
-        $param = [$result->id,$now];
+        $oauth = config('g9zz.oauth.auth.github');
+        $param = [$result->id,$now,$oauth];
         $auth = Hashids::connection('user')->encode($param);
 
         return redirect()->route('web.get.login',['auth' => $auth]);
     }
 
-
+    /**
+     * @param $user
+     * @return mixed
+     */
     public function storeWeibo($user)
     {
         $data = $user->user;
@@ -238,28 +228,30 @@ class UserService extends BaseService
             $this->log('service.request to '.__METHOD__,['weibo_create' => $data]);
             $result = $this->weiBoUserRepository->create($data);
 
-            $userCreate = [
-                'email' => isset($user->email) ? $user->email : null,
-                'weibo_id' => $result->id,
-                'name' => empty($data['name']) ? $data['name'] : $data['screen_name'],
-                'avatar' => empty($user->avatar) ? $data['profile_image_url'] : $user->avatar,
-                'register_source' => 'weibo',
-                'verified' => 'true'
-            ];
-            $this->log('service.request to '.__METHOD__,['user_create' => $userCreate]);
-            $userResult = $this->userRepository->create($userCreate);
-            $userResult->hid = Hashids::connection('user')->encode($userResult->id);
-            $userResult->save();
             \DB::commit();
         } catch (\Exception $e) {
             $this->log('"service.error" to listener "' . __METHOD__ . '".', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()]);
             \DB::rollBack();
             throw new TryException(json_encode($e->getMessage()),(int)$e->getCode());
         }
-        return $userResult;
+
+        $now = time();
+        $oauth = config('g9zz.oauth.auth.weibo');
+        $param = [$result->id,$now,$oauth];
+        $auth = Hashids::connection('user')->encode($param);
+
+        return redirect()->route('web.get.login',['auth' => $auth]);
     }
 
-
+    /**
+     * @param $oauthId
+     * @param $type
+     * @return mixed
+     */
+    public function checkExistsOauth($oauthId,$type)
+    {
+        return $this->userRepository->findWhere([$type => $oauthId])->first();
+    }
 
     /**
      * @param $githubId
