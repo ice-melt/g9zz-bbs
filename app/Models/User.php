@@ -83,6 +83,7 @@ class User extends Model
         'github_id',
         'wechat_id',
         'weibo_id',
+        'xcx_id',
         'qq_id',
         'google_id',
         'douban_id',

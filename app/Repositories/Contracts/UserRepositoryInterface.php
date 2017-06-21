@@ -75,4 +75,10 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function findUserByWeiboId($weiboId);
+
+    /**
+     * @param $xcxId
+     * @return mixed
+     */
+    public function getUserByXcxId($xcxId);
 }

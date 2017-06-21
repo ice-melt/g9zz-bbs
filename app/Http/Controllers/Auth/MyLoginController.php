@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Requests\Auth\ConsoleLoginRequest;
+use App\Services\Auth\LoginService;
 use App\Services\Auth\UserService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -13,11 +14,13 @@ class MyLoginController extends Controller
 {
     protected $isInvite;
     protected $userService;
+    protected $loginService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService,LoginService $loginService)
     {
         $this->isInvite = config('g9zz.invite_code.is_invite');
         $this->userService = $userService;
+        $this->loginService = $loginService;
     }
 
     /**
@@ -176,11 +179,54 @@ class MyLoginController extends Controller
         $this->response();
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function returnError()
     {
         $this->setCode(config('validation.login')['verify.failed']);
         return $this->response();
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getWechatMiniProgramUserInfo(Request $request)
+    {
+        $code = $request->get('code');
+        $res = $this->loginService->getXCXUserInfo($code);
+        $data = json_decode($res,true);
+        if ($data['openid']) {
+            $data = new \stdClass();
+            $xcx = $this->loginService->getXcxByOpenId($data['openid']);
+            if (empty($xcx)) {//第一次授权
+                $token = $this->loginService->createXcx($data['openid']);
+                $data->token = $token;
+                $this->setData($data);
+                $this->setCode(200);
+                return $this->response();
+            } else {
+                $user = $this->loginService->getUserByXcxId($xcx->id);
+                if (empty($user)) {//已经授权,但未绑定账号
+                    $time = time();
+                    $param = [$xcx->id,$time,5];
+                    $token = Hashids::connection('user')->encode($param);
+                    $data->token = $token;
+                    $this->setData($data);
+                    $this->setCode(200);
+                    return $this->response();
+                } else {//已经授权且已经绑定账号
+                    $now = time();
+                    $auth = [$user->id, $now];
+                    $hid = $user->hid;
+                    return $this->makeToken($auth,$hid);
+                }
+            }
+        }
+    }
+
+
 
     /**
      * @param Request $request

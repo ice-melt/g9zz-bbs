@@ -28,6 +28,9 @@ Route::get('auth/{service}/callback', 'Auth\MyLoginController@handleProviderCall
 //激活账号
 Route::get('/verify','Auth\MyLoginController@verify')->name('index.auth.login.verify.account');
 
+Route::group(['prefix' => 'wechat'],function () {
+    Route::get('/xcx/userInfo','Auth\MyLoginController@getWechatMiniProgramUserInfo')->name('index.xcx.userInfo');
+});
 
 Route::group([],function(){
     Route::group(['prefix' => 'user','middleware' => 'idDecode'],function(){

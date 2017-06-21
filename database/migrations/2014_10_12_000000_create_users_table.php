@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->integer('qq_id')->default(0);
             $table->integer('google_id')->default(0);
             $table->integer('douban_id')->default(0);
+            $table->integer('xcx_id')->default(0);
             $table->integer('topic_count')->default(0)->index();
             $table->integer('reply_count')->default(0)->index();
             $table->integer('follower_count')->default(0)->index();

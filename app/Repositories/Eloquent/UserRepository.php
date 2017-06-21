@@ -165,4 +165,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         return $this->model->whereWeiboId($weiboId)->first();
     }
+
+    /**
+     * @param $xcxId
+     * @return mixed
+     */
+    public function getUserByXcxId($xcxId)
+    {
+        return $this->model->whereXcxId($xcxId)->first();
+    }
 }
