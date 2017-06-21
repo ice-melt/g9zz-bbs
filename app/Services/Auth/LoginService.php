@@ -38,7 +38,7 @@ class LoginService extends BaseService
         $url = 'https://api.weixin.qq.com/sns/jscode2session';
         $response = $this->client->request('GET',$url,['query' => ['appid' => $miniProgramAppid,
             'secret'=>$miniProgramSECRET,
-            'js_code' => '041cZjkv1azo2d0hxYjv1nclkv1cZjkG',
+            'js_code' => $code,
             'grant_type' => 'authorization_code']]);
 
         $body = $response->getBody();

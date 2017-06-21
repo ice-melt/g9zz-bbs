@@ -197,13 +197,13 @@ class MyLoginController extends Controller
         $code = $request->get('code');
         $res = $this->loginService->getXCXUserInfo($code);
         $data = json_decode($res,true);
-        if ($data['openid']) {
-            $data = new \stdClass();
+        $return = new \stdClass();
+        if (isset($data['openid'])) {
             $xcx = $this->loginService->getXcxByOpenId($data['openid']);
             if (empty($xcx)) {//第一次授权
                 $token = $this->loginService->createXcx($data['openid']);
-                $data->token = $token;
-                $this->setData($data);
+                $return->token = $token;
+                $this->setData($return);
                 $this->setCode(200);
                 return $this->response();
             } else {
@@ -212,8 +212,8 @@ class MyLoginController extends Controller
                     $time = time();
                     $param = [$xcx->id,$time,5];
                     $token = Hashids::connection('user')->encode($param);
-                    $data->token = $token;
-                    $this->setData($data);
+                    $return->token = $token;
+                    $this->setData($return);
                     $this->setCode(200);
                     return $this->response();
                 } else {//已经授权且已经绑定账号
@@ -223,6 +223,11 @@ class MyLoginController extends Controller
                     return $this->makeToken($auth,$hid);
                 }
             }
+        } else {
+            $return->message = '授权失败';
+            $this->setData($return);
+            $this->setCode(200);
+            return $this->response();
         }
     }
 
