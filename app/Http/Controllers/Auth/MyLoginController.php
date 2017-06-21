@@ -196,6 +196,7 @@ class MyLoginController extends Controller
     {
 //        $code = $request->get('code');
         $input = $request->only(['nickName','avatarUrl','gender','province','city','country','code']);
+        $input = parse_input($input);
         $this->log('controller.request to '.__METHOD__,['request' => $input]);
         $res = $this->loginService->getXCXUserInfo($input['code']);
         $this->log('controller.record to '.__METHOD__,['get_xcx_user' => $res]);
@@ -204,7 +205,8 @@ class MyLoginController extends Controller
         if (isset($data['openid'])) {
             $xcx = $this->loginService->getXcxByOpenId($data['openid']);
             if (empty($xcx)) {//第一次授权
-                $token = $this->loginService->createXcx(parse_input($input));
+                $input['open_id'] = $data['openid'];
+                $token = $this->loginService->createXcx($input);
                 $return->token = $token;
                 $this->setData($return);
                 $this->setCode(200);
