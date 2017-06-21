@@ -55,12 +55,12 @@ class LoginService extends BaseService
     }
 
     /**
-     * @param $openid
+     * @param $input
      * @return mixed
      */
-    public function createXcx($openid)
+    public function createXcx($input)
     {
-        $result = $this->xcxUserRepository->create(['open_id' => $openid]);
+        $result = $this->xcxUserRepository->create($input);
         $time = time();
         $param = [$result->id,$time,5];
         return Hashids::connection('user')->encode($param);
