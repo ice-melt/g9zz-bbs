@@ -26,6 +26,6 @@ class XcxUserRepository extends BaseRepository implements XcxUserRepositoryInter
      */
     public function getXcxByOpenId($openid)
     {
-        return $this->model->where('opend_id',$openid)->first();
+        return $this->model->where('open_id',$openid)->first();
     }
 }
