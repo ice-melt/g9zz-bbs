@@ -228,7 +228,7 @@ class MyLoginController extends Controller
         } else {
             $return->message = '授权失败';
             $this->setData($return);
-            $this->setCode(200);
+            $this->setCode(401);
             return $this->response();
         }
     }
