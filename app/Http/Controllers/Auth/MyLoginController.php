@@ -195,7 +195,9 @@ class MyLoginController extends Controller
     public function getWechatMiniProgramUserInfo(Request $request)
     {
         $code = $request->get('code');
+        $this->log('controller.request to '.__METHOD__,['code' => $code]);
         $res = $this->loginService->getXCXUserInfo($code);
+        $this->log('controller.record to '.__METHOD__,['get_xcx_user' => $res]);
         $data = json_decode($res,true);
         $return = new \stdClass();
         if (isset($data['openid'])) {
