@@ -58,6 +58,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @mixin \Eloquent
  * @property string $deleted_at
  * @method static \Illuminate\Database\Query\Builder|\App\User whereDeletedAt($value)
+ * @property int $xcx_id
+ * @method static \Illuminate\Database\Query\Builder|\App\User whereXcxId($value)
  */
 class User extends Authenticatable
 {

@@ -69,6 +69,8 @@ use Illuminate\Notifications\Notifiable;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Roles[] $role
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Posts[] $post
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property int $xcx_id
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereXcxId($value)
  */
 class User extends Model
 {
