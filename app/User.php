@@ -60,6 +60,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static \Illuminate\Database\Query\Builder|\App\User whereDeletedAt($value)
  * @property int $xcx_id
  * @method static \Illuminate\Database\Query\Builder|\App\User whereXcxId($value)
+ * @property string $last_activated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\User whereLastActivatedAt($value)
  */
 class User extends Authenticatable
 {
