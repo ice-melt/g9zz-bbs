@@ -44,7 +44,7 @@ Route::group([],function(){
 
     Route::group(['prefix' => 'post'],function() {
         Route::get('/','Console\PostController@index')->name('index.post.index');
-        Route::post('/','Console\PostController@store')->name('index.post.store');
+//        Route::post('/','Console\PostController@store')->name('index.post.store');
         Route::get('/{hid}','Console\PostController@show')->name('index.post.show');
 
         Route::get('/{postHid}/reply','Console\PostController@getReply')->name('index.post.get.reply');
@@ -66,14 +66,32 @@ Route::group([],function(){
 
     Route::group(['prefix' => 'reply'],function() {
         Route::get('/','Index\ReplyController@index')->name('index.reply.index');
-        Route::post('/','Index\ReplyController@store')->name('index.reply.store');
+//        Route::post('/','Index\ReplyController@store')->name('index.reply.store');
         Route::get('/{hid}','Index\ReplyController@show')->name('index.reply.show');
     });
 
     Route::group(['prefix' => 'append'],function() {
         Route::get('/','Index\AppendController@index')->name('index.append.index');
-        Route::post('/','Index\AppendController@store')->name('index.append.store');
+//        Route::post('/','Index\AppendController@store')->name('index.append.store');
         Route::get('/{hid}','Index\AppendController@show')->name('index.append.show');
+    });
+
+});
+
+/**
+ * 普通用户 可以操作 但必须登录的
+ */
+Route::group(['middleware' => 'g9zz'],function(){
+    Route::group(['prefix' => 'post'],function() {
+        Route::post('/','Console\PostController@store')->name('index.post.store');
+    });
+
+    Route::group(['prefix' => 'reply'],function() {
+        Route::post('/','Index\ReplyController@store')->name('index.reply.store');
+    });
+
+    Route::group(['prefix' => 'append'],function() {
+        Route::post('/','Index\AppendController@store')->name('index.append.store');
     });
 
 });
