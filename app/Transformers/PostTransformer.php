@@ -38,9 +38,8 @@ class PostTransformer extends BaseTransformer
 
             'createdAt' => rfc_3339($posts->created_at),
             'created' => $posts->created_at->diffForHumans(),
-            'lastReplyActivedAt' => isset($posts->last_reply_actived_at) ? rfc_3339($posts->last_reply_actived_at) : null,
-//            'lastReplyActived' => isset($posts->last_reply_actived_at) ? $posts->last_reply_actived_at->diffForHumans() : null,
-            'lastReplyActived' => isset($posts->last_reply_actived_at) ? Carbon::parse($posts->last_reply_actived_at)->diffForHumans() : null,
+            'lastReplyActivatedAt' => isset($posts->last_reply_activated_at) ? rfc_3339($posts->last_reply_activated_at) : null,
+            'lastReplyActivated' => isset($posts->last_reply_activated_at) ? Carbon::parse($posts->last_reply_activated_at)->diffForHumans() : null,
         ];
 
         if ($posts->user_hid) {

@@ -95,7 +95,7 @@ class ReplyService extends BaseService
 
         $author->reply_count++;//post里 回复数添加1
         $author->last_reply_user_hid = $request->get('g9zz_user_hid');//更新post里  最后一个回复的人hid
-        $author->last_reply_actived_at = date('Y-m-d H:i:s',time());//更新post里  最后一个回复的人hid
+        $author->last_reply_activated_at = date('Y-m-d H:i:s',time());//更新post里  最后一个回复的人hid
         $author->save();
 
         $user = $this->userRepository->getUserById($notify->to_id);

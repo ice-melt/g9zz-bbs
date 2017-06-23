@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 
-
 /**
  * App\Models\Posts
  *
@@ -87,7 +86,7 @@ class Posts extends Model
         'view_count',
         'vote_count',
         'last_reply_user_hid',
-        'last_reply_actived_at',
+        'last_reply_activated_at',
         'order',
         'is_top',
         'is_excellent',

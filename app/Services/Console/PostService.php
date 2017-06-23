@@ -40,14 +40,6 @@ class PostService extends BaseService
      */
     public function paginate($request)
     {
-
-        if (empty($request)) {
-            return $this->postRepository->models()
-                ->orderBy('last_reply_actived_at','desc')
-                ->orderBy('created_at','desc')
-                ->paginate(per_page());
-        }
-
         $request['replyCount']= $this->order($request,'replyCount');
         $request['viewCount']= $this->order($request,'viewCount');
         $request['voteCount']= $this->order($request,'voteCount');
@@ -64,7 +56,8 @@ class PostService extends BaseService
         $query = $this->allOrderBy($request,$query,'isExcellent');
         $query = $this->allOrderBy($request,$query,'isBlocked');
         $query = $this->allOrderBy($request,$query,'isTagged');
-
+        $query = $query->orderBy('last_reply_activated_at','desc')
+            ->orderBy('created_at','desc');
         if (!empty($this->request->get('node'))) {
             $query =  $query->whereNodeHid($this->request->get('node'));
         }
