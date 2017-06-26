@@ -35,7 +35,6 @@ class RegisterService extends BaseService
         if ($this->isInvite) {
             $other['invite_code'] = $request->get('inviteCode');
         }
-
         
         $create = [
             'name' => $request->get('name'),
