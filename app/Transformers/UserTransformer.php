@@ -14,13 +14,13 @@ use Illuminate\Http\Request;
 
 class UserTransformer extends BaseTransformer
 {
-    protected  $request;
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
+//    protected  $request;
+//    public function __construct(Request $request)
+//    {
+//        $this->request = $request;
+//    }
 
-    public function transform(User $user)
+    public function transform(User $user,Request $request)
     {
         $return =  [
             'hid' => $user->hid,
@@ -79,8 +79,7 @@ class UserTransformer extends BaseTransformer
         }
 
 
-
-        $g9zz = $this->request->get('g9zz_user_hid');
+        $g9zz = $request->get('g9zz_user_hid');
         if (empty($g9zz)) return $return;
 
         if ($g9zz == $user->hid) {
