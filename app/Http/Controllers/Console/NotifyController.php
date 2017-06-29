@@ -60,6 +60,7 @@ class NotifyController extends Controller
         $data->count = $count;
         $this->log('controller.log to '.__METHOD__,['data' => $data]);
         $this->setData($data);
+        $this->setCode(0);
         return $this->response();
     }
 }
