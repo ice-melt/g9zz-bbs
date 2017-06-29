@@ -36,7 +36,7 @@ class RegisterService extends BaseService
             $other['invite_code'] = $request->get('inviteCode');
         }
 
-        
+
         $create = [
             'name' => $request->get('name'),
             'email' => $request->get('email'),

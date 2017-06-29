@@ -24,6 +24,7 @@ Route::group(['prefix' => 'test'],function() {
 Route::group(['middleware' => ['g9zz','permission']],function(){
     Route::group(['prefix' => 'user','middleware' => 'idDecode'],function(){
         Route::get('/','Console\UserController@index')->name('console.user.index');
+        Route::get('/{hid}','Console\UserController@show')->name('console.user.show');
         Route::post('/{userId}/role/{roleId}','Console\UserController@attachRole')->name('console.user.attach.role');
 
         Route::get('/{userId}/post','Console\UserController@getPostByUser')->name('console.all.post.by.user');

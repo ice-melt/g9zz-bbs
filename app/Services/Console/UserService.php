@@ -77,4 +77,12 @@ class UserService extends BaseService
         return $this->userRepository->getReplyByUser($userHid)->paginate(per_page());
     }
 
+    /**
+     * @param $hid
+     * @return mixed
+     */
+    public function hidFind($hid)
+    {
+        return $this->userRepository->hidFind($hid);
+    }
 }

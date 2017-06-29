@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('hid')->default('')->comment('加密ID');
             $table->string('name')->nullable()->default('')->comment('用户名');
             $table->string('email')->nullable()->default('');
+            $table->string('mobile', 11)->default('')->comment('手机号');
             $table->string('password')->nullable()->default('');
             $table->string('avatar')->nullable();
             $table->string('status')->default('activited')->nullable();

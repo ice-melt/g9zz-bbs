@@ -77,7 +77,17 @@ class UserController extends Controller
         return $this->response();
     }
 
-
+    /**
+     * @param $hid
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show($hid)
+    {
+        $result = $this->userService->hidFind($hid);
+        $resource = new Item($result,new UserTransformer());
+        $this->setData($resource);
+        return $this->response();
+    }
 
 
 }

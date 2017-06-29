@@ -72,6 +72,13 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereWeiboId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereXcxId($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\DoubanUser $douban
+ * @property-read \App\Models\GithubUser $github
+ * @property-read \App\Models\GoogleUser $google
+ * @property-read \App\Models\QqUser $qq
+ * @property-read \App\Models\WechatUser $wechat
+ * @property-read \App\Models\WeiboUser $weibo
+ * @property-read \App\Models\WechatMiniPrograms $xcx
  */
 class User extends Model
 {
@@ -82,6 +89,7 @@ class User extends Model
         'name',
         'email',
         'password',
+        'mobile',
         'avatar',
         'github_id',
         'wechat_id',
@@ -115,4 +123,59 @@ class User extends Model
         return $this->hasMany(Posts::class,'user_hid','hid');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function xcx()
+    {
+        return $this->hasOne(WechatMiniPrograms::class,'id','xcx_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function google()
+    {
+        return $this->hasOne(GoogleUser::class,'id','google_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function wechat()
+    {
+        return $this->hasOne(WechatUser::class,'id','wechat_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function douban()
+    {
+        return $this->hasOne(DoubanUser::class,'id','douban_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function qq()
+    {
+        return $this->hasOne(QqUser::class,'id','qq_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function weibo()
+    {
+        return $this->hasOne(WeiboUser::class,'id','weibo_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function github()
+    {
+        return $this->hasOne(GithubUser::class,'id','github_id');
+    }
 }

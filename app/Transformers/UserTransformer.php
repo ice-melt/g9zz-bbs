@@ -10,17 +10,84 @@ namespace App\Transformers;
 
 
 use App\Models\User;
+use Illuminate\Http\Request;
+use Vinkla\Hashids\Facades\Hashids;
 
 class UserTransformer extends BaseTransformer
 {
+    protected  $request;
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
     public function transform(User $user)
     {
         $return =  [
             'hid' => $user->hid,
             'name' => $user->name,
-            'mobile' => $user->mobile,
-            'email' => $user->email,
+            'avatar' => $user->avatar,
+//            'mobile' => $user->mobile,
+//            'email' => $user->email,
         ];
+
+        if ($user->xcx) {
+            $return['xcx'] = [
+                'nickName' => $user->xcx->nick_name,
+                'avatarUrl' => $user->xcx->avatar_url,
+            ];
+        }
+
+        if ($user->github) {
+            $return['github'] = [
+                'nickname' => $user->github->nickname,
+                'displayName' => $user->github->display_name,
+                'avatar' => $user->github->avatar,
+            ];
+        }
+
+        if ($user->google) {
+            $return['google'] = [
+
+            ];
+        }
+
+        if ($user->weibo) {
+            $return['weibo'] = [
+                'screenName' => $user->weibo->screen_name,
+                'name' => $user->weibo->name,
+                'description' => $user->weibo->description,
+                'url' => $user->weibo->url,
+            ];
+        }
+
+        if ($user->qq) {
+            $return['qq'] = [
+
+            ];
+        }
+
+        if ($user->douban) {
+            $return['douban'] = [
+
+            ];
+        }
+
+        if ($user->wechat) {
+            $return['wechat'] = [
+
+            ];
+        }
+
+
+
+        $g9zz = $this->request->get('g9zz_user_hid');
+        if (empty($g9zz)) return $return;
+
+        if ($g9zz == $user->hid) {
+            $return['email'] = $user->email;
+            $return['mobile'] = $user->mobile;
+        }
 
         if ($user->role){
             foreach ($user->role as $value) {
@@ -31,6 +98,9 @@ class UserTransformer extends BaseTransformer
                 ];
             }
         }
+
+
+
         return $return;
     }
 }

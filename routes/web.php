@@ -34,6 +34,7 @@ Route::group(['prefix' => 'wechat'],function () {
 
 Route::group([],function(){
     Route::group(['prefix' => 'user','middleware' => 'idDecode'],function(){
+        Route::get('/{hid}','Console\UserController@show')->name('index.user.show');
 //        Route::get('/','Console\UserController@index')->name('console.user.index');
 //        Route::post('/{userId}/role/{roleId}','Console\UserController@attachRole')->name('console.user.attach.role');
         Route::get('/{userId}/post','Console\UserController@getPostByUser')->name('index.all.post.by.user');
