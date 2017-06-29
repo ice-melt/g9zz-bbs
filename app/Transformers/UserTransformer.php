@@ -13,12 +13,6 @@ use App\Models\User;
 
 class UserTransformer extends BaseTransformer
 {
-//    protected  $request;
-//    public function __construct(Request $request)
-//    {
-//        $this->request = $request;
-//    }
-
     public function transform(User $user)
     {
 
@@ -26,8 +20,6 @@ class UserTransformer extends BaseTransformer
             'hid' => $user->hid,
             'name' => $user->name,
             'avatar' => $user->avatar,
-//            'mobile' => $user->mobile,
-//            'email' => $user->email,
         ];
 
         if ($user->xcx) {
@@ -97,9 +89,7 @@ class UserTransformer extends BaseTransformer
                 ];
             }
         }
-
-
-
+        
         return $return;
     }
 }

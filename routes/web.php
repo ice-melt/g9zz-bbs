@@ -83,6 +83,11 @@ Route::group([],function(){
  * 普通用户 可以操作 但必须登录的
  */
 Route::group(['middleware' => 'g9zz'],function(){
+
+    Route::group(['prefix' => 'user'],function(){
+        Route::get('/{hid}','Console\UserController@show')->name('index.user.show');
+    });
+
     Route::group(['prefix' => 'post'],function() {
         Route::post('/','Console\PostController@store')->name('index.post.store');
     });
