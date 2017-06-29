@@ -100,4 +100,13 @@ Route::group(['middleware' => 'g9zz'],function(){
         Route::post('/','Index\AppendController@store')->name('index.append.store');
     });
 
+    Route::group(['prefix' => 'notify'],function() {
+        //获取所有通知
+        Route::get('/','Console\NotifyController@getNotify')->name('index.user.get.notify');
+        Route::get('/unreadNum','Console\NotifyController@getUnreadNotifyNum')->name('index.user.notify.unread.num');
+        //标记某个通知已读
+        Route::post('/set/{notifyId}/read','Console\NotifyController@setNotifyRead')->name('index.user.set.notify.read');
+        //标记所有通知已读
+        Route::post('/set/allRead','Console\NotifyController@setAllNotifyRead')->name('index.user.set.all.notify.read');
+    });
 });

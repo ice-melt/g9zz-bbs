@@ -74,4 +74,14 @@ class NotifyService extends BaseService
         $user = $this->userRepository->find($this->request->get('g9zz_user_id'));
         return $user->unreadNotifications->markAsRead();;
     }
+
+    /**
+     * @return int
+     */
+    public function getUnreadNum()
+    {
+        $user = $this->userRepository->find($this->request->get('g9zz_user_id'));
+        $count = count($user->notifications);
+        return $count;
+    }
 }

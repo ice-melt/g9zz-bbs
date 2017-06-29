@@ -49,4 +49,16 @@ class NotifyController extends Controller
         $this->notifyService->setAllNotifyRead();
         return $this->response();
     }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUnreadNotifyNum()
+    {
+        $count = $this->notifyService->getUnreadNum();
+        $data = new \stdClass();
+        $data->count = $count;
+        $this->setData($data);
+        return $this->response();
+    }
 }

@@ -38,6 +38,7 @@ Route::group(['middleware' => ['g9zz','permission']],function(){
     Route::group(['prefix' => 'notify'],function() {
         //获取所有通知
         Route::get('/','Console\NotifyController@getNotify')->name('console.user.get.notify');
+        Route::get('/unreadNum','Console\NotifyController@getUnreadNotifyNum')->name('console.user.notify.unread.num');
 //        Route::get('/notify/unread','Console\NotifyController@getUnReadNotify')->name('console.user.get.unread.notify');
 //        Route::get('/notify/read','Console\NotifyController@getHadReadNotify')->name('console.user.get.had.read.notify');
         //标记某个通知已读
