@@ -10,7 +10,6 @@ namespace App\Transformers;
 
 
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class UserTransformer extends BaseTransformer
 {
@@ -22,7 +21,7 @@ class UserTransformer extends BaseTransformer
 
     public function transform(User $user)
     {
-        $request = new Request();
+
         $return =  [
             'hid' => $user->hid,
             'name' => $user->name,
@@ -80,7 +79,7 @@ class UserTransformer extends BaseTransformer
         }
 
 
-        $g9zz = $request->get('g9zz_user_hid');
+        $g9zz = \Request::get('g9zz_user_hid');
         if (empty($g9zz)) return $return;
 
         if ($g9zz == $user->hid) {
