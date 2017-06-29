@@ -20,8 +20,9 @@ class UserTransformer extends BaseTransformer
 //        $this->request = $request;
 //    }
 
-    public function transform(User $user,Request $request)
+    public function transform(User $user)
     {
+        $request = new Request();
         $return =  [
             'hid' => $user->hid,
             'name' => $user->name,
