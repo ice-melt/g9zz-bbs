@@ -81,7 +81,7 @@ class NotifyService extends BaseService
     public function getUnreadNum()
     {
         $user = $this->userRepository->find($this->request->get('g9zz_user_id'));
-        dd($user->notifications);
+        dd($user->notifications->toArray());
         $count = count($user->notifications);
         return $count;
     }
