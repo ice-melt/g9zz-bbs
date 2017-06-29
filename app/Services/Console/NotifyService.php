@@ -82,7 +82,7 @@ class NotifyService extends BaseService
     {
         $user = $this->userRepository->find($this->request->get('g9zz_user_id'));
         $count = count($user->unreadNotifications->toArray());
-        dd($count,$user->unreadNotifications->toArray());
+//        dd($count,$user->unreadNotifications->toArray());
         return $count;
     }
 }
