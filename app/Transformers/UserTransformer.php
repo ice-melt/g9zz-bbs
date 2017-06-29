@@ -11,7 +11,6 @@ namespace App\Transformers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Vinkla\Hashids\Facades\Hashids;
 
 class UserTransformer extends BaseTransformer
 {
