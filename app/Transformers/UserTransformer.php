@@ -80,7 +80,7 @@ class UserTransformer extends BaseTransformer
 
 
         $g9zz = \Request::get('g9zz_user_hid');
-        dd($g9zz);
+
         if (empty($g9zz)) return $return;
 
         if ($g9zz == $user->hid) {
