@@ -58,6 +58,7 @@ class NotifyController extends Controller
         $count = $this->notifyService->getUnreadNum();
         $data = new \stdClass();
         $data->count = $count;
+        $this->log('controller.log to '.__METHOD__,['data' => $data]);
         $this->setData($data);
         return $this->response();
     }
