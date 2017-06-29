@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\Item;
 
 class NotifyController extends Controller
 {
@@ -37,7 +38,9 @@ class NotifyController extends Controller
      */
     public function setNotifyRead($notifyId)
     {
-        $this->notifyService->setNotifyRead($notifyId);
+        $result = $this->notifyService->setNotifyRead($notifyId);
+        $resource = new Item($result,new NotifyTransformer());
+        $this->setData($resource);
         return $this->response();
     }
 

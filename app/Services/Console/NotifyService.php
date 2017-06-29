@@ -39,8 +39,10 @@ class NotifyService extends BaseService
         //不允许标记他人的通知
         if ($notify->notifiable_id != $this->request->get('g9zz_user_id')) {
             $this->setCode(config('validation.notify')['noSet.other']);
-            return $this->response();        }
-        return $notify->markAsRead();
+            return $this->response();
+        }
+        $notify->markAsRead();
+        return $this->notifyRepository->find($notifyId);
     }
 
     /**
