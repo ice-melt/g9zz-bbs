@@ -99,7 +99,7 @@ class ReplyService extends BaseService
         $author->save();
 
         $user = $this->userRepository->getUserById($notify->to_id);
-        if (!empty($user)) {
+        if (!empty($user) && $notify->from_id != $notify->to_id) {
             $user->notify(new ReplyNotify($notify));
         }
 
