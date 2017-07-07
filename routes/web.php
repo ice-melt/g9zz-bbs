@@ -34,7 +34,7 @@ Route::group(['prefix' => 'wechat'],function () {
 
 Route::group([],function(){
     Route::group(['prefix' => 'user','middleware' => 'idDecode'],function(){
-        Route::get('/{hid}','Console\UserController@show')->name('index.user.show');
+//        Route::get('/{hid}','Console\UserController@show')->name('index.user.show');
 //        Route::get('/','Console\UserController@index')->name('console.user.index');
 //        Route::post('/{userId}/role/{roleId}','Console\UserController@attachRole')->name('console.user.attach.role');
         Route::get('/{userId}/post','Console\UserController@getPostByUser')->name('index.all.post.by.user');
@@ -86,6 +86,10 @@ Route::group(['middleware' => 'g9zz'],function(){
 
     Route::group(['prefix' => 'user'],function(){
         Route::get('/{hid}','Console\UserController@show')->name('index.user.show');
+
+        //点击获取 验证链接
+        Route::get('/verify','Auth\MyLoginController@getVerifyToken')->name('console.user.get.verify.token');
+
     });
 
     Route::group(['prefix' => 'post'],function() {
