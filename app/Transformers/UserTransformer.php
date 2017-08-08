@@ -20,6 +20,9 @@ class UserTransformer extends BaseTransformer
             'hid' => $user->hid,
             'name' => $user->name,
             'avatar' => $user->avatar,
+            'email' => $user->email,
+            'status' => $user->status,
+            'verified' => $user->verified
         ];
 
         if ($user->xcx) {
