@@ -22,7 +22,8 @@ class UserTransformer extends BaseTransformer
             'avatar' => $user->avatar,
             'email' => $user->email,
             'status' => $user->status,
-            'verified' => $user->verified
+            'verified' => $user->verified,
+            'createdAt' => rfc_3339($user->created_at)
         ];
 
         if ($user->xcx) {
