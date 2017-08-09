@@ -39,7 +39,7 @@ class ReplyService extends BaseService
      */
     public function paginate()
     {
-        return $this->replyRepository->noBlocked()->paginate(per_page(100));
+        return $this->replyRepository->noBlocked()->paginate(per_page());
     }
 
     /**
@@ -65,6 +65,9 @@ class ReplyService extends BaseService
             $result->save();
 
             $this->replyNotify($create,$request);
+
+            //TODO::应该还有个 艾特的通知
+
             \DB::commit();
         } catch (\Exception $e) {
             $this->log('"service.error" to listener "' . __METHOD__ . '".', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()]);
