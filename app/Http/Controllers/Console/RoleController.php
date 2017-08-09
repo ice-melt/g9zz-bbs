@@ -6,6 +6,7 @@ use App\Http\Requests\Console\RoleRequest;
 use App\Services\Console\RoleService;
 use App\Transformers\RoleTransformer;
 use App\Http\Controllers\Controller;
+use App\Transformers\ShowRoleTransformer;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
@@ -51,7 +52,7 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $resource = new Item($this->roleService->find($id),new RoleTransformer());
+        $resource = new Item($this->roleService->find($id),new ShowRoleTransformer());
         $this->setData($resource);
         return $this->response();
     }
