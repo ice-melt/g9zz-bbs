@@ -22,7 +22,7 @@ class NodeTransformer extends BaseTransformer
             'postCount' => $nodes->post_count,
             'weight' => $nodes->weight,
             'level' => $nodes->level,
-            'is_show' => $nodes->is_show,
+            'isShow' => $nodes->is_show,
             'name' => $nodes->name,
             'displayName' => $nodes->display_name,
             'description' => $nodes->description,
