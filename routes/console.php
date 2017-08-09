@@ -111,7 +111,7 @@ Route::group(['middleware' => ['g9zz','permission']],function(){
     });
 
     Route::group(['prefix' => 'code'],function() {
-        Route::get('/','Console\InviteCodeController@index')->name('console.code.store');
+        Route::get('/','Console\InviteCodeController@index')->name('console.code.index');
         Route::get('/ownCode','Console\InviteCodeController@getOwnCode')->name('console.code.own.code');
         Route::post('/','Console\InviteCodeController@store')->name('console.code.store');
     });
