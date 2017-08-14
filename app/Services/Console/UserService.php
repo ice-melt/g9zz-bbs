@@ -103,7 +103,8 @@ class UserService extends BaseService
     {
         $result = $this->userRepository->hidFind($hid);
         $result->status = 'closure';
-        return $result->save();
+        $result->save();
+        return $result;
     }
 
 }
