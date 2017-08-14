@@ -102,11 +102,14 @@ class UserController extends Controller
     /**
      * 封禁;  注意:此处是可以封禁自己的哦....
      * @param $hid
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function closure($hid)
+    public function closure($hid,Request $request)
     {
-        $result = $this->userService->closureHid($hid);
+        $status = $request->only('status');
+        $this->log('controller.request to '.__METHOD__,['request' => $status]);
+        $result = $this->userService->closureHid($hid,$status);
         $resource = new Item($result,new UserTransformer());
         $this->setData($resource);
         return $this->response();

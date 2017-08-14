@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('mobile', 11)->default('')->comment('手机号');
             $table->string('password')->nullable()->default('');
             $table->string('avatar')->nullable();
-            $table->string('status')->default('activited')->nullable()->comment('状态 activited正常,closure 封禁');
+            $table->string('status')->default('activated')->nullable()->comment('状态 activated正常,closure 封禁');
             $table->integer('github_id')->default(0);
             $table->integer('wechat_id')->default(0);
             $table->integer('weibo_id')->default(0);
