@@ -163,7 +163,8 @@ class PostService extends BaseService
     {
         $update = [
             'title' => $request->get('title'),
-            'body_original' => $request->get('content')
+            'body_original' => $request->get('content'),
+            'node_hid' => $request->get('nodeHid')
         ];
         $parser = new Parser();
         $update['content'] = $parser->makeHtml($update['body_original']);
@@ -171,10 +172,10 @@ class PostService extends BaseService
         try {
             \DB::beginTransaction();
             $result = $this->postRepository->hidUpdate($update,$hid);
-            $nodeId = Hashids::connection('node')->decode($request->get('nodeHid'));
-            $this->log('"service.error" to listener "' . __METHOD__ . '".', ['nodeId' => $nodeId]);
-            $result->node_hid = $nodeId[0];
-            $result->save();
+//            $nodeId = Hashids::connection('node')->decode($request->get('nodeHid'));
+//            $this->log('"service.log" to listener "' . __METHOD__ . '".', ['nodeId' => $nodeId]);
+//            $result->node_hid = $nodeId[0];
+//            $result->save();
             \DB::commit();
         } catch (\Exception $e) {
             $this->log('"service.error" to listener "' . __METHOD__ . '".', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()]);
