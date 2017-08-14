@@ -30,7 +30,10 @@ Route::group(['middleware' => ['g9zz','permission']],function(){
         Route::get('/{userHid}/post','Console\UserController@getPostByUser')->name('console.all.post.by.user');
         Route::get('/{userHid}/reply','Console\UserController@getReplyByUser')->name('console.all.reply.by.user');
 
+        Route::delete('/{userHid}','Console\UserController@destroy')->name('console.user.delete');
+        Route::post('/{userHid}/closure','Console\UserController@closure')->name('console.user.closure');
 
+        
     });
 
     Route::group(['prefix' => 'notify'],function() {

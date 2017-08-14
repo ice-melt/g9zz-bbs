@@ -85,4 +85,25 @@ class UserService extends BaseService
     {
         return $this->userRepository->hidFind($hid);
     }
+
+    /**
+     * @param $hid
+     * @return mixed
+     */
+    public function deleteHid($hid)
+    {
+        return $this->userRepository->hidDelete($hid);
+    }
+
+    /**
+     * @param $hid
+     * @return mixed
+     */
+    public function closureHid($hid)
+    {
+        $result = $this->userRepository->hidFind($hid);
+        $result->status = 'closure';
+        return $result->save();
+    }
+
 }

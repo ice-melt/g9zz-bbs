@@ -89,5 +89,26 @@ class UserController extends Controller
         return $this->response();
     }
 
+    /**
+     * @param $hid
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy($hid)
+    {
+        $result = $this->userService->deleteHid($hid);
+        if ($result) return $this->response();
+    }
 
+    /**
+     * 封禁;  注意:此处是可以封禁自己的哦....
+     * @param $hid
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function closure($hid)
+    {
+        $result = $this->userService->closureHid($hid);
+        $resource = new Item($result,new UserTransformer());
+        $this->setData($resource);
+        return $this->response();
+    }
 }

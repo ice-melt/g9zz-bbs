@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('mobile', 11)->default('')->comment('手机号');
             $table->string('password')->nullable()->default('');
             $table->string('avatar')->nullable();
-            $table->string('status')->default('activited')->nullable();
+            $table->string('status')->default('activited')->nullable()->comment('状态 activited正常,closure 封禁');
             $table->integer('github_id')->default(0);
             $table->integer('wechat_id')->default(0);
             $table->integer('weibo_id')->default(0);
@@ -29,12 +29,12 @@ class CreateUsersTable extends Migration
             $table->integer('google_id')->default(0);
             $table->integer('douban_id')->default(0);
             $table->integer('xcx_id')->default(0);
-            $table->integer('topic_count')->default(0)->index();
-            $table->integer('reply_count')->default(0)->index();
-            $table->integer('follower_count')->default(0)->index();
-            $table->string('verified')->default('false')->index();
-            $table->enum('email_notify_enabled', ['yes',  'no'])->default('yes')->index();
-            $table->string('register_source')->nullable()->index();
+            $table->integer('topic_count')->default(0);
+            $table->integer('reply_count')->default(0);
+            $table->integer('follower_count')->default(0);
+            $table->string('verified')->default('false');
+            $table->enum('email_notify_enabled', ['yes',  'no'])->default('yes');
+            $table->string('register_source')->nullable();
             $table->timestamp('last_activated_at')->nullable();
             $table->softDeletes();
             $table->rememberToken();
