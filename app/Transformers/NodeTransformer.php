@@ -26,6 +26,7 @@ class NodeTransformer extends BaseTransformer
             'name' => $nodes->name,
             'displayName' => $nodes->display_name,
             'description' => $nodes->description,
+            'parentHid' => $nodes->parent_hid,
         ];
 
         if ($nodes->newHtml) {
