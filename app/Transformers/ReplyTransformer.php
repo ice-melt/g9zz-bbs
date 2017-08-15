@@ -21,7 +21,7 @@ class ReplyTransformer extends BaseTransformer
             'source' => $replies->source,
 //            'post_id' ,
 //            'user_id',
-//            'is_blocked',
+            'isBlocked' => $replies->is_blocked,
 //            'voteCount' => $replies->vote_count,
             'content' => $replies->is_blocked == 'yes' ? '该条因为一些原因被block,望周知' : $replies->body,
             'contentOriginal' => $replies->is_blocked == 'yes' ? '该条因为一些原因被block,望周知' : $replies->body_original,
