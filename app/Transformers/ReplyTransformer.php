@@ -37,11 +37,19 @@ class ReplyTransformer extends BaseTransformer
         }
 
         if ($replies->user_hid) {
-            $return['user'] = [
-                'hid' => isset($replies->user->hid) ? $replies->user->hid : null,
-                'name' => isset($replies->user->name) ? $replies->user->name : null,
-                'avatar' => isset($replies->user->avatar) ? $replies->user->avatar : null
-            ];
+            if ($replies->is_blocked == 'yes') {
+                $return['user'] = [
+                    'hid' => config('g9zz.official.hid'),
+                    'name' => config('g9zz.official.name'),
+                    'avatar' => config('g9zz.official.avatar')
+                ];
+            } else {
+                $return['user'] = [
+                    'hid' => isset($replies->user->hid) ? $replies->user->hid : null,
+                    'name' => isset($replies->user->name) ? $replies->user->name : null,
+                    'avatar' => isset($replies->user->avatar) ? $replies->user->avatar : null
+                ];
+            }
         }
         return $return;
     }

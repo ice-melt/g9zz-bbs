@@ -43,5 +43,10 @@ return [
             'douban' => 6,
         ],
 
+    ],
+    'official' => [
+        'name' => env('OFFICIAL_NAME','G9ZZ'),
+        'hid' => '',
+        'avatar' => env('OFFICIAL_NAME','../assets/g9zz.jpeg'),
     ]
 ];
