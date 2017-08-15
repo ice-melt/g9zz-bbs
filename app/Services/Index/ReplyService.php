@@ -39,7 +39,7 @@ class ReplyService extends BaseService
      */
     public function paginate()
     {
-        return $this->replyRepository->noBlocked()->paginate(per_page());
+        return $this->replyRepository->models()->paginate(per_page());
     }
 
     /**
