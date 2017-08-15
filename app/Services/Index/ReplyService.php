@@ -154,4 +154,16 @@ class ReplyService extends BaseService
     {
         return $this->replyRepository->hidDelete($hid);
     }
+
+    /**
+     * @param $hid
+     * @return mixed
+     */
+    public function blockReply($hid)
+    {
+        $result = $this->replyRepository->hidFind($hid);
+        $result->is_blocked = $result->is_blocked == 'yes' ? 'no' : 'yes';
+        $result->save();
+        return $result;
+    }
 }

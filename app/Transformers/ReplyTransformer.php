@@ -23,8 +23,8 @@ class ReplyTransformer extends BaseTransformer
 //            'user_id',
 //            'is_blocked',
 //            'voteCount' => $replies->vote_count,
-            'content' => $replies->body,
-            'contentOriginal' => $replies->body_original,
+            'content' => $replies->is_blocked == 'yes' ? '该条因为一些原因被block,望周知' : $replies->body,
+            'contentOriginal' => $replies->is_blocked == 'yes' ? '该条因为一些原因被block,望周知' : $replies->body_original,
             'createdAt' => rfc_3339($replies->created_at),
             'created' => $replies->created_at->diffForHumans()
         ];

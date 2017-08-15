@@ -33,7 +33,7 @@ Route::group(['middleware' => ['g9zz','permission']],function(){
         Route::delete('/{userHid}','Console\UserController@destroy')->name('console.user.delete');
         Route::post('/{userHid}/closure','Console\UserController@closure')->name('console.user.closure');
 
-        
+
     });
 
     Route::group(['prefix' => 'notify'],function() {
@@ -84,6 +84,7 @@ Route::group(['middleware' => ['g9zz','permission']],function(){
         Route::get('/{hid}','Index\ReplyController@show')->name('console.reply.show');
         Route::put('/{hid}','Index\ReplyController@update')->name('console.reply.put');
         Route::delete('/{hid}','Index\ReplyController@destroy')->name('console.reply.destroy');
+        Route::post('/{hid}/block','Index\ReplyController@block')->name('console.reply.block');
     });
 
     Route::group(['prefix' => 'append'],function() {
