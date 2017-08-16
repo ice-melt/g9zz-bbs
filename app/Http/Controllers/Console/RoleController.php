@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Console;
 
 use App\Http\Requests\Console\RoleRequest;
 use App\Services\Console\RoleService;
+use App\Transformers\RolePermissionListTransformer;
 use App\Transformers\RoleTransformer;
 use App\Http\Controllers\Controller;
 use App\Transformers\ShowRoleTransformer;
@@ -95,6 +96,18 @@ class RoleController extends Controller
         $permissions = $request->get('permissionIds');
         $this->roleService->attachPermission($permissions,$roleId);
         $resource = new Item($this->roleService->find($roleId),new RoleTransformer());
+        $this->setData($resource);
+        return $this->response();
+    }
+
+    /**
+     * @param $roleId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getPermissionByRole($roleId)
+    {
+        $result = $this->roleService->find($roleId);
+        $resource = new Item($result,new RolePermissionListTransformer());
         $this->setData($resource);
         return $this->response();
     }
