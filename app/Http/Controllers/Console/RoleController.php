@@ -37,7 +37,7 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
-        $create = $request->only(['name','displayName','description']);
+        $create = $request->only(['name','displayName','description','level']);
         $this->log('controller.request to '.__METHOD__,['create' => $create]);
         $create = parse_input($create);
         $result = $this->roleService->store($create);
@@ -64,7 +64,7 @@ class RoleController extends Controller
      */
     public function update(RoleRequest $request, $id)
     {
-        $update = $request->only(['name','displayName']);
+        $update = $request->only(['name','displayName','level']);
         if (!empty($request->get('description'))) $update['description'] = $request->get('description');
         $this->log('service.request to '.__METHOD__,['update' => $update]);
         $update = parse_input($update);

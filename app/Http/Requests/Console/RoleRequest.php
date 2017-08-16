@@ -22,6 +22,7 @@ class RoleRequest extends BaseRequest
             $rule = [
                 'name' => 'required|unique:roles,name',
                 'displayName' => 'required|unique:roles,display_name',
+                'level' => 'required|integer',
                 'description' => 'max:150',
             ];
         }
@@ -30,6 +31,7 @@ class RoleRequest extends BaseRequest
             $rule = [
                 'name' => 'required|unique:roles,name,null,null,id,!'.$id,
                 'displayName' => 'required|unique:roles,display_name,null,null,id,!'.$id,
+                'level' => 'required|integer',
                 'description' => 'max:150',
             ];
         }

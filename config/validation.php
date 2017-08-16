@@ -72,6 +72,8 @@ return [
         'description.max' => 408000004,
         'permissionIds.required' => 408000005,
         'has.user' => 408000006,
+        'level.required' => 408000007,
+        'level.integer' => 408000008,
     ],
     'invite_code' => [
         'max.num' => 409000000,
