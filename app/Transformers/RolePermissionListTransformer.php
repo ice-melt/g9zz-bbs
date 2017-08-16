@@ -26,6 +26,7 @@ class RolePermissionListTransformer extends BaseTransformer
         ];
         if ($roles->permission) {
             foreach ($roles->permission as $key => $value) {
+                $return['permissionIds'][] = $value->id;
                 $return['permission'][] = [
                     'id' => $value->id,
                     'name' => $value->name,
