@@ -21,6 +21,7 @@ class PermissionTransformer extends BaseTransformer
             'name' => $permissions->name,
             'displayName' => $permissions->display_name,
             'description' => $permissions->description,
+            'createdAt' => rfc_3339($permissions->created_at)
         ];
         return $return;
     }
