@@ -111,6 +111,7 @@ Route::group(['middleware' => ['g9zz','permission']],function(){
         Route::delete('/{id}','Console\RoleController@destroy')->name('console.role.destroy');
 
         Route::post('/{roleId}/permission','Console\RoleController@attachPermission')->name('console.role.attach.permission');
+        Route::post('/{roleId}/cover/permission','Console\RoleController@coverAttachPermission')->name('console.role.cover.attach.permission');
         Route::get('/{roleId}/permission','Console\RoleController@getPermissionByRole')->name('console.role.get.permission');
 
     });

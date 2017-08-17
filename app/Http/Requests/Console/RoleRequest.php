@@ -36,7 +36,7 @@ class RoleRequest extends BaseRequest
             ];
         }
 
-        if ($actionMethod == 'attachPermission') {
+        if ($actionMethod == 'attachPermission' || $actionMethod == 'coverAttachPermission') {
             $rule = [
                 'permissionIds' => 'required'
             ];

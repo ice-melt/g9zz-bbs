@@ -86,7 +86,7 @@ class RoleController extends Controller
     }
 
     /**
-     * 给角色分配权限
+     * 去重给角色分配权限
      * @param RoleRequest $request
      * @param $roleId
      * @return \Illuminate\Http\JsonResponse
@@ -99,6 +99,22 @@ class RoleController extends Controller
         $this->setData($resource);
         return $this->response();
     }
+
+    /**
+     * 覆盖分配权限
+     * @param RoleRequest $request
+     * @param $roleId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function coverAttachPermission(RoleRequest $request,$roleId)
+    {
+        $permissions = $request->get('permissionIds');
+        $this->roleService->coverAttachPermission($permissions,$roleId);
+        $resource = new Item($this->roleService->find($roleId),new RoleTransformer());
+        $this->setData($resource);
+        return $this->response();
+    }
+
 
     /**
      * @param $roleId

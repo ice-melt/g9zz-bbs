@@ -90,6 +90,7 @@ class RoleService extends BaseService
     }
 
     /**
+     * 合并去重分配权限
      * @param $permissions
      * @param $roleId
      * @return mixed
@@ -103,6 +104,30 @@ class RoleService extends BaseService
         $this->log('service.request to '.__METHOD__,['permissions' => $newPermissions]);
         return $this->roleRepository->syncRelationship($newPermissions,$roleId);
     }
+
+    /**
+     * 覆盖分配权限
+     * @param $permissions
+     * @param $roleId
+     * @return bool
+     */
+    public function coverAttachPermission($permissions,$roleId)
+    {
+        $this->checkExists($permissions);
+
+        try {
+            \DB::beginTransaction();
+            $this->roleRepository->detachPermissionRole($roleId);
+            $this->roleRepository->syncRelationship($permissions,$roleId);
+            \DB::commit();
+        } catch (\Exception $e) {
+            $this->log('"service.error" to listener "' . __METHOD__ . '".', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()]);
+            \DB::rollBack();
+            throw new TryException(json_encode($e->getMessage()),(int)$e->getCode());
+        }
+        return true;
+    }
+
 
     /**
      * 校验传入的权限ID 是否存在
