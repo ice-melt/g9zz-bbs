@@ -25,7 +25,7 @@ class IdDecode
             if ($userHid !== (int)$userHid ) {
                 $userId = Hashids::connection('user')->decode($userHid);
                 \Log::info('middleware.request to '.__METHOD__,['Hashids_user_id' => $userId]);
-                $request->route()->setParameter('userId',$userId[0]);
+                $request->route()->setParameter('userHid',$userId[0]);
             }
         }
         return $next($request);
