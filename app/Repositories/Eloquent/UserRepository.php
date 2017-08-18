@@ -194,6 +194,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function getUserRoleIdsByUserId($id)
     {
-        return $this->roleUserRepository->models()->whereUserId($id)->lists('role_id');
+        return $this->roleUserRepository->models()->whereUserId($id)->pluck('role_id');
     }
 }
