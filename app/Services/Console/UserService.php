@@ -122,7 +122,7 @@ class UserService extends BaseService
         $closureLevels = $this->userRepository->getRoleLevelsByUserId($closureId);
         $this->log('service.request to '.__METHOD__,['closure_user_levels' => $closureLevels]);
 
-        if (!empty($levels)) {
+        if (!empty($closureLevels)) {
             //被处理用户最大权限(最小值)
             $closureMaxLevel = $closureLevels[array_search(min($closureLevels),$closureLevels)];
             $this->log('service.request to '.__METHOD__,['closure_user_max_level' => $closureMaxLevel]);
