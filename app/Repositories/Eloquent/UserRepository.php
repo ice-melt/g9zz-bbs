@@ -181,6 +181,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function getRoleByUserHid($hid)
     {
-        return $this->model->findWhere(['hid' => $hid])->role()->first();
+        return $this->model->whereHid($hid)->with('role')->first();
     }
 }
