@@ -114,4 +114,16 @@ class UserController extends Controller
         $this->setData($resource);
         return $this->response();
     }
+
+    /**
+     * @param $hid
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function doVerify($hid)
+    {
+        $result = $this->userService->doVerify($hid);
+        $resource = new Item($result,new UserTransformer());
+        $this->setData($resource);
+        return $this->response();
+    }
 }

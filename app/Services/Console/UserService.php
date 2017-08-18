@@ -109,4 +109,17 @@ class UserService extends BaseService
         return $result;
     }
 
+    /**
+     * 手动修改验证状态
+     * @param $hid
+     * @return mixed
+     */
+    public function doVerify($hid)
+    {
+        $result = $this->userRepository->hidFind($hid);
+        $result->verified = true;
+        $result->save();
+        return $result;
+    }
+
 }

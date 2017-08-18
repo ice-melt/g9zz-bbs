@@ -32,6 +32,7 @@ Route::group(['middleware' => ['g9zz','permission']],function(){
 
         Route::delete('/{userHid}','Console\UserController@destroy')->name('console.user.delete');
         Route::post('/{userHid}/closure','Console\UserController@closure')->name('console.user.closure');
+        Route::post('/{userHid}/verify','Console\UserController@doVerify')->name('console.user.do.verify');
 
 
     });
