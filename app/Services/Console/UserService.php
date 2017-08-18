@@ -74,7 +74,7 @@ class UserService extends BaseService
             $this->setCode(config('validation.permission')['permission.forbidden']);
             return $this->response();
         }
-        
+
         return $this->userRepository->syncRelationship($roleId,$userId);
     }
 

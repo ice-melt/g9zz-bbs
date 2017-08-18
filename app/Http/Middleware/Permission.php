@@ -47,7 +47,7 @@ class Permission
         }
 
         //超管,直接跳走
-        if ($role->level == 1) {
+        if ($role->level >= 1) {
             return $next($request);
         }
 
