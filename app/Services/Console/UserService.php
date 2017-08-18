@@ -110,8 +110,8 @@ class UserService extends BaseService
         $this->log('service.request to '.__METHOD__,['auth-id' => $authId]);
         $user = $this->userRepository->getUserRoleIdsByUserId($authId)->toArray();
         $test = [1,5,3,7,8,3];
-        $res = array_sort($test,function(){
-            return true;
+        $res = array_sort($test,function($value){
+            return $value;
         });
 
         dd($user,$test,$res);
