@@ -119,19 +119,17 @@ class UserService extends BaseService
         //被处理用户
         $closureId = $this->userRepository->hidFind($hid)->id;
         $closureLevels = $this->userRepository->getRoleLevelsByUserId($closureId);
-        if (empty($levels)) {
-            $this->setCode(config('validation.default')['some.error']);
-            return $this->response();
-        }
-        //被处理用户最大权限(最小值)
-        $closureMaxLevel = $closureLevels[array_search(min($closureLevels),$closureLevels)];
+        if (!empty($levels)) {
+            //被处理用户最大权限(最小值)
+            $closureMaxLevel = $closureLevels[array_search(min($closureLevels),$closureLevels)];
 
-        // 权限里level越小 权限越大
-        if ($userMaxLevel >= $closureMaxLevel) {
-            $this->setCode(config('validation.permission')['permission.forbidden']);
-            return $this->response();
+            // 权限里level越小 权限越大
+            if ($userMaxLevel >= $closureMaxLevel) {
+                $this->setCode(config('validation.permission')['permission.forbidden']);
+                return $this->response();
+            }
         }
-
+        
         $result = $this->userRepository->hidFind($hid);
         $result->status = $status;
         $result->save();
