@@ -57,6 +57,24 @@ class UserService extends BaseService
     {
         $this->roleRepository->find($roleId);
         $this->userRepository->find($userId);
+
+        //当前登录用户HID
+        $authId = $this->request->get('g9zz_user_id');
+        $this->log('service.request to '.__METHOD__,['auth_id' => $authId]);
+        $levels = $this->userRepository->getRoleLevelsByUserId($authId);
+        if (empty($levels)) {
+            $this->setCode(config('validation.default')['some.error']);
+            return $this->response();
+        }
+        //登录用户的最大权限(值最小)
+        $userMaxLevel = $levels[array_search(min($levels),$levels)];
+        $this->log('service.request to '.__METHOD__,['user_max_level' => $userMaxLevel]);
+
+        if ($userMaxLevel > $roleId) {
+            $this->setCode(config('validation.permission')['permission.forbidden']);
+            return $this->response();
+        }
+        
         return $this->userRepository->syncRelationship($roleId,$userId);
     }
 
