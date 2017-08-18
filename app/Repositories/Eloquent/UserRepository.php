@@ -13,6 +13,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\User;
 use App\Repositories\Contracts\PostRepositoryInterface;
 use App\Repositories\Contracts\ReplyRepositoryInterface;
+use App\Repositories\Contracts\RoleUserRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Container\Container as App;
 use Illuminate\Support\Collection;
@@ -21,12 +22,15 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
     protected $postRepository;
     protected $replyRepository;
+    protected $roleUserRepository;
     public function __construct(App $app,
                                 Collection $collection,
+                                RoleUserRepositoryInterface $roleUserRepository,
                                 PostRepositoryInterface $postRepository,
                                 ReplyRepositoryInterface $replyRepository)
     {
         $this->postRepository = $postRepository;
+        $this->roleUserRepository = $roleUserRepository;
         $this->replyRepository = $replyRepository;
         parent::__construct($app, $collection);
     }
@@ -182,5 +186,14 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function getRoleByUserHid($hid)
     {
         return $this->model->whereHid($hid)->with('role')->first();
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getUserRoleIdsByUserId($id)
+    {
+        return $this->roleUserRepository->findWhere(['user_id',$id])->get('id');
     }
 }

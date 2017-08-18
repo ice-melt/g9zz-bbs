@@ -106,9 +106,12 @@ class UserService extends BaseService
         $this->log('service.request to '.__METHOD__,['request' => $status]);
 
         //当前登录用户HID
-        $authHid = $this->request->get('g9zz_user_hid');
-        $user = $this->userRepository->getRoleByUserHid($authHid)->toArray();
+        $authId = $this->request->get('g9zz_user_id');
+        $user = $this->userRepository->getUserRoleIdsByUserId($authId);
         dd($user);
+        if (count($user['role']) > 0)
+
+
         $result = $this->userRepository->hidFind($hid);
         $result->status = $status;
         $result->save();
