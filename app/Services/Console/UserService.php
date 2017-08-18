@@ -88,6 +88,7 @@ class UserService extends BaseService
             }
         }
 
+        $this->log('service.request to '.__METHOD__,['user_max_level' => $userMaxLevel,'role_id' => $roleId]);
 
         if ($userMaxLevel > $roleId) {
             $this->setCode(config('validation.permission')['permission.forbidden']);
