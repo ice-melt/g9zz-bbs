@@ -81,4 +81,11 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function getUserByXcxId($xcxId);
+
+    /**
+     * 通过HID查询用户角色
+     * @param $hid
+     * @return mixed
+     */
+    public function getRoleByUserHid($hid);
 }
