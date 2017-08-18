@@ -60,7 +60,7 @@ class UserService extends BaseService
             if ($this->isInvite) {
                 $inviteCode = $this->inviteCodeRepository->getInviteCodeByCode($other['invite_code']);
                 if (empty($inviteCode)) {
-                    $this->setCode(config('validation.validation.register')['inviteCode.exists']);
+                    $this->setCode(config('validation.register')['inviteCode.exists']);
                     return $this->response();
                 }
                 $inviteCodeUpdate = [
