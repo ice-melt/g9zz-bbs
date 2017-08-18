@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Console;
 
 use App\Services\Console\NotifyService;
 use App\Services\Console\UserService;
-use App\Transformers\NotifyTransformer;
 use App\Transformers\PostListTransformer;
 use App\Transformers\ReplyTransformer;
 use App\Transformers\UserTransformer;

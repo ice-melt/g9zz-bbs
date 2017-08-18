@@ -47,6 +47,6 @@ return [
     'official' => [
         'name' => env('OFFICIAL_NAME','G9ZZ'),
         'hid' => '',
-        'avatar' => env('OFFICIAL_AVATAR',asset('images/g9zz.jpeg')),
+        'avatar' => env('OFFICIAL_AVATAR','images/g9zz.jpeg'),
     ]
 ];
