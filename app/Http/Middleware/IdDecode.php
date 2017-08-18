@@ -8,7 +8,6 @@ use Vinkla\Hashids\Facades\Hashids;
 
 class IdDecode
 {
-    use G9zzLog;
     /**
      * Handle an incoming request.
      *
@@ -19,13 +18,13 @@ class IdDecode
     public function handle($request, Closure $next)
     {
         $actionName = $request->route()->getName();
-        $this->log('middleware.request to '.__METHOD__,['action_name' => $actionName]);
+        \Log::info('middleware.request to '.__METHOD__,['action_name' => $actionName]);
         if ($actionName == 'console.user.attach.role') {
             $userId = $request->route()->parameter('userId');
-            $this->log('middleware.request to '.__METHOD__,['user_id' => $userId]);
+            \Log::info('middleware.request to '.__METHOD__,['user_id' => $userId]);
             if ($userId !== (int)$userId ) {
                 $userId = Hashids::connection('user')->decode($userId);
-                $this->log('middleware.request to '.__METHOD__,['Hashids_user_id' => $userId]);
+                \Log::info('middleware.request to '.__METHOD__,['Hashids_user_id' => $userId]);
                 $request->route()->setParameter('userId',$userId[0]);
             }
         }
