@@ -108,7 +108,7 @@ class UserService extends BaseService
         //当前登录用户HID
         $authId = $this->request->get('g9zz_user_id');
         $this->log('service.request to '.__METHOD__,['auth-id' => $authId]);
-        $user = $this->userRepository->getRoleLevelsByUserId($authId)->toArray();
+        $user = $this->userRepository->getRoleLevelsByUserId($authId);
         $test = [1,5,3,7,8,3];
         $res = array_sort($test,function($value){
             return $value;

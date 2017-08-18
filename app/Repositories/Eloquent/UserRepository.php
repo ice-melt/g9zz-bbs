@@ -199,10 +199,17 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     /**
      * @param $userId
-     * @return mixed
+     * @return array
      */
     public function getRoleLevelsByUserId($userId)
     {
-        return $this->model->find($userId)->role()->pluck('role.level');
+        $role = $this->model->find($userId)->role()->get()->toArray();
+        $ids = [];
+        if (!empty($role)) {
+            foreach ($role as $key => $value) {
+                $ids[] = $value['level'];
+            }
+        }
+        return $ids;
     }
 }
