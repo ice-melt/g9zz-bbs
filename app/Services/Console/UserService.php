@@ -108,14 +108,16 @@ class UserService extends BaseService
         //当前登录用户HID
         $authId = $this->request->get('g9zz_user_id');
         $this->log('service.request to '.__METHOD__,['auth-id' => $authId]);
-        $user = $this->userRepository->getRoleLevelsByUserId($authId);
-        $test = [1,5,3,7,8,3];
-        $res = array_sort($test,function($value){
-            return $value;
-        });
+        $levels = $this->userRepository->getRoleLevelsByUserId($authId);
+        if (empty($levels)) {
+            $this->setCode(config('validation.default')['some.error']);
+            return $this->response();
+        }
 
-        dd($user,$test,$res);
-        if (count($user['role']) > 0)
+        $userMaxLevel = $levels[array_search(max($levels),$levels)];
+
+        $closureId = $this->userRepository->hidFind($hid)->id;
+        dd($userMaxLevel,$closureId);
 
 
         $result = $this->userRepository->hidFind($hid);
