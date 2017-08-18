@@ -70,6 +70,25 @@ class UserService extends BaseService
         $userMaxLevel = $levels[array_search(min($levels),$levels)];
         $this->log('service.request to '.__METHOD__,['user_max_level' => $userMaxLevel]);
 
+
+        //被处理用户
+        $closureId = $this->userRepository->find($userId)->id;
+        $closureLevels = $this->userRepository->getRoleLevelsByUserId($closureId);
+        $this->log('service.request to '.__METHOD__,['closure_user_levels' => $closureLevels]);
+
+        if (!empty($closureLevels)) {
+            //被处理用户最大权限(最小值)
+            $closureMaxLevel = $closureLevels[array_search(min($closureLevels),$closureLevels)];
+            $this->log('service.request to '.__METHOD__,['closure_user_max_level' => $closureMaxLevel]);
+
+            // 权限里level越小 权限越大
+            if ($userMaxLevel >= $closureMaxLevel) {
+                $this->setCode(config('validation.permission')['permission.forbidden']);
+                return $this->response();
+            }
+        }
+
+
         if ($userMaxLevel > $roleId) {
             $this->setCode(config('validation.permission')['permission.forbidden']);
             return $this->response();
