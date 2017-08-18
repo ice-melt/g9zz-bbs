@@ -2,12 +2,13 @@
 
 namespace App\Http\Middleware;
 
-use App\Traits\G9zzLog;
+use App\Traits\Respond;
 use Closure;
 use Vinkla\Hashids\Facades\Hashids;
 
 class IdDecode
 {
+    use  Respond;
     /**
      * Handle an incoming request.
      *
@@ -24,6 +25,10 @@ class IdDecode
             \Log::info('middleware.request to '.__METHOD__,['user_id' => $userHid]);
             if ($userHid !== (int)$userHid ) {
                 $userId = Hashids::connection('user')->decode($userHid);
+                if (empty($userId)) {
+                    $this->setCode(config('validation.default')['data.null']);
+                    return $this->response();
+                }
                 \Log::info('middleware.request to '.__METHOD__,['Hashids_user_id' => $userId]);
                 $request->route()->setParameter('userHid',$userId[0]);
             }
