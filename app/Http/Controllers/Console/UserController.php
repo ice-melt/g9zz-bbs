@@ -109,7 +109,7 @@ class UserController extends Controller
     {
         $status = $request->only('status');
         $this->log('controller.request to '.__METHOD__,['request' => $status]);
-        $result = $this->userService->closureHid($hid,$status);
+        $result = $this->userService->closureHid($hid,$status['status']);
         $resource = new Item($result,new UserTransformer());
         $this->setData($resource);
         return $this->response();

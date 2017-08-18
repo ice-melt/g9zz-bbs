@@ -102,10 +102,10 @@ class UserService extends BaseService
      */
     public function closureHid($hid,$status)
     {
-        $status == 'closure' ? $newStatus = 'closure' : $newStatus = 'activated';
-        $this->log('service.request to '.__METHOD__,['request' => $newStatus]);
+        $status = $status == 'closure' ? 'closure' : 'activated';
+        $this->log('service.request to '.__METHOD__,['request' => $status]);
         $result = $this->userRepository->hidFind($hid);
-        $result->status = $newStatus;
+        $result->status = $status;
         $result->save();
         return $result;
     }
