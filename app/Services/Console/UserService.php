@@ -107,7 +107,7 @@ class UserService extends BaseService
 
         //当前登录用户HID
         $authId = $this->request->get('g9zz_user_id');
-        $this->log('service.request to '.__METHOD__,['auth-id' => $authId]);
+        $this->log('service.request to '.__METHOD__,['auth_id' => $authId]);
         $levels = $this->userRepository->getRoleLevelsByUserId($authId);
         if (empty($levels)) {
             $this->setCode(config('validation.default')['some.error']);
@@ -115,13 +115,17 @@ class UserService extends BaseService
         }
         //登录用户的最大权限(值最小)
         $userMaxLevel = $levels[array_search(min($levels),$levels)];
+        $this->log('service.request to '.__METHOD__,['user_max_level' => $userMaxLevel]);
 
         //被处理用户
         $closureId = $this->userRepository->hidFind($hid)->id;
         $closureLevels = $this->userRepository->getRoleLevelsByUserId($closureId);
+        $this->log('service.request to '.__METHOD__,['closure_user_levels' => $closureLevels]);
+
         if (!empty($levels)) {
             //被处理用户最大权限(最小值)
             $closureMaxLevel = $closureLevels[array_search(min($closureLevels),$closureLevels)];
+            $this->log('service.request to '.__METHOD__,['closure_user_max_level' => $closureMaxLevel]);
 
             // 权限里level越小 权限越大
             if ($userMaxLevel >= $closureMaxLevel) {
@@ -129,7 +133,7 @@ class UserService extends BaseService
                 return $this->response();
             }
         }
-        
+
         $result = $this->userRepository->hidFind($hid);
         $result->status = $status;
         $result->save();
