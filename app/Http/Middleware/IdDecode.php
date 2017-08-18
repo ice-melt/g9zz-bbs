@@ -2,11 +2,13 @@
 
 namespace App\Http\Middleware;
 
+use App\Traits\G9zzLog;
 use Closure;
 use Vinkla\Hashids\Facades\Hashids;
 
 class IdDecode
 {
+    use G9zzLog;
     /**
      * Handle an incoming request.
      *
