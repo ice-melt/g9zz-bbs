@@ -95,4 +95,12 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function getUserRoleIdsByUserId($id);
+
+
+    /**
+     * 通过用户ID获取用户角色等级列表
+     * @param $userId
+     * @return mixed
+     */
+    public function getRoleLevelsByUserId($userId);
 }
