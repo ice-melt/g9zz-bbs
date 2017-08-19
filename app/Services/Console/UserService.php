@@ -89,7 +89,6 @@ class UserService extends BaseService
         }
 
         $roleLevel = $this->roleRepository->find($roleId)->level;
-
         $this->log('service.request to '.__METHOD__,['user_max_level' => $userMaxLevel,'role_level' => $roleLevel]);
 
         if ($userMaxLevel > $roleLevel) {
