@@ -87,6 +87,7 @@ class UserTransformer extends BaseTransformer
         if ($user->role){
             foreach ($user->role as $value) {
                 $return['role'][] = [
+                    'id' => $value->id,
                     'name' => $value->name,
                     'displayName' => $value->display_name,
                     'description' => $value->description
