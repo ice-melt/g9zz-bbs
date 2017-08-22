@@ -75,7 +75,7 @@ class CaptchaService extends BaseService
         $this->createLine();
         $this->createFont();
 
-        $uuid = \Request::header('uuid');
+        $uuid = \Request::get('uuid');
         $this->log('service.request to '.__METHOD__,['uuid' => $uuid]);
 
         $captcha = 'captcha.'.$uuid;
