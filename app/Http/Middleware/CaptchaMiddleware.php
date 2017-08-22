@@ -18,8 +18,8 @@ class CaptchaMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $uuid = trim($request->header('uuid'));
-        $this->log('header.request to '.__METHOD__,['uuid' => $uuid]);
+        $uuid = trim($request->get('uuid'));
+        $this->log('middleware.request to '.__METHOD__,['uuid' => $uuid]);
 
         if (empty($uuid)) {
             $code = config('validation.captcha')['uuid.required'];

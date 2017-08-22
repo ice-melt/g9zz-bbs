@@ -112,6 +112,7 @@ return [
         'had.oauth' => 412000006,
         'captcha.required' => 412000007,
         'auth.required' => 412000008,
+        'x-auth-uuid.required' => 414000000,
     ],
     'notify' => [
         'noSet.other' => 413000000
