@@ -57,7 +57,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function checkUserByEmail($email)
     {
-        return $this->model->whereEmail($email)->whereStatus('activated')->frist();
+        return $this->model->whereEmail($email)->whereStatus('activated')->first();
     }
 
 
