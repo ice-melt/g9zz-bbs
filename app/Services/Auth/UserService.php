@@ -130,6 +130,16 @@ class UserService extends BaseService
     }
 
     /**
+     * @param $email
+     * @return mixed
+     */
+    public function checkUserByEmail($email)
+    {
+        return $this->userRepository->checkUserByEmail($email);
+    }
+
+
+    /**
      * @param $requestPwd
      * @param $sqlPwd
      * @return \Illuminate\Http\JsonResponse

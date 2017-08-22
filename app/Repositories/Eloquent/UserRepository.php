@@ -52,6 +52,16 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
+     * @param $email
+     * @return mixed
+     */
+    public function checkUserByEmail($email)
+    {
+        return $this->model->whereEmail($email)->whereStatus('activated')->frist();
+    }
+
+
+    /**
      * 通过githubId 获取 user
      * @param $githubId
      * @return mixed

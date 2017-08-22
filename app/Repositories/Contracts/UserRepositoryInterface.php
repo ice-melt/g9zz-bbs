@@ -103,4 +103,11 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function getRoleLevelsByUserId($userId);
+
+    /**
+     * 通过邮箱或者正常状态的用户
+     * @param $email
+     * @return mixed
+     */
+    public function checkUserByEmail($email);
 }

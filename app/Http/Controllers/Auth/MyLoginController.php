@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Requests\Auth\ConsoleLoginRequest;
+use App\Http\Requests\Auth\GetLoginRequest;
+use App\Services\Auth\CaptchaService;
 use App\Services\Auth\LoginService;
 use App\Services\Auth\UserService;
 use App\Http\Controllers\Controller;
@@ -15,19 +17,21 @@ class MyLoginController extends Controller
     protected $isInvite;
     protected $userService;
     protected $loginService;
+    protected $captchaService;
 
-    public function __construct(UserService $userService,LoginService $loginService)
+    public function __construct(UserService $userService,LoginService $loginService,CaptchaService $captchaService)
     {
         $this->isInvite = config('g9zz.invite_code.is_invite');
         $this->userService = $userService;
         $this->loginService = $loginService;
+        $this->captchaService = $captchaService;
     }
 
     /**
-     * @param Request $request
+     * @param GetLoginRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getLogin(Request $request)
+    public function getLogin(GetLoginRequest $request)
     {
         $auth = $request->get('auth');
 
@@ -44,8 +48,32 @@ class MyLoginController extends Controller
      */
     public function login(ConsoleLoginRequest $request)
     {
+        $uuid = $request->header('x-auth-uuid');
+        $this->log('controller.request to '.__METHOD__,['x-auth-uuid' => $uuid]);
+        if (empty($uuid)) {
+            $code = config('validation.captcha')['uuid.required'];
+            $this->setCode($code);
+            return $this->response();
+        }
+
+        $cacheCaptcha = \Cache::pull('captcha.'.$uuid);
+        $captcha = strtolower($request->get('captcha'));
+        $this->log('controller.request to '.__METHOD__,['cache_captcha' => $cacheCaptcha,'captcha' => $captcha]);
+
+        if ($cacheCaptcha != $captcha) {
+            $code = config('validation.captcha')['captcha.error'];
+            $this->setCode($code);
+            return $this->response();
+        }
+
         $email = $request->get('email');
-        $user = $this->userService->findUserByEmail($email);
+        $user = $this->userService->checkUserByEmail($email);
+
+        if (empty($user)) {
+            $this->setCode(config('validation.login')['login.error']);
+            return $this->response();
+        }
+
         //防止三方登录,密码为空的情况
         if (empty($user->password)) {
             $this->setCode(config('validation.login')['login.error']);
@@ -86,6 +114,15 @@ class MyLoginController extends Controller
         $hid = $user->hid;
         return $this->makeToken($auth,$hid);
     }
+
+    /**
+     * @return Image
+     */
+    public function getCaptcha()
+    {
+        return $this->captchaService->outImg();
+    }
+
 
     /**
      * @param $login

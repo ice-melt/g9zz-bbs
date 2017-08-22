@@ -28,6 +28,11 @@ Route::get('auth/{service}/callback', 'Auth\MyLoginController@handleProviderCall
 //激活账号
 Route::get('/verify','Auth\MyLoginController@verify')->name('index.auth.login.verify.account');
 
+Route::group(['prefix' => 'captcha','middleware' => 'captcha'],function () {
+    Route::get('/','Auth\MyLoginController@getCaptcha')->name('index.get.captcha');
+});
+
+
 Route::group(['prefix' => 'wechat'],function () {
     Route::get('/xcx/userInfo','Auth\MyLoginController@getWechatMiniProgramUserInfo')->name('index.xcx.userInfo');
 });
