@@ -22,7 +22,7 @@ Route::group(['prefix' => 'test'],function() {
 });
 
 Route::group(['middleware' => ['g9zz'],'prefix' => 'me'],function() {
-        Route::get('/me','Auth\MeController@index')->name('console.me.index');
+        Route::get('/','Auth\MeController@index')->name('console.me.index');
 });
 
 
