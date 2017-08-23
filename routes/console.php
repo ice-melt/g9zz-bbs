@@ -21,6 +21,11 @@ Route::group(['prefix' => 'test'],function() {
     Route::get('/', 'TestController@index')->name('test.index');
 });
 
+Route::group(['middleware' => ['g9zz'],'prefix' => 'me'],function() {
+        Route::get('/me','Auth\MeController@index')->name('console.me.index');
+});
+
+
 Route::group(['middleware' => ['g9zz','permission']],function(){
     Route::group(['prefix' => 'user','middleware' => 'idDecode'],function(){
         Route::get('/','Console\UserController@index')->name('console.user.index');
