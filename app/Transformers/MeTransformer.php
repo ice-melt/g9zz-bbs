@@ -36,7 +36,7 @@ class MeTransformer extends BaseTransformer
                 ];
                 if ($value->permission) {
                     foreach ($value->permission as $item) {
-                        $permissions[$item->id] = [
+                        $return['permission'][$item->id] = [
                             'id' => $item->id,
                             'name' => $item->name,
                             'displayName' => $item->display_name,
