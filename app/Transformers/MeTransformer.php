@@ -26,7 +26,6 @@ class MeTransformer extends BaseTransformer
         ];
 
         if ($user->role) {
-            $permissions = [];
             foreach ($user->role as $value) {
                 $return['role'][] = [
                     'id' => $value->id,
