@@ -119,3 +119,16 @@ Route::group(['middleware' => 'g9zz'],function(){
         Route::post('/set/allRead','Console\NotifyController@setAllNotifyRead')->name('index.user.set.all.notify.read');
     });
 });
+
+
+Route::get('/ttest',function (){
+    for ($i = 0;$i < 24;$i++) {
+        for ($j=0;$j<24;$j++) {
+            if ($i-5*$j == -3) {
+                dd($i,$j);
+            }
+        }
+    }
+    dd('运行结束');
+
+});
