@@ -95,7 +95,7 @@ class PostTransformer extends BaseTransformer
 
         if ($posts->postscript) {
             foreach ($posts->postscript as $item) {
-                $return['postscript'] = [
+                $return['postscript'][] = [
                     'content' => $item->content,
                     'contentOriginal' => $item->content_original,
                     'createdAt' => $item->created_at,
