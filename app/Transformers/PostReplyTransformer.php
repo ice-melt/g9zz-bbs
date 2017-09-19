@@ -12,15 +12,18 @@ namespace App\Transformers;
 
 use App\Models\Replies;
 
-class ReplyTransformer extends BaseTransformer
+class PostReplyTransformer extends BaseTransformer
 {
+    public $floor;
+    public function __construct($floor)
+    {
+        $this->floor = $floor;
+    }
+
     public function transform(Replies $replies)
     {
-        $page = \Request::get('page') ? \Request::get('page') : 1;
-        $limit = per_page();
-        $i = ($page - 1) * $limit + 1;
         $return = [
-            'floor' => $i+1,
+            'floor' => $this->floor,
             'hid' => $replies->hid,
             'source' => $replies->source,
 //            'post_id' ,
@@ -32,7 +35,7 @@ class ReplyTransformer extends BaseTransformer
             'createdAt' => rfc_3339($replies->created_at),
             'created' => $replies->created_at->diffForHumans()
         ];
-
+        $this->floor++;
         if ($replies->post_hid) {
             $return['post'] = [
                 'hid' =>  isset($replies->post->hid) ? $replies->post->hid : null,
