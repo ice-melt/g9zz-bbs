@@ -94,6 +94,6 @@ class NodeRepository extends BaseRepository implements NodeRepositoryInterface
     public function getPopNode()
     {
         $showNum = config('g9zz.node.show_num');
-        return $this->model->orderBy('weight','desc')->limit($showNum)->get();
+        return $this->model->where('is_show','yes')->orderBy('weight','asc')->limit($showNum)->get();
     }
 }
