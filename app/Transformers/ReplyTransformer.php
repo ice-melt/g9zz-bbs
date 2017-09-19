@@ -16,11 +16,8 @@ class ReplyTransformer extends BaseTransformer
 {
     public function transform(Replies $replies)
     {
-        $page = \Request::get('page') ? \Request::get('page') : 1;
-        $limit = per_page();
-        $i = ($page - 1) * $limit;        
         $return = [
-            'floor' => $i++,
+            'floor' => $replies->id,
             'hid' => $replies->hid,
             'source' => $replies->source,
 //            'post_id' ,
