@@ -105,9 +105,14 @@ class NodeController extends Controller
         return $this->response();
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getPopularNode()
     {
         $result = $this->nodeService->getPopNode();
-        dd($result,$result->toArray());
+        $resource = new Collection($result,new NodeTransformer());
+        $this->setData($resource);
+        return $this->response();
     }
 }
