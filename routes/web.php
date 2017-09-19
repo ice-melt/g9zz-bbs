@@ -63,6 +63,7 @@ Route::group([],function(){
 
         Route::get('/{hid}/post','Console\NodeController@getPostByNode')->name('index.get.post.by.node');
         Route::get('/all/showNode','Console\NodeController@getShowNode')->name('index.get.show.node');
+        Route::get('/pop/show','Console\NodeController@getPopularNode')->name('index.get.pop.show');
     });
 
     Route::group(['prefix' => 'tag'],function() {

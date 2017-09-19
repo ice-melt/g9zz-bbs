@@ -104,4 +104,9 @@ class NodeController extends Controller
         $this->setData($resource);
         return $this->response();
     }
+
+    public function getPopularNode()
+    {
+        $this->nodeService->getPopNode();
+    }
 }

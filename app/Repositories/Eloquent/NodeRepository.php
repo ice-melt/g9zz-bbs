@@ -87,4 +87,10 @@ class NodeRepository extends BaseRepository implements NodeRepositoryInterface
     {
         return $this->model->whereIsShow('yes')->get();
     }
+
+    public function getPopNode()
+    {
+        $showNum = config('g9zz.node.show_num');
+        dd($showNum);
+    }
 }
