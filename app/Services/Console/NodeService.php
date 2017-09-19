@@ -202,6 +202,9 @@ class NodeService extends BaseService
         return $this->nodeRepository->getShowNode();
     }
 
+    /**
+     * @return mixed
+     */
     public function getPopNode()
     {
         return $this->nodeRepository->getPopNode();

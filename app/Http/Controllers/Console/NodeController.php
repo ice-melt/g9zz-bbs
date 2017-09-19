@@ -107,6 +107,7 @@ class NodeController extends Controller
 
     public function getPopularNode()
     {
-        $this->nodeService->getPopNode();
+        $result = $this->nodeService->getPopNode();
+        dd($result,$result->toArray());
     }
 }
