@@ -344,7 +344,7 @@ class MyLoginController extends Controller
                 $data = new \stdClass();
                 $data->auth = $auth;
                 $this->setData($data);
-                $this->setCode(400000004);
+                $this->setCode(200);
                 return $this->response();
 
 //                return redirect()->route('web.get.login',['auth' => $auth]);
