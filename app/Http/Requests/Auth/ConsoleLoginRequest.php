@@ -19,7 +19,7 @@ class ConsoleLoginRequest extends BaseRequest
             'email' => 'required|email|exists:users,email,status,activated',
             'password' => 'required|string',
             'captcha' => 'required',
-            'x-auth-uuid' => 'required'
+//            'x-auth-uuid' => 'required'
         ];
         return $rule;
     }
