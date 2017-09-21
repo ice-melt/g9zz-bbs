@@ -48,6 +48,7 @@ class MyLoginController extends Controller
      */
     public function login(ConsoleLoginRequest $request)
     {
+        dd($request->all());
         $uuid = $request->header('x-auth-uuid');
         $this->log('controller.request to '.__METHOD__,['x-auth-uuid' => $uuid]);
         if (empty($uuid)) {
