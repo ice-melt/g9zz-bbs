@@ -341,14 +341,15 @@ class MyLoginController extends Controller
 
                 $auth = Hashids::connection('user')->encode($param);
 
-                return redirect()->route('new.login',['auth' => $auth]);
+                return redirect()->route('new.auth',['auth' => $auth]);
             }
         }
 
         $now = time();
         $auth = [$result->id, $now];
-        return $this->makeToken($auth,$result->hid);
-
+        $token = Hashids::connection('console_token')->encode($auth);
+        return redirect()->route('new.login',['token' => $token,'hid' => $result->hid]);
+        
     }
 
     public function loginByWeixin($user)

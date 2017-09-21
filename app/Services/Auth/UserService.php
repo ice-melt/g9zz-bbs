@@ -218,7 +218,7 @@ class UserService extends BaseService
         $param = [$result->id,$now,$oauth];
         $auth = Hashids::connection('user')->encode($param);
 
-        return redirect()->route('new.login',['auth' => $auth]);
+        return redirect()->route('new.auth',['auth' => $auth]);
     }
 
     /**

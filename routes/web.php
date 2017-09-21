@@ -22,11 +22,18 @@ $this->post('register', 'Auth\MyRegisterController@store')->name('register.store
 $this->post('login', 'Auth\MyLoginController@login');
 $this->get('login','Auth\MyLoginController@getLogin')->name('web.get.login');
 
-Route::get('new/login',function (){
+//授权登录 需要绑定账号
+Route::get('new/auth',function (){
     $auth = \Request::get('auth');
     return redirect(env('G9ZZ_INDEX_DOMAIN').'login?auth='.$auth,302);
-})->name('new.login');
+})->name('new.auth');
 
+//授权直接登录 返回前端首页
+Route::get('new/login',function (){
+    $token = \Request::get('token');
+    $hid = \Request::get('hid');
+    return redirect(env('G9ZZ_INDEX_DOMAIN').'my',302,['x-auth-token' => $token,'hid' => $hid]);
+})->name('new.login');
 
 Route::get('auth/{service}', 'Auth\MyLoginController@redirectToProvider');
 Route::get('auth/{service}/callback', 'Auth\MyLoginController@handleProviderCallback');
