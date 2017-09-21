@@ -11,6 +11,7 @@ return [
         'some.error' => 400000000,
         'data.null' => 400000001,
         'need.login' => 400000002,
+        'need.bindAccount' => 400000004,
     ],
     'post' => [
         'title.required' =>  401000000,

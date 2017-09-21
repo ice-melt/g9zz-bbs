@@ -217,8 +217,12 @@ class UserService extends BaseService
         $oauth = config('g9zz.oauth.auth.github');
         $param = [$result->id,$now,$oauth];
         $auth = Hashids::connection('user')->encode($param);
-
-        return redirect()->route('web.get.login',['auth' => $auth]);
+        $data = new \stdClass();
+        $data->auth = $auth;
+        $this->setData($data);
+        $this->setCode(400000004);
+        return $this->response();
+//        return redirect()->route('web.get.login',['auth' => $auth]);
     }
 
     /**
