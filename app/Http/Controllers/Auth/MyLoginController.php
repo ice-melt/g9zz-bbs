@@ -48,7 +48,7 @@ class MyLoginController extends Controller
      */
     public function login(ConsoleLoginRequest $request)
     {
-        $uuid = $request->get('x-auth-uuid');
+        $uuid = $request->header('x-auth-uuid');
         $this->log('controller.request to '.__METHOD__,['x-auth-uuid' => $uuid]);
         if (empty($uuid)) {
             $code = config('validation.captcha')['uuid.required'];
