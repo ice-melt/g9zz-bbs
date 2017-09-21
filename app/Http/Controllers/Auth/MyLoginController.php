@@ -68,6 +68,7 @@ class MyLoginController extends Controller
 
         $email = $request->get('email');
         $user = $this->userService->checkUserByEmail($email);
+        $this->log('controller.request to '.__METHOD__,['user' => $user]);
 
         if (empty($user)) {
             $this->setCode(config('validation.login')['login.error']);
@@ -85,8 +86,11 @@ class MyLoginController extends Controller
 
         //如果授权登录
         $authorization = $request->get('auth');
+        $this->log('controller.request to '.__METHOD__,['authorization' => $authorization]);
         if (!empty($authorization)) {
             $oauth = Hashids::connection('user')->decode($authorization);
+            $this->log('controller.request to '.__METHOD__,['oauth' => $oauth]);
+
             if (empty($oauth)) {
                 $this->setCode(config('validation.login')['oauth.failed']);
                 return $this->response();
@@ -101,6 +105,7 @@ class MyLoginController extends Controller
 
             $login = config('g9zz.oauth.login.'.$oauth[2]);
             $result = $this->userService->checkExistsOauth($oauth[0],$login);
+            $this->log('controller.request to '.__METHOD__,['result' => $result]);
             if (!empty($result)) {
                 $this->setCode(config('validation.login')['had.oauth']);
                 return $this->response();
@@ -349,7 +354,7 @@ class MyLoginController extends Controller
         $auth = [$result->id, $now];
         $token = Hashids::connection('console_token')->encode($auth);
         return redirect()->route('new.login',['token' => $token,'hid' => $result->hid]);
-        
+
     }
 
     public function loginByWeixin($user)
