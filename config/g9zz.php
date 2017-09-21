@@ -49,5 +49,9 @@ return [
         'name' => env('OFFICIAL_NAME','G9ZZ'),
         'hid' => '',
         'avatar' => env('OFFICIAL_AVATAR','images/g9zz.jpeg'),
+    ],
+    //G9ZZ前台
+    'g9zz_index' => [
+        'domain' => env('G9ZZ_INDEX_DOMAIN','https://www.g9zz.com')
     ]
 ];

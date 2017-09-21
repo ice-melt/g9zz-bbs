@@ -341,13 +341,7 @@ class MyLoginController extends Controller
 
                 $auth = Hashids::connection('user')->encode($param);
 
-                $data = new \stdClass();
-                $data->auth = $auth;
-                $this->setData($data);
-                $this->setCode(200);
-                return $this->response();
-
-//                return redirect()->route('web.get.login',['auth' => $auth]);
+                return redirect()->route('new.login',['auth' => $auth]);
             }
         }
 
