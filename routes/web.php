@@ -23,7 +23,8 @@ $this->post('login', 'Auth\MyLoginController@login');
 $this->get('login','Auth\MyLoginController@getLogin')->name('web.get.login');
 
 Route::get('new/login',function (){
-    return redirect(env('G9ZZ_INDEX_DOMAIN'),302);
+    $auth = \Request::get('auth');
+    return redirect(env('G9ZZ_INDEX_DOMAIN').'?auth='.$auth,302);
 })->name('new.login');
 
 
