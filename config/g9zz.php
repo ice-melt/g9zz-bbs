@@ -52,6 +52,8 @@ return [
     ],
     //G9ZZ前台
     'g9zz_index' => [
-        'domain' => env('G9ZZ_INDEX_DOMAIN','https://www.g9zz.com')
+        'domain' => env('G9ZZ_INDEX_DOMAIN','https://www.g9zz.com'),
+        'login_redirect' => env('G9ZZ_LOGIN_REDIRECT','login'),
+        'auth_redirect' => env('G9ZZ_AUTH_REDIRECT','my'),
     ]
 ];

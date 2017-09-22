@@ -25,14 +25,14 @@ $this->get('login','Auth\MyLoginController@getLogin')->name('web.get.login');
 //授权登录 需要绑定账号
 Route::get('new/auth',function (){
     $auth = \Request::get('auth');
-    return redirect(env('G9ZZ_INDEX_DOMAIN').'login?auth='.$auth,302);
+    return redirect(env('G9ZZ_INDEX_DOMAIN').env('G9ZZ_AUTH_REDIRECT').'?auth='.$auth,302);
 })->name('new.auth');
 
 //授权直接登录 返回前端首页
 Route::get('new/login',function (){
     $token = \Request::get('token');
     $hid = \Request::get('hid');
-    return redirect(env('G9ZZ_INDEX_DOMAIN').'my',302,['x-auth-token' => $token,'hid' => $hid]);
+    return redirect(env('G9ZZ_INDEX_DOMAIN').env('G9ZZ_LOGIN_REDIRECT'),302,['x-auth-token' => $token,'hid' => $hid]);
 })->name('new.login');
 
 Route::get('auth/{service}', 'Auth\MyLoginController@redirectToProvider');
