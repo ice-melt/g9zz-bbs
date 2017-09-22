@@ -21,3 +21,18 @@
 - [x] 验证码
 - 
     
+- 试试流程图效果
+
+```flow
+st=>start:开始
+e=>end:结束
+op1=>operation:操作步骤
+cond=>condition:是 或者 否?
+op2=>operation: 还有一步是?
+op3=>operation: end 在哪呢
+
+st->op1->cond
+cond(no)->op1
+cond(yes)->op2
+op2->op3->e->
+```
