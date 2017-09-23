@@ -32,7 +32,7 @@ Route::get('new/auth',function (){
 Route::get('new/login',function (){
     $token = \Request::get('token');
     $hid = \Request::get('hid');
-    return redirect(env('G9ZZ_INDEX_DOMAIN').env('G9ZZ_LOGIN_REDIRECT').'?secret='.$token.'&secretId='.$hid,302);
+    return redirect(env('G9ZZ_INDEX_DOMAIN').'?secret='.$token.'&secretId='.$hid,302);
 })->name('new.login');
 
 Route::get('auth/{service}', 'Auth\MyLoginController@redirectToProvider');
