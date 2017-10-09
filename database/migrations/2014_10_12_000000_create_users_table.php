@@ -43,12 +43,6 @@ class CreateUsersTable extends Migration
             $table->index('name');
             $table->index('email');
             $table->index('status');
-            $table->index('github_id');
-            $table->index('wechat_id');
-            $table->index('weibo_id');
-            $table->index('qq_id');
-            $table->index('google_id');
-            $table->index('douban_id');
         });
     }
 
