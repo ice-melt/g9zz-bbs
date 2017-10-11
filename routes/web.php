@@ -88,7 +88,7 @@ Route::group([],function(){
 
     Route::group(['prefix' => 'reply'],function() {
         Route::get('/','Index\ReplyController@index')->name('index.reply.index');
-//        Route::post('/','Index\ReplyController@store')->name('index.reply.store');
+        Route::post('/','Index\ReplyController@store')->name('index.reply.store');
         Route::get('/{hid}','Index\ReplyController@show')->name('index.reply.show');
     });
 
