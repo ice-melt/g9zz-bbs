@@ -21,6 +21,7 @@ return [
     ],
     'token' => [
         'valid_time' => 12 * 60 * 60,  //秒数
+        'over_time' => 36 * 60 * 60, //最多超出时间
         'login_way'  => ['github','weibo'],//'weixin','qq','weibo',''
     ],
     'verify' => [

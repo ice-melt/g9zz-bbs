@@ -45,6 +45,8 @@ Route::group(['prefix' => 'captcha','middleware' => 'captcha'],function () {
     Route::get('/','Auth\MyLoginController@getCaptcha')->name('index.get.captcha');
 });
 
+Route::get('/updateToken','Auth\MyLoginController@updateToken')->name('index.update.token');
+
 
 Route::group(['prefix' => 'wechat'],function () {
     Route::get('/xcx/userInfo','Auth\MyLoginController@getWechatMiniProgramUserInfo')->name('index.xcx.userInfo');

@@ -400,4 +400,18 @@ class MyLoginController extends Controller
     {
 
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateToken(Request $request)
+    {
+        $user = $this->loginService->updateToken($request);
+        $now = time();
+        $auth = [$user->id, $now];
+        $hid = $user->hid;
+        return $this->makeToken($auth,$hid);
+    }
+
 }
