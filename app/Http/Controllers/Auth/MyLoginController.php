@@ -182,7 +182,6 @@ class MyLoginController extends Controller
      */
     public function getVerifyToken(Request $request)
     {
-        dd($request->get('g9zz_user_id'),234);
         $authId = $request->get('g9zz_user_id');
         $this->log('controller.request to '.__METHOD__,['auth_id' => $authId]);
         $user = $this->userService->getUserById($authId);

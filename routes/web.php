@@ -103,13 +103,13 @@ Route::group([],function(){
 /**
  * 普通用户 可以操作 但必须登录的
  */
-Route::group([],function(){
+Route::group(['middleware' => 'g9zz'],function(){
 
     Route::group(['prefix' => 'user'],function(){
         Route::get('/{hid}','Console\UserController@show')->name('index.user.show');
 
         //点击获取 验证链接
-        Route::get('/verify','Auth\MyLoginController@getVerifyToken')->name('console.user.get.verify.token');
+        Route::get('/get/verify','Auth\MyLoginController@getVerifyToken')->name('console.user.get.verify.token');
 
     });
 
