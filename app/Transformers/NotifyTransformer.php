@@ -30,8 +30,10 @@ class NotifyTransformer extends BaseTransformer
             'id' => $notifies->id,
             'type' => $data['type'],//类型
             'body' => $data['body'],//艾特里的内容
-            'body_original' => $data['body_original'],//艾特里原内容
-            'read_at' => isset($notifies->read_at) ? rfc_3339($notifies->read_at) : null,
+            'bodyOriginal' => $data['body_original'],//艾特里原内容
+            'readAt' => isset($notifies->read_at) ? rfc_3339($notifies->read_at) : null,
+            'createdAt' => rfc_3339($notifies->created_at),
+            'updatedAt' => rfc_3339($notifies->updated_at),
         ];
         $post = $postRepository->hidFind($data['post_hid']);
         $return['post'] = [

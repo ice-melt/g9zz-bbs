@@ -62,6 +62,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static \Illuminate\Database\Query\Builder|\App\User whereXcxId($value)
  * @property string $last_activated_at
  * @method static \Illuminate\Database\Query\Builder|\App\User whereLastActivatedAt($value)
+ * @property string $mobile 手机号
+ * @method static \Illuminate\Database\Query\Builder|\App\User whereMobile($value)
  */
 class User extends Authenticatable
 {

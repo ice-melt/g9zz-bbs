@@ -79,6 +79,8 @@ use Illuminate\Notifications\Notifiable;
  * @property-read \App\Models\WechatUser $wechat
  * @property-read \App\Models\WeiboUser $weibo
  * @property-read \App\Models\WechatMiniPrograms $xcx
+ * @property string $mobile 手机号
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereMobile($value)
  */
 class User extends Model
 {
