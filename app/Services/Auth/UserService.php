@@ -93,6 +93,7 @@ class UserService extends BaseService
     {
         $message = [$id,time(),3];
         $param = Hashids::connection('code')->encode($message);
+        $this->log('service.note to '.__METHOD__,['note' => '邮件发送队列']);
         dispatch((new SendMail('verify_account',
 //            is_local() ? 'g9zz@g9zz.com' : $email,//TODO::修改正式的
                 'g9zz@g9zz.com',
