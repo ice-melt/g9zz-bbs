@@ -32,7 +32,7 @@ class CreateUsersTable extends Migration
             $table->integer('topic_count')->default(0);
             $table->integer('reply_count')->default(0);
             $table->integer('follower_count')->default(0);
-            $table->string('verified')->default('false');
+            $table->enum('verified',['true','false'])->default('false');
             $table->enum('email_notify_enabled', ['yes',  'no'])->default('yes');
             $table->string('register_source')->nullable();
             $table->timestamp('last_activated_at')->nullable();
