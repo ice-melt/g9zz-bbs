@@ -45,6 +45,7 @@ class G9zz
 
         $id = $token[0];
         $user = $this->userService->findUserByToken($id);
+        $this->log('header.request to '.__METHOD__,['user' => $user]);
         if (empty($user)) {
             $this->log('header.error to '.__METHOD__,['error_message' => '[g9zz中间件]用户不存在']);
             $code = config('validation.token')['token.invalid'];
