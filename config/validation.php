@@ -114,6 +114,7 @@ return [
         'captcha.required' => 412000007,
         'auth.required' => 412000008,
         'x-auth-uuid.required' => 414000000,
+        'verify_email.too_much' => 412000009,
     ],
     'notify' => [
         'noSet.other' => 413000000

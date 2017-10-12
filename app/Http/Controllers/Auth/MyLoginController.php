@@ -190,6 +190,12 @@ class MyLoginController extends Controller
             $this->setCode(config('validation.login')['had.verified']);
             return $this->response();
         }
+        $sendMailNum = \Cache::get('send_mail_num_'.$user->id);
+        if ($sendMailNum > 4) {
+            $this->setCode(config('validation.login')['verify_email.too_much']);
+            return $this->response();
+        }
+        \Cache::put('send_mail_num_'.$user->id,$sendMailNum+1,60 * 3);
         $result = $this->userService->verifyEmail($user->email,$user->name,$user->id);
         return $this->response();
     }
