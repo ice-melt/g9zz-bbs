@@ -63,7 +63,7 @@ class G9zz
 
         $request->offsetSet('g9zz_user_id',$user->id);
         $request->offsetSet('g9zz_user_hid',$user->hid);
-        dd($request->all());
+
         return $next($request);
     }
 
