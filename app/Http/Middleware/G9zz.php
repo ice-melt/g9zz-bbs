@@ -60,7 +60,7 @@ class G9zz
             $code = config('validation.token')['token.invalid'];
             return $this->handleRes($code);
         }
-
+dd($user->id,$user->hid);
         $request->offsetSet('g9zz_user_id',$user->id);
         $request->offsetSet('g9zz_user_hid',$user->hid);
 
