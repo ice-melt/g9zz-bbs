@@ -80,7 +80,11 @@ class UserService extends BaseService
             \DB::rollBack();
             throw new TryException(json_encode($e->getMessage()),(int)$e->getCode());
         }
-        return $user;
+        $token = Hashids::connection('console_token')->encode([$user->id, time()]);
+        $data = new \stdClass();
+        $data->token = $token;
+        $data->hid = $user->hid;
+        return $data;
     }
 
     /**
