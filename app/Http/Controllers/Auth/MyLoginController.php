@@ -183,7 +183,9 @@ class MyLoginController extends Controller
     public function getVerifyToken(Request $request)
     {
         $authId = $request->get('g9zz_user_id');
+        $this->log('controller.request to '.__METHOD__,['auth_id' => $authId]);
         $user = $this->userService->getUserById($authId);
+        $this->log('controller.request to '.__METHOD__,['user' => $user]);
         if ($user->verified) {
             $this->setCode(config('validation.login')['had.verified']);
             return $this->response();
