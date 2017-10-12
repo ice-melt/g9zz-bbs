@@ -9,6 +9,7 @@
 
 namespace App\Services\Auth;
 
+use App\Exceptions\CodeException;
 use App\Exceptions\TryException;
 use App\Jobs\SendMail;
 use App\Repositories\Contracts\GithubUserRepositoryInterface;
@@ -60,8 +61,7 @@ class UserService extends BaseService
             if ($this->isInvite) {
                 $inviteCode = $this->inviteCodeRepository->getInviteCodeByCode($other['invite_code']);
                 if (empty($inviteCode)) {
-                    $this->setCode(config('validation.register')['inviteCode.exists']);
-                    return $this->response();
+                    throw new CodeException(config('validation.register')['inviteCode.exists']);
                 }
                 $inviteCodeUpdate = [
                     'status' => 'used',

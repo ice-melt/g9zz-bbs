@@ -10,7 +10,9 @@
 namespace App\Services\Auth;
 
 
+use App\Exceptions\CodeException;
 use App\Services\BaseService;
+use Illuminate\Http\Request;
 
 class RegisterService extends BaseService
 {
@@ -24,7 +26,7 @@ class RegisterService extends BaseService
     }
 
     /**
-     * @param $request
+     * @param Request $request
      * @return mixed
      */
     public function store($request)
@@ -36,6 +38,21 @@ class RegisterService extends BaseService
             $other['invite_code'] = $request->get('inviteCode');
         }
 
+        $uuid = $request->header('x-auth-uuid');
+        $this->log('controller.request to '.__METHOD__,['x-auth-uuid' => $uuid]);
+        if (empty($uuid)) {
+            $code = config('validation.captcha')['uuid.required'];
+            throw new CodeException($code);
+        }
+
+        $cacheCaptcha = \Cache::pull('captcha.'.$uuid);
+        $captcha = strtolower($request->get('captcha'));
+        $this->log('controller.request to '.__METHOD__,['cache_captcha' => $cacheCaptcha,'captcha' => $captcha]);
+
+        if ($cacheCaptcha != $captcha) {
+            $code = config('validation.captcha')['captcha.error'];
+            throw new CodeException($code);
+        }
 
         $create = [
             'name' => $request->get('name'),
