@@ -36,6 +36,7 @@ class SendMail implements ShouldQueue
 
         switch ($this->type){
             case 'verify_account':
+                \Log::info('正式开始发送邮件');
                 \Mail::to($this->user)->send(new VerifyAccount($this->subject,$this->userName,$this->verifyUrl));
                 break;
         }
