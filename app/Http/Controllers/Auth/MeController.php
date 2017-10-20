@@ -37,8 +37,54 @@ class MeController extends Controller
 
     public function uploadAvatar(Request $request)
     {
-        dd($request->all());
+        $photo = $request->file();
+        $original_name = $photo->getClientOriginalName();
+        dd($photo,$original_name);
+        $original_name_without_ext = substr($original_name, 0, strlen($original_name) - 4);
+        $filename = $this->sanitize($original_name_without_ext);
+        $allowed_filename = $this->createUniqueFilename( $filename );
+        $filename_ext = $allowed_filename .'.jpg';
         $disk = \Storage::disk('qiniu');
+        $disk->put($filename_ext,'22');
+    }
 
+    /**
+     * 上传图片带的
+     * @param $string
+     * @param bool $force_lowercase
+     * @param bool $anal
+     * @return mixed|string
+     */
+    private function sanitize($string, $force_lowercase = true, $anal = false)
+    {
+        $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
+            "}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;",
+            "â€”", "â€“", ",", "<", ".", ">", "/", "?");
+        $clean = trim(str_replace($strip, "", strip_tags($string)));
+        $clean = preg_replace('/\s+/', "-", $clean);
+        $clean = ($anal) ? preg_replace("/[^a-zA-Z0-9]/", "", $clean) : $clean ;
+        return ($force_lowercase) ?
+            (function_exists('mb_strtolower')) ?
+                mb_strtolower($clean, 'UTF-8') :
+                strtolower($clean) :
+            $clean;
+    }
+
+    /**
+     * 编辑器上传图片命名
+     * @param $filename
+     * @return string
+     */
+    private function createUniqueFilename( $filename )
+    {
+        $upload_path = env('UPLOAD_PATH');
+        $full_image_path = $upload_path . $filename . '.jpg';
+        if ( \File::exists( $full_image_path ) )
+        {
+            // Generate token for image
+            $image_token = substr(sha1(mt_rand()), 0, 5);
+            return $filename . '-' . $image_token;
+        }
+        return $filename;
     }
 }
