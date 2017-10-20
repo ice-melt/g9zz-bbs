@@ -37,10 +37,8 @@ class MeController extends Controller
 
     public function uploadAvatar(Request $request)
     {
-        $photo = $request->file();
-        $photo = $photo['file'];
+        $photo = $request->file('file');
         $original_name = $photo->getClientOriginalName();
-        dd($photo,$original_name);
         $original_name_without_ext = substr($original_name, 0, strlen($original_name) - 4);
         $filename = $this->sanitize($original_name_without_ext);
         $allowed_filename = $this->createUniqueFilename( $filename );
