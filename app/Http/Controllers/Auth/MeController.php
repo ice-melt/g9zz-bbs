@@ -38,7 +38,7 @@ class MeController extends Controller
     public function uploadAvatar(Request $request)
     {
         $photo = $request->file();
-        dd($photo);
+        $photo = $photo['file'];
         $original_name = $photo->getClientOriginalName();
         dd($photo,$original_name);
         $original_name_without_ext = substr($original_name, 0, strlen($original_name) - 4);
