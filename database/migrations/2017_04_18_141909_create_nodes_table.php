@@ -24,6 +24,7 @@ class CreateNodesTable extends Migration
             $table->string('name')->unique()->index()->comment('名称');
             $table->string('display_name', 60)->unique()->comment('别名');
             $table->string('description')->nullable()->comment('描述');
+            $table->string('avatar')->nullable()->comment('节点图');
             $table->timestamps();
             $table->softDeletes();
             $table->index('hid');

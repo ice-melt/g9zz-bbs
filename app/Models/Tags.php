@@ -39,6 +39,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Tags whereWeight($value)
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Posts[] $post
+ * @property string $avatar 标签图
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Tags whereAvatar($value)
  */
 class Tags extends Model
 {
@@ -52,6 +54,7 @@ class Tags extends Model
         'description',
         'post_count',
         'weight',
+        'avatar',
     ];
 
     /**

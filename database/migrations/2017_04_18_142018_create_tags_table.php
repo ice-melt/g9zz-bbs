@@ -21,6 +21,7 @@ class CreateTagsTable extends Migration
             $table->string('description')->nullable()->comment('描述');
             $table->integer('post_count')->default(0)->comment('帖子数');
             $table->tinyInteger('weight')->default(0)->comment('权重');
+            $table->string('avatar')->nullable()->comment('标签图');
             $table->softDeletes();
             $table->timestamps();
             $table->index('hid');
