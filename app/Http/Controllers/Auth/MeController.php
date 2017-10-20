@@ -34,4 +34,11 @@ class MeController extends Controller
         $this->setData($resource);
         return $this->response();
     }
+
+    public function uploadAvatar(Request $request)
+    {
+        dd($request->all());
+        $disk = \Storage::disk('qiniu');
+
+    }
 }

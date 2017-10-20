@@ -111,6 +111,7 @@ Route::group(['middleware' => 'g9zz'],function(){
         //点击获取 验证链接
         Route::get('/get/verify','Auth\MyLoginController@getVerifyToken')->name('console.user.get.verify.token');
 
+        Route::post('/upload/avatar','Auth\MeController@uploadAvatar')->name('index.upload.avatar');
     });
 
     Route::group(['prefix' => 'post'],function() {
