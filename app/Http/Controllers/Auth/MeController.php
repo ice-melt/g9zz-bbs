@@ -52,6 +52,7 @@ class MeController extends Controller
             $this->userService->updateAvatar($url->getUrl());
             $data->url = $url->getUrl();
             $this->setData($data);
+            $this->setCode(0);
             return $this->response();
         } else {
             $this->setMessage(config('validation.user')['upload_avatar.failed']);
