@@ -76,11 +76,8 @@ trait Respond
         $response = new \stdClass();
         $response->code = $this->getCode();
         $response->message = $this->getMessage();
-//        $response->data = new \stdClass();
         if ($data instanceof Collection) {
-            $arr = $fractal->createData($data)->toArray();
-            if (count($arr['data']) >1 ) $response->data->items = $arr['data'];
-            $response->data = $arr['data'];
+            $response->data = new \stdClass();
             $paginator = $data->getPaginator();
             if ($paginator) {
                 $pager = new \stdClass();
@@ -93,11 +90,14 @@ trait Respond
                 $pager->previous = $pager->current - 1 > 0 ? $pager->current - 1 : '';
                 $response->pager = $pager;
             }
-            
+            $arr = $fractal->createData($data)->toArray();
+            if (count($arr['data']) >1 ) $response->data->items = $arr['data'];
+            $response->data = $arr['data'];
             return \Response::json($response, $status);
         }
 
         if ($data instanceof Item) {
+            $response->data = new \stdClass();
             $arr = $fractal->createData($data)->toArray();
             $response->data = $arr['data'];
             return \Response::json($response, $status);
