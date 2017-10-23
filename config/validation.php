@@ -123,5 +123,11 @@ return [
     'captcha' => [
         'uuid.required' => 414000000,
         'captcha.error' => 414000001,
-    ]
+    ],
+    'user' => [
+        'upload_avatar.failed' => 415000000,
+        'upload_avatar.null' => 415000001,
+        'upload_avatar.format_error' => 415000002,
+        'upload_avatar.size_over' => 415000003,
+    ],
 ];

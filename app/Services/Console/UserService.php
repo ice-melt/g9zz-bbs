@@ -10,8 +10,10 @@
 namespace App\Services\Console;
 
 
+use App\Exceptions\CodeException;
 use App\Repositories\Contracts\RoleRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use Illuminate\Support\Facades\Storage;
 use App\Services\BaseService;
 use Illuminate\Http\Request;
 
@@ -190,6 +192,48 @@ class UserService extends BaseService
         $result->verified = true;
         $result->save();
         return $result;
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function uploadAvatar($request)
+    {
+        //上传为空
+        if (!$request->hasFile('file') || !$request->file('file')->isValid()) {
+            throw new CodeException(config('validation.user')['upload_avatar.null']);
+        }
+
+        $allowFormat = config('g9zz.user.avatar');
+        $extension = $request->file('file')->getClientOriginalExtension();
+        if (!in_array($extension,$allowFormat)) {
+            throw new CodeException(config('validation.user')['upload_avatar.format_error']);
+        }
+
+        $size = $request->file('file')->getSize();
+        if ($size > 1048576) {
+            throw new CodeException(config('validation.user')['upload_avatar.size_over']);
+        }
+
+        $userHid = $request->get('g9zz_user_hid');
+        $newFileName =  time().$userHid.md5($request->file('file')->getClientOriginalName() . time())
+            . '.'
+            . $extension;
+        $put = Storage::disk('qiniu')->put($newFileName, \File::get($request->file('file')->path()));
+        $url = Storage::disk('qiniu')->getDriver()->downloadUrl($newFileName);
+
+        return $url;
+    }
+
+    /**
+     * @param $avatarUrl
+     * @return mixed
+     */
+    public function updateAvatar($avatarUrl)
+    {
+        $userId = \Request::get('g9zz_user_id');
+        return $this->userRepository->update(['avatar' => $avatarUrl],$userId);
     }
 
 }

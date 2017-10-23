@@ -12,19 +12,23 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Services\Console\UserService;
 use App\Transformers\MeTransformer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use League\Fractal\Resource\Item;
 
 class MeController extends Controller
 {
     protected $userRepository;
+    protected $userService;
     protected $request;
 
-    public function __construct(UserRepositoryInterface $userRepository,Request $request)
+    public function __construct(UserRepositoryInterface $userRepository,
+                                UserService $userService,
+                                Request $request)
     {
         $this->userRepository = $userRepository;
+        $this->userService = $userService;
         $this->request = $request;
     }
 
@@ -36,27 +40,24 @@ class MeController extends Controller
         return $this->response();
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function uploadAvatar(Request $request)
     {
-        if ($request->hasFile('file') && $request->file('file')->isValid()) {
-
-            $userHid = $request->get('g9zz_user_hid');
-
-            $newFileName =  time().$userHid.md5($request->file('file')->getClientOriginalName() . time())
-                . '.'
-                . $request->file('file')->getClientOriginalExtension();
-            $put = Storage::disk('qiniu')->put($newFileName, \File::get($request->file('file')->path()));
-            $url = Storage::disk('qiniu')->getDriver()->downloadUrl($newFileName);
-            $data = new \stdClass();
-            if ($put && $url->getUrl()) {
-                $data->url = $url->getUrl();
-                $this->setData($data);
-                return $this->response();
-            } else {
-                $this->setMessage(config(''));
-            }
+        $url = $this->userService->uploadAvatar($request);
+        $data = new \stdClass();
+        if ($url->getUrl()) {
+            $this->userService->updateAvatar($url->getUrl());
+            $data->url = $url->getUrl();
+            $this->setData($data);
+            return $this->response();
+        } else {
+            $this->setMessage(config('validation.user')['upload_avatar.failed']);
+            return $this->response();
         }
-
+        
     }
 
 }
