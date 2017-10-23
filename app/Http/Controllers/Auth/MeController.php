@@ -57,7 +57,7 @@ class MeController extends Controller
             $this->setMessage(config('validation.user')['upload_avatar.failed']);
             return $this->response();
         }
-        
+
     }
 
 }

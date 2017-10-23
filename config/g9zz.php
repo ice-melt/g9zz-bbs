@@ -58,6 +58,6 @@ return [
         'auth_redirect' => env('G9ZZ_AUTH_REDIRECT','my'),
     ],
     'user' => [
-        'avatar' => ['jpg','png']
+        'avatar' => ['jpg','png','jpeg']
     ]
 ];

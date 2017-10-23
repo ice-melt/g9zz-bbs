@@ -202,17 +202,20 @@ class UserService extends BaseService
     {
         //上传为空
         if (!$request->hasFile('file') || !$request->file('file')->isValid()) {
+            $this->log('service.error to '.__METHOD__,['upload_avatar_error' => '上传为空']);
             throw new CodeException(config('validation.user')['upload_avatar.null']);
         }
 
         $allowFormat = config('g9zz.user.avatar');
         $extension = $request->file('file')->getClientOriginalExtension();
         if (!in_array($extension,$allowFormat)) {
+            $this->log('service.error to '.__METHOD__,['upload_avatar_error' => '格式不正确']);
             throw new CodeException(config('validation.user')['upload_avatar.format_error']);
         }
 
         $size = $request->file('file')->getSize();
-        if ($size > 1048576) {
+        if ($size > 2048576) {
+            $this->log('service.error to '.__METHOD__,['upload_avatar_error' => '格式大小不正确']);
             throw new CodeException(config('validation.user')['upload_avatar.size_over']);
         }
 
