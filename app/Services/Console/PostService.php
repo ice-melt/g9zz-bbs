@@ -203,4 +203,9 @@ class PostService extends BaseService
         return $this->replyRepository->getReply($postHid);
     }
 
+    public function getPopPost()
+    {
+        return $this->postRepository->getPostByReplyCount();
+    }
+
 }

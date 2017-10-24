@@ -111,5 +111,15 @@ class PostController extends Controller
         return $this->response();
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getPopPost()
+    {
+        $result = $this->postService->getPopPost();
+        $resource = new Collection($result,new PostTransformer());
+        $this->setData($resource);
+        return $this->response();
+    }
 
 }

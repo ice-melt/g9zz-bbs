@@ -36,4 +36,12 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
     {
         return $this->hidFind($postHid);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPostByReplyCount()
+    {
+        return $this->model->orderBy('reply_count','desc')->limit(8)->get();
+    }
 }

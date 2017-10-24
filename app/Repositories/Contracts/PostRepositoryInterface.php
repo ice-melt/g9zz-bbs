@@ -23,4 +23,10 @@ interface PostRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function getAuthorByPostHid($postHid);
+
+    /**
+     * 根据回复数目的多少排名
+     * @return mixed
+     */
+    public function getPostByReplyCount();
 }

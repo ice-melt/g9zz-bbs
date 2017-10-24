@@ -69,6 +69,7 @@ Route::group([],function(){
         Route::get('/{hid}','Console\PostController@show')->name('index.post.show');
 
         Route::get('/{postHid}/reply','Console\PostController@getReply')->name('index.post.get.reply');
+        Route::get('/most/pop','Console\PostController@getPopPost')->name('index.post.get.pop_post');
 
     });
 
