@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Console;
 
 use App\Http\Requests\Console\PostRequest;
 use App\Services\Console\PostService;
+use App\Transformers\PopPostTransformer;
 use App\Transformers\PostReplyTransformer;
 use App\Transformers\PostTransformer;
 use Illuminate\Http\Request;
@@ -117,7 +118,7 @@ class PostController extends Controller
     public function getPopPost()
     {
         $result = $this->postService->getPopPost();
-        $resource = new Collection($result,new PostTransformer());
+        $resource = new Collection($result,new PopPostTransformer());
         $this->setData($resource);
         return $this->response();
     }
