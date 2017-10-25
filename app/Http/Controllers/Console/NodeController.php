@@ -106,11 +106,24 @@ class NodeController extends Controller
     }
 
     /**
+     * 常展示的节点列表
      * @return \Illuminate\Http\JsonResponse
      */
     public function getPopularNode()
     {
         $result = $this->nodeService->getPopNode();
+        $resource = new Collection($result,new NodeTransformer());
+        $this->setData($resource);
+        return $this->response();
+    }
+
+    /**
+     * 获取最热节点
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getMostNode()
+    {
+        $result = $this->nodeService->getMostNode();
         $resource = new Collection($result,new NodeTransformer());
         $this->setData($resource);
         return $this->response();

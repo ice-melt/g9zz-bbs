@@ -11,6 +11,7 @@ return [
     'node' => [
         'max_level' => 3,
         'show_num' => 6,//最多显示节点个数
+        'most_num' => 15,//用的最多的个数
     ],
     'append' => [
         'max_count' => 3

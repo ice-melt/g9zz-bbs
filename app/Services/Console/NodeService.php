@@ -12,16 +12,19 @@ namespace App\Services\Console;
 
 use App\Exceptions\TryException;
 use App\Repositories\Contracts\NodeRepositoryInterface;
+use App\Repositories\Contracts\PostRepositoryInterface;
 use App\Services\BaseService;
 use Vinkla\Hashids\Facades\Hashids;
 
 class NodeService extends BaseService
 {
     protected $nodeRepository;
+    protected $postRepository;
 
-    public function __construct(NodeRepositoryInterface $nodeRepository)
+    public function __construct(NodeRepositoryInterface $nodeRepository,PostRepositoryInterface $postRepository)
     {
         $this->nodeRepository = $nodeRepository;
+        $this->postRepository = $postRepository;
     }
     /**
      * 节点按照父子关系排序
@@ -207,6 +210,17 @@ class NodeService extends BaseService
      */
     public function getPopNode()
     {
-        return $this->nodeRepository->getPopNode();
+        $showNum = config('g9zz.node.show_num');
+        return $this->nodeRepository->getPopNode($showNum);
+    }
+
+    /**
+     * 本来想获取最近2天里节点使用数最多的前$mostNum名,不过算起来麻烦,算了,偷个懒吧
+     * @return mixed
+     */
+    public function getMostNode()
+    {
+        $mostNum = config('g9zz.node.most_num');
+        return $this->nodeRepository->getPopNode($mostNum);
     }
 }
