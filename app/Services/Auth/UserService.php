@@ -99,8 +99,8 @@ class UserService extends BaseService
         $param = Hashids::connection('code')->encode($message);
         $this->log('service.note to '.__METHOD__,['note' => '邮件发送队列']);
         dispatch((new SendMail('verify_account',
-//            is_local() ? 'g9zz@g9zz.com' : $email,//TODO::修改正式的
-                'g9zz@g9zz.com',
+            is_local() ? 'g9zz@g9zz.com' : $email,
+//                'g9zz@g9zz.com',
             "邮箱激活",
             $name,
             config('app.url').'/verify?token='.$param))->onQueue('send-email'));
