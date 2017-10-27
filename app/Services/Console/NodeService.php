@@ -53,7 +53,7 @@ class NodeService extends BaseService
         foreach ($model as $k => $v) {
             if ($v->parent_hid == $parentHid && $v->level == $level) {
                 if ($level != 0) {
-                    $v->html = str_repeat('└────', $level);
+                    $v->html = str_repeat('└─', $level);
                     $v->html .= '─';
                 }
                 $v->html .= str_repeat($html, $level);
