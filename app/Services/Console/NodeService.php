@@ -35,7 +35,7 @@ class NodeService extends BaseService
         $model = $this->nodeRepository->all();
         $data  = self::tree($model);
         foreach ($data as $key => $value) {
-            $data[$key]->newHtml = $value->html.$value->name;
+            $data[$key]->newHtml = $value->html.$value->display_name;
         }
         return $data;
     }
@@ -47,14 +47,14 @@ class NodeService extends BaseService
      * @param string $html
      * @return array
      */
-    public  static function tree($model, $parentHid = 0, $level = 0, $html = '-')
+    public  static function tree($model, $parentHid = 0, $level = 0, $html = '─')
     {
         $data = array();
         foreach ($model as $k => $v) {
-            if ($v->parent_hid == $parentHid) {
+            if ($v->parent_hid == $parentHid && $v->level == $level) {
                 if ($level != 0) {
-                    $v->html = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $level);
-                    $v->html .= '|';
+                    $v->html = str_repeat('└────', $level);
+                    $v->html .= '─';
                 }
                 $v->html .= str_repeat($html, $level);
                 $data[] = $v;
