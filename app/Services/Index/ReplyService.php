@@ -72,7 +72,7 @@ class ReplyService extends BaseService
                     $create['at_ids'][$key] = $user->id;
                     $aiTeUserName[$key] = $value;
                     $pregs[$key] = '/'.$value.'/';
-                    $arr[$key] = "/user/". urlencode($value)."'>".$value."</a>";
+                    $arr[$key] = '<a href='.env('G9ZZ_INDEX_DOMAIN').'"user/"'.urldecode($value).'>'.$value.'</a>';
                 }
             }
             $body = preg_replace($pregs,$arr,$body);
