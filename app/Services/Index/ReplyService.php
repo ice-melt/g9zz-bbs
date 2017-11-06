@@ -60,11 +60,14 @@ class ReplyService extends BaseService
 
         $preg='/(?<=@)[^\s]+\s?/';
         $res = preg_match_all($preg, $body, $match);
+        $this->log('"service.log" to listener "' . __METHOD__ . '".', ['preg_res' => $res]);
+
         if ($res) {
             $arr = [];
             $pregs = [];
             foreach ($match[0] as $key =>  $value) {
                 $user = $this->userRepository->findUserByName($value);
+                $this->log('"service.log" to listener "' . __METHOD__ . '".', ['preg_res_user' => $user]);
                 if (!empty($user)) {
                     $create['at_ids'][$key] = $user->id;
                     $aiTeUserName[$key] = $value;
@@ -73,6 +76,7 @@ class ReplyService extends BaseService
                 }
             }
             $body = preg_replace($pregs,$arr,$body);
+            $this->log('"service.log" to listener "' . __METHOD__ . '".', ['body' => $body]);
         }
 
         $create['body'] = $body;
@@ -126,6 +130,7 @@ class ReplyService extends BaseService
 
         //艾特
         if (!empty($create['at_ids']) && is_array($create['at_ids']) ) {
+            $this->log('"service.log" to listener "' . __METHOD__ . '".', ['at_ids' => $create['at_ids']]);
             foreach ($create['at_ids'] as $value) {
                 $notify->to_id = $value;
                 $user = $this->userRepository->getUserById($value);
