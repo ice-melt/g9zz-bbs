@@ -222,4 +222,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         }
         return $ids;
     }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function findUserByName($name)
+    {
+        return $this->model->whereName($name)->first();
+    }
 }

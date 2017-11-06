@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SendMail;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 
 class TestController extends Controller
@@ -12,6 +13,7 @@ class TestController extends Controller
     //
     public function index()
     {
+
 
 
         $dd = strtotime('Tue May 10 11:37:42 +0800 2011');
@@ -38,5 +40,25 @@ dd($dd,$aa);
 //        $invoice->id = 12;
 //        $invoice->message = "测试信息";
 //        $user->notify(new InvoicePaid($invoice));
+    }
+
+    public function store(Request $request)
+    {
+        $str = $request->get('content');
+
+        $preg='/(?<=@)[^\s]+\s?/';
+        $res = preg_match_all($preg, $str, $match);
+        $arr = [];
+        $pregs = [];
+        foreach ($match[0] as $key =>  $value) {
+            $pregs[$key] = '/'.$value.'/';
+            $arr[$key] = "<a href='".env('APP_URL')."/user/". urlencode($value)."'>".$value."</a>";
+        }
+
+        $res2 = preg_replace($pregs,$arr,$str);
+        dd($res2,$str);
+
+
+        dd($res);
     }
 }

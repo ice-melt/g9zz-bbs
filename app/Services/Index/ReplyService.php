@@ -52,11 +52,29 @@ class ReplyService extends BaseService
             'post_hid' => $request->get('postHid'),
             'user_hid' => $request->get('g9zz_user_hid'),
             'body_original' => $request->get('content'),
-            'at_ids' => $request->get('atIds'),
+//            'at_ids' => $request->get('atIds'),
         ];
 
         $parse = new Parser();
         $body = $parse->makeHtml($create['body_original']);
+
+        $preg='/(?<=@)[^\s]+\s?/';
+        $res = preg_match_all($preg, $body, $match);
+        if ($res) {
+            $arr = [];
+            $pregs = [];
+            foreach ($match[0] as $key =>  $value) {
+                $user = $this->userRepository->findUserByName($value);
+                if (!empty($user)) {
+                    $create['at_ids'][$key] = $user->id;
+                    $aiTeUserName[$key] = $value;
+                    $pregs[$key] = '/'.$value.'/';
+                    $arr[$key] = "<a href='".env('APP_URL')."/user/". urlencode($value)."'>".$value."</a>";
+                }
+            }
+            $body = preg_replace($pregs,$arr,$body);
+        }
+
         $create['body'] = $body;
         try {
             \DB::beginTransaction();
@@ -107,7 +125,7 @@ class ReplyService extends BaseService
         }
 
         //艾特
-        if (!!empty($create['at_ids']) && is_array($create['at_ids']) ) {
+        if (!empty($create['at_ids']) && is_array($create['at_ids']) ) {
             foreach ($create['at_ids'] as $value) {
                 $notify->to_id = $value;
                 $user = $this->userRepository->getUserById($value);

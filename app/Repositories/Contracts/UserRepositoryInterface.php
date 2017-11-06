@@ -110,4 +110,11 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function checkUserByEmail($email);
+
+    /**
+     * 通过name查找用户
+     * @param $name
+     * @return mixed
+     */
+    public function findUserByName($name);
 }

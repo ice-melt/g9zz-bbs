@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 
 Route::get('/test','TestController@index');
+Route::post('/test','TestController@store');
 
 
 $this->post('register', 'Auth\MyRegisterController@store')->name('register.store');
