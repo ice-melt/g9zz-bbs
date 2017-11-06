@@ -30,7 +30,7 @@ class PostReplyTransformer extends BaseTransformer
 //            'user_id',
             'isBlocked' => $replies->is_blocked,
 //            'voteCount' => $replies->vote_count,
-            'content' => $replies->is_blocked == 'yes' ? '该条因为一些原因被block,望周知' : cut_html_str($replies->body,100),
+            'content' => $replies->is_blocked == 'yes' ? '该条因为一些原因被block,望周知' : $replies->body,
             'contentOriginal' => $replies->is_blocked == 'yes' ? '该条因为一些原因被block,望周知' : $replies->body_original,
             'createdAt' => rfc_3339($replies->created_at),
             'created' => $replies->created_at->diffForHumans()

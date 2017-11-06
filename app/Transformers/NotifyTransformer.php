@@ -29,7 +29,7 @@ class NotifyTransformer extends BaseTransformer
 //            'data',
             'id' => $notifies->id,
             'type' => $data['type'],//类型
-            'body' => $data['body'],//艾特里的内容
+            'body' => cut_html_str($data['body'],100),//艾特里的内容
             'bodyOriginal' => $data['body_original'],//艾特里原内容
             'readAt' => isset($notifies->read_at) ? rfc_3339($notifies->read_at) : null,
             'createdAt' => rfc_3339($notifies->created_at),
