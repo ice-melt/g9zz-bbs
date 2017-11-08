@@ -36,7 +36,6 @@ class ReplyRepository extends BaseRepository implements ReplyRepositoryInterface
     {
         return $this->models()
             ->wherePostHid($postHid)
-            ->whereIsBlocked('no')
             ->orderBy('created_at','asc')
             ->paginate(per_page(100));
     }
