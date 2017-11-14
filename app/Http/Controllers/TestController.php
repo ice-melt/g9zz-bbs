@@ -69,7 +69,7 @@ dd($dd,$aa);
         $signature = $request->get('signature');
         $timestamp = $request->get('timestamp');
         $nonce = $request->get('nonce');
-        \Log::log(1,'22',['signature' => $signature,'timestamp' => $timestamp,'nonce' => $nonce]);
+        \Log::log('222','22',['signature' => $signature,'timestamp' => $timestamp,'nonce' => $nonce]);
         $token = 'zgh528g9zz';
         $echostr = $request->get('echostr');
         $tmpArr = array($token,$timestamp, $nonce);
