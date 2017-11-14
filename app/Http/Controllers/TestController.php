@@ -79,6 +79,7 @@ dd($dd,$aa);
         if( $tmpStr == $signature ){
             echo $echostr;
         }else{
+            dd($tmpStr,$signature,$echostr);
             echo "false";
         }
 
