@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SendMail;
 use App\Models\User;
+use App\Traits\G9zzLog;
 use EasyWeChat\Foundation\Application;
 use EasyWeChat\Message\Text;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Notification;
 
 class TestController extends Controller
 {
+    use G9zzLog;
     //
     public function index()
     {
@@ -69,18 +71,21 @@ dd($dd,$aa);
         $signature = $request->get('signature');
         $timestamp = $request->get('timestamp');
         $nonce = $request->get('nonce');
-        \Log::log('222','22',['signature' => $signature,'timestamp' => $timestamp,'nonce' => $nonce]);
+        $this->log('controller.request to '.__METHOD__,['signature' => $signature,'timestamp' => $timestamp,'nonce' => $nonce]);
+
         $token = 'zgh528g9zz';
         $echostr = $request->get('echostr');
-        $tmpArr = array($token,$timestamp, $nonce);
-        sort($tmpArr, SORT_STRING);
-        $tmpStr = implode( $tmpArr );
-        $tmpStr = sha1( $tmpStr );
+        $tmpArr = array($nonce,$token,$timestamp);
+        sort($tmpArr,SORT_STRING);
 
-        if( $tmpStr == $signature ){
+        // 2）将三个参数字符串拼接成一个字符串进行sha1加密
+        $str = implode($tmpArr);
+        $sign = sha1($str);
+
+        if( $sign == $signature ){
             echo $echostr;
         }else{
-            dd($tmpStr,$signature,$echostr);
+            dd($sign,$signature,$echostr);
             echo "false";
         }
 
