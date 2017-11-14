@@ -18,6 +18,9 @@ Route::get('/', function () {
 Route::get('/test','TestController@index');
 Route::post('/test','TestController@store');
 
+Route::get('/checkWechat','TestController@checkWechat');
+
+
 
 $this->post('register', 'Auth\MyRegisterController@store')->name('register.store');
 $this->post('login', 'Auth\MyLoginController@login');

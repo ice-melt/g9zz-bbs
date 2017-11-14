@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SendMail;
 use App\Models\User;
+use EasyWeChat\Foundation\Application;
+use EasyWeChat\Message\Text;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 
@@ -60,5 +62,25 @@ dd($dd,$aa);
 
 
         dd($res);
+    }
+
+    public function checkWechat(Request $request)
+    {
+        $signature = $request->get('signature');
+        $timestamp = $request->get('timestamp');
+        $nonce = $request->get('nonce');
+        $token = 'zgh528g9zz';
+        $echostr = $request->get('echostr');
+        $tmpArr = array($token,$timestamp, $nonce);
+        sort($tmpArr, SORT_STRING);
+        $tmpStr = implode( $tmpArr );
+        $tmpStr = sha1( $tmpStr );
+
+        if( $tmpStr == $signature ){
+            echo $echostr;
+        }else{
+            echo "false";
+        }
+
     }
 }
