@@ -29,7 +29,7 @@ class WechatController extends Controller
         $this->log('22222222222');
 
         $this->app->server->setMessageHandler(function ($message) {
-            return "叶落山城秋";
+            return "";
 
         });
 
