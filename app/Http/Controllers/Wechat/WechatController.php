@@ -28,6 +28,8 @@ class WechatController extends Controller
 
     public function serve()
     {
+        $this->log('22222222222');
+
         $this->app->server->setMessageHandler(function ($message) {
             switch ($message->MsgType) {
                 case 'event':
