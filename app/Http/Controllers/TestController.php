@@ -90,4 +90,32 @@ dd($dd,$aa);
         }
 
     }
+
+    public function wechatText()
+    {
+        $options = [
+            'debug'  => true,
+            'app_id' => 'wx80d0a532aaf5207d',
+            'secret' => 'e9249e04997c5f4aade89003963ba118',
+            'token'  => 'zgh528g9zz',
+            // 'aes_key' => null, // 可选
+            'log' => [
+                'level' => 'debug',
+                'file'  => '/data/wwwroot/g9zz/g9zz-demo/storage/logs/wechat-'.date('Y-m-d').'.log', // XXX: 绝对路径！！！！
+            ],
+            'oauth' => [
+                'scopes'   => ['snsapi_userinfo'],
+                'callback' => 'login',//不存在session重定向的页面
+            ],
+            //...
+        ];
+
+
+        $app = new Application($options);
+        $server = $app->server;
+        $server->setMessageHandler(function ($message) {
+            return "您好！欢迎关注我!";
+        });
+        $server->serve()->send();
+    }
 }
