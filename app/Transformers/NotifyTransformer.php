@@ -10,6 +10,8 @@
 namespace App\Transformers;
 
 
+use App\Models\Posts;
+use App\Models\User;
 use App\Repositories\Contracts\PostRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Notifications\DatabaseNotification;
@@ -22,11 +24,8 @@ class NotifyTransformer extends BaseTransformer
         $userRepository = app()->make(UserRepositoryInterface::class);
         $postRepository = app()->make(PostRepositoryInterface::class);
         $data = $notifies->data;
+
         $return = [
-//            'type',
-//            'notifiable_id',
-//            'notifiable_type',
-//            'data',
             'id' => $notifies->id,
             'type' => $data['type'],//类型
             'body' => cut_html_str($data['body'],100),//艾特里的内容
@@ -35,6 +34,7 @@ class NotifyTransformer extends BaseTransformer
             'createdAt' => rfc_3339($notifies->created_at),
             'updatedAt' => rfc_3339($notifies->updated_at),
         ];
+        /** @var Posts $post */
         $post = $postRepository->hidFind($data['post_hid']);
         $return['post'] = [
             'hid' => $post->hid,
@@ -42,6 +42,7 @@ class NotifyTransformer extends BaseTransformer
             'author' => $post->author->name,
         ];
 
+        /** @var User $userFrom */
         $userFrom = $userRepository->find($data['from_id']);
         $return['userFrom'] = [
             'hid' => $userFrom->hid,
@@ -49,6 +50,7 @@ class NotifyTransformer extends BaseTransformer
             'avatar' => $userFrom->avatar
         ];
 
+        /** @var User $userTo */
         $userTo = $userRepository->find($data['to_id']);
         $return['userTo'] = [
             'hid' => $userTo->hid,

@@ -21,6 +21,11 @@ Route::post('/test','TestController@store');
 Route::get('/checkWechat','TestController@checkWechat');
 
 
+Route::group(['prefix' => 'wechat','namespace' => 'Wechat'],function(){
+    Route::any('/', 'WechatController@serve');
+
+});
+
 
 $this->post('register', 'Auth\MyRegisterController@store')->name('register.store');
 $this->post('login', 'Auth\MyLoginController@login');
@@ -58,23 +63,15 @@ Route::group(['prefix' => 'wechat'],function () {
 
 Route::group([],function(){
     Route::group(['prefix' => 'user','middleware' => 'idDecode'],function(){
-//        Route::get('/{hid}','Console\UserController@show')->name('index.user.show');
-//        Route::get('/','Console\UserController@index')->name('console.user.index');
-//        Route::post('/{userId}/role/{roleId}','Console\UserController@attachRole')->name('console.user.attach.role');
         Route::get('/{userId}/post','Console\UserController@getPostByUser')->name('index.all.post.by.user');
         Route::get('/{userId}/reply','Console\UserController@getReplyByUser')->name('index.all.reply.by.user');
-
-
     });
 
     Route::group(['prefix' => 'post'],function() {
         Route::get('/','Console\PostController@index')->name('index.post.index');
-//        Route::post('/','Console\PostController@store')->name('index.post.store');
         Route::get('/{hid}','Console\PostController@show')->name('index.post.show');
-
         Route::get('/{postHid}/reply','Console\PostController@getReply')->name('index.post.get.reply');
         Route::get('/most/pop','Console\PostController@getPopPost')->name('index.post.get.pop_post');
-
     });
 
     Route::group(['prefix' => 'node'],function() {
@@ -101,7 +98,6 @@ Route::group([],function(){
 
     Route::group(['prefix' => 'append'],function() {
         Route::get('/','Index\AppendController@index')->name('index.append.index');
-//        Route::post('/','Index\AppendController@store')->name('index.append.store');
         Route::get('/{hid}','Index\AppendController@show')->name('index.append.show');
     });
 
@@ -114,10 +110,8 @@ Route::group(['middleware' => 'g9zz'],function(){
 
     Route::group(['prefix' => 'user'],function(){
         Route::get('/{hid}','Console\UserController@show')->name('index.user.show');
-
         //点击获取 验证链接
         Route::get('/get/verify','Auth\MyLoginController@getVerifyToken')->name('console.user.get.verify.token');
-
         Route::post('/upload/avatar','Auth\MeController@uploadAvatar')->name('index.upload.avatar');
     });
 

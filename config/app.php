@@ -177,6 +177,10 @@ return [
 
         //qiniu存储
         zgldh\QiniuStorage\QiniuFilesystemServiceProvider::class,
+
+        //wechat
+        Overtrue\LaravelWechat\ServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -237,6 +241,7 @@ return [
 
         'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'EasyWeChat' => Overtrue\LaravelWechat\Facade::class,
     ],
 
 ];
