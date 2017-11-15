@@ -63,7 +63,7 @@ class WechatController extends Controller
 
         $this->log('233455555');
 
-        return $this->wechat->server->serve();
+        return $this->app->server->serve();
 
     }
 
