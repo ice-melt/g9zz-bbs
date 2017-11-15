@@ -18,7 +18,6 @@ class WechatController extends Controller
 
     protected $app;
 
-
     public function __construct()
     {
         $this->app = new Application(config('wechat'));
@@ -27,15 +26,14 @@ class WechatController extends Controller
     public function serve()
     {
         $this->log('22222222222');
-
-        $this->app->server->setMessageHandler(function ($message) {
-            return "";
-
+        $server = $this->app->server;
+        $server->setMessageHandler(function ($message) {
+            return "叶落山城秋";
         });
 
         $this->log('233455555');
 
-        return $this->app->server->serve();
+        return $server->serve();
 
     }
 
