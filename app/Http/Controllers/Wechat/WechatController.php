@@ -17,21 +17,24 @@ class WechatController extends Controller
 {
 
     protected $app;
+    protected $wechat;
+
 
     public function __construct()
     {
         $this->app = new Application(config('wechat'));
+        $this->wechat = app('wechat');
     }
 
     public function serve()
     {
-        $this->app->server->setMessageHandler(function($message){
+        $this->wechat->server->setMessageHandler(function($message){
             return "欢迎关注 ";
         });
 
-        $this->log('return response.');
+        $this->log('233455555');
 
-        return $this->app->server->serve();
+        return $this->wechat->server->serve();
 
     }
 }
