@@ -28,7 +28,7 @@ class WechatController extends Controller
 
     public function serve()
     {
-        $this->log('22222222222');
+//        $this->log('22222222222');
 
         $this->app->server->setMessageHandler(function ($message) {
             switch ($message->MsgType) {
@@ -61,7 +61,7 @@ class WechatController extends Controller
             // ...
         });
 
-        $this->log('233455555');
+//        $this->log('233455555');
 
         return $this->app->server->serve();
 
