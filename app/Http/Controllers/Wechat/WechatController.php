@@ -91,10 +91,22 @@ class WechatController extends Controller
         $content = $message->Content;
 
         if($content == '叶落') {
-            $text = new Text(['content' => '叶落山城秋1']);
+            
+            $text = new Text(['content' => $this->app->user->get('openId')]);
         } else {
             $text = new Text(['content' => '叶落山城秋2']);
         }
         return $text;
     }
+
+    /**
+     * 创建微信菜单
+     */
+    public function createMenu()
+    {
+        $menuConfig = config('my-wechat.wechat_menu');
+        $result = $this->app->menu->add($menuConfig);
+        dd($result);
+    }
+
 }

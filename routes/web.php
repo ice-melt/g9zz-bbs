@@ -18,9 +18,11 @@ Route::get('/', function () {
 Route::get('/test','TestController@index');
 Route::post('/test','TestController@store');
 
-Route::group(['namespace' => 'Wechat'],function(){
-    Route::any('/wechat', 'WechatController@serve');
+Route::group(['namespace' => 'Wechat','prefix' => 'wechat'],function(){
+    Route::any('/', 'WechatController@serve');
 
+    //创建微信菜单
+    Route::post('/createMenu','WechatController@createMenu')->name('wechat.menu.create');
 });
 
 
