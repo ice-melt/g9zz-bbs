@@ -90,9 +90,7 @@ class WechatController extends Controller
     {
         $content = $message->Content;
 
-
         if($content == '叶落') {
-
             $text = new Text(['content' => $message->FromUserName]);
         } else {
             $text = new Text(['content' => '叶落山城秋2']);
