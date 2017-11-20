@@ -11,6 +11,7 @@ namespace App\Transformers;
 
 
 use App\Models\Posts;
+use Carbon\Carbon;
 
 class PostTransformer extends BaseTransformer
 {
@@ -34,8 +35,11 @@ class PostTransformer extends BaseTransformer
             'bodyOriginal' => $posts->body_original,
 //            'excerpt' => $posts->excerpt,
 //            'isTagged' => $posts->is_tagged,
+
             'createdAt' => rfc_3339($posts->created_at),
             'created' => $posts->created_at->diffForHumans(),
+            'lastReplyActivatedAt' => isset($posts->last_reply_activated_at) ? rfc_3339($posts->last_reply_activated_at) : null,
+            'lastReplyActivated' => isset($posts->last_reply_activated_at) ? Carbon::parse($posts->last_reply_activated_at)->diffForHumans() : null,
         ];
 
         if ($posts->user_hid) {
@@ -75,23 +79,23 @@ class PostTransformer extends BaseTransformer
             ];
         }
 
-        if ($posts->reply) {
-            foreach ($posts->reply as $item) {
-                $return['reply'][] = [
-                    'source' => $item->source,
-                    'isBlocked' => $item->is_blocked,
-                    'voteCount' => $item->vote_count,
-                    'body' => $item->body,
-                    'bodyOriginal' => $item->body_original,
-                    'createdAt' => rfc_3339($item->created_at),
-                    'created' => $item->created_at->diffForHumans(),
-                ];
-            }
-        }
+//        if ($posts->reply) {
+//            foreach ($posts->reply as $item) {
+//                $return['reply'][] = [
+//                    'source' => $item->source,
+//                    'isBlocked' => $item->is_blocked,
+//                    'voteCount' => $item->vote_count,
+//                    'body' => $item->body,
+//                    'bodyOriginal' => $item->body_original,
+//                    'createdAt' => rfc_3339($item->created_at),
+//                    'created' => $item->created_at->diffForHumans(),
+//                ];
+//            }
+//        }
 
         if ($posts->postscript) {
             foreach ($posts->postscript as $item) {
-                $return['postscript'] = [
+                $return['postscript'][] = [
                     'content' => $item->content,
                     'contentOriginal' => $item->content_original,
                     'createdAt' => $item->created_at,

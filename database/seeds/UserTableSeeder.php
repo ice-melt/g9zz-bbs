@@ -12,10 +12,13 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        $a = factory(User::class,10)->create();
-        foreach ($a as $value) {
-            $value->hid = \Vinkla\Hashids\Facades\Hashids::connection('user')->encode($value->id);
-            $value->save();
-        }
+        $a = factory(User::class)->create();
+        $b = factory(\App\Models\Roles::class)->create();
+
+        $a->hid = \Vinkla\Hashids\Facades\Hashids::connection('user')->encode($a->id);
+        $a->save();
+        $a->role()->sync([$b->id]);
+
+
     }
 }

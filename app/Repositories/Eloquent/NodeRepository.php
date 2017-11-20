@@ -79,4 +79,21 @@ class NodeRepository extends BaseRepository implements NodeRepositoryInterface
     {
         return $this->postRepository->models()->whereNodeHid($nodeHid);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getShowNode()
+    {
+        return $this->model->whereIsShow('yes')->get();
+    }
+
+    /**
+     * @param $showNum
+     * @return mixed
+     */
+    public function getPopNode($showNum)
+    {
+        return $this->model->where('is_show','yes')->orderBy('weight','asc')->limit($showNum)->get();
+    }
 }

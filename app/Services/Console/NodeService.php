@@ -12,16 +12,19 @@ namespace App\Services\Console;
 
 use App\Exceptions\TryException;
 use App\Repositories\Contracts\NodeRepositoryInterface;
+use App\Repositories\Contracts\PostRepositoryInterface;
 use App\Services\BaseService;
 use Vinkla\Hashids\Facades\Hashids;
 
 class NodeService extends BaseService
 {
     protected $nodeRepository;
+    protected $postRepository;
 
-    public function __construct(NodeRepositoryInterface $nodeRepository)
+    public function __construct(NodeRepositoryInterface $nodeRepository,PostRepositoryInterface $postRepository)
     {
         $this->nodeRepository = $nodeRepository;
+        $this->postRepository = $postRepository;
     }
     /**
      * 节点按照父子关系排序
@@ -32,7 +35,7 @@ class NodeService extends BaseService
         $model = $this->nodeRepository->all();
         $data  = self::tree($model);
         foreach ($data as $key => $value) {
-            $data[$key]->newHtml = $value->html.$value->name;
+            $data[$key]->newHtml = $value->html.$value->display_name;
         }
         return $data;
     }
@@ -44,14 +47,14 @@ class NodeService extends BaseService
      * @param string $html
      * @return array
      */
-    public  static function tree($model, $parentHid = 0, $level = 0, $html = '-')
+    public  static function tree($model, $parentHid = 0, $level = 0, $html = '─')
     {
         $data = array();
         foreach ($model as $k => $v) {
-            if ($v->parent_hid == $parentHid) {
+            if ($v->parent_hid == $parentHid && $v->level == $level) {
                 if ($level != 0) {
-                    $v->html = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $level);
-                    $v->html .= '|';
+                    $v->html = str_repeat('└', $level);
+                    $v->html .= '─';
                 }
                 $v->html .= str_repeat($html, $level);
                 $data[] = $v;
@@ -192,5 +195,32 @@ class NodeService extends BaseService
     public function getPost($nodeHid)
     {
         return $this->nodeRepository->getPost($nodeHid)->paginate(per_page());
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getShowNode()
+    {
+        return $this->nodeRepository->getShowNode();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPopNode()
+    {
+        $showNum = config('g9zz.node.show_num');
+        return $this->nodeRepository->getPopNode($showNum);
+    }
+
+    /**
+     * 本来想获取最近2天里节点使用数最多的前$mostNum名,不过算起来麻烦,算了,偷个懒吧
+     * @return mixed
+     */
+    public function getMostNode()
+    {
+        $mostNum = config('g9zz.node.most_num');
+        return $this->nodeRepository->getPopNode($mostNum);
     }
 }

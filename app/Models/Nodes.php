@@ -45,6 +45,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Nodes whereWeight($value)
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Posts[] $post
+ * @property string $avatar 节点图
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Nodes whereAvatar($value)
  */
 class Nodes extends Model
 {
@@ -61,6 +63,7 @@ class Nodes extends Model
         'name',
         'display_name',
         'description',
+        'avatar',
     ];
 
     public function post()

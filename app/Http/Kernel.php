@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\CaptchaMiddleware;
 use App\Http\Middleware\G9zz;
 use App\Http\Middleware\IdDecode;
 use App\Http\Middleware\Permission;
@@ -62,5 +63,6 @@ class Kernel extends HttpKernel
         'idDecode' => IdDecode::class,
         'g9zz' => G9zz::class,
         'permission' => Permission::class,
+        'captcha' => CaptchaMiddleware::class,
     ];
 }

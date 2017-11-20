@@ -13,6 +13,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\User;
 use App\Repositories\Contracts\PostRepositoryInterface;
 use App\Repositories\Contracts\ReplyRepositoryInterface;
+use App\Repositories\Contracts\RoleUserRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Container\Container as App;
 use Illuminate\Support\Collection;
@@ -21,12 +22,15 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
     protected $postRepository;
     protected $replyRepository;
+    protected $roleUserRepository;
     public function __construct(App $app,
                                 Collection $collection,
+                                RoleUserRepositoryInterface $roleUserRepository,
                                 PostRepositoryInterface $postRepository,
                                 ReplyRepositoryInterface $replyRepository)
     {
         $this->postRepository = $postRepository;
+        $this->roleUserRepository = $roleUserRepository;
         $this->replyRepository = $replyRepository;
         parent::__construct($app, $collection);
     }
@@ -46,6 +50,16 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         return $this->model->whereEmail($email)->first();
     }
+
+    /**
+     * @param $email
+     * @return mixed
+     */
+    public function checkUserByEmail($email)
+    {
+        return $this->model->whereEmail($email)->whereStatus('activated')->first();
+    }
+
 
     /**
      * 通过githubId 获取 user
@@ -148,4 +162,73 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return $this->replyRepository->models()->whereUserHid($userHid);
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getUserById($id)
+    {
+        return $this->model->whereId($id)->first();
+    }
+
+    /**
+     * @param $weiboId
+     * @return mixed
+     */
+    public function findUserByWeiboId($weiboId)
+    {
+        return $this->model->whereWeiboId($weiboId)->first();
+    }
+
+    /**
+     * @param $xcxId
+     * @return mixed
+     */
+    public function getUserByXcxId($xcxId)
+    {
+        return $this->model->whereXcxId($xcxId)->first();
+    }
+
+    /**
+     * @param $hid
+     * @return mixed
+     */
+    public function getRoleByUserHid($hid)
+    {
+        return $this->model->whereHid($hid)->with('role')->first();
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getUserRoleIdsByUserId($id)
+    {
+        return $this->roleUserRepository->models()->whereUserId($id)->pluck('role_id');
+    }
+
+    /**
+     * @param $userId
+     * @return array
+     */
+    public function getRoleLevelsByUserId($userId)
+    {
+        $role = $this->model->find($userId)->role()->get()->toArray();
+        $ids = [];
+        if (!empty($role)) {
+            foreach ($role as $key => $value) {
+                $ids[] = $value['level'];
+            }
+        }
+        return $ids;
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function findUserByName($name)
+    {
+        return $this->model->whereName($name)->first();
+    }
 }

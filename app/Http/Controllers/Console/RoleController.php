@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Console;
 
 use App\Http\Requests\Console\RoleRequest;
 use App\Services\Console\RoleService;
+use App\Transformers\RolePermissionListTransformer;
 use App\Transformers\RoleTransformer;
 use App\Http\Controllers\Controller;
+use App\Transformers\ShowRoleTransformer;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
@@ -36,7 +38,7 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
-        $create = $request->only(['name','displayName','description']);
+        $create = $request->only(['name','displayName','description','level']);
         $this->log('controller.request to '.__METHOD__,['create' => $create]);
         $create = parse_input($create);
         $result = $this->roleService->store($create);
@@ -51,7 +53,7 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $resource = new Item($this->roleService->find($id),new RoleTransformer());
+        $resource = new Item($this->roleService->find($id),new ShowRoleTransformer());
         $this->setData($resource);
         return $this->response();
     }
@@ -63,7 +65,7 @@ class RoleController extends Controller
      */
     public function update(RoleRequest $request, $id)
     {
-        $update = $request->only(['name','displayName']);
+        $update = $request->only(['name','displayName','level']);
         if (!empty($request->get('description'))) $update['description'] = $request->get('description');
         $this->log('service.request to '.__METHOD__,['update' => $update]);
         $update = parse_input($update);
@@ -84,7 +86,7 @@ class RoleController extends Controller
     }
 
     /**
-     * 给角色分配权限
+     * 去重给角色分配权限
      * @param RoleRequest $request
      * @param $roleId
      * @return \Illuminate\Http\JsonResponse
@@ -94,6 +96,34 @@ class RoleController extends Controller
         $permissions = $request->get('permissionIds');
         $this->roleService->attachPermission($permissions,$roleId);
         $resource = new Item($this->roleService->find($roleId),new RoleTransformer());
+        $this->setData($resource);
+        return $this->response();
+    }
+
+    /**
+     * 覆盖分配权限
+     * @param RoleRequest $request
+     * @param $roleId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function coverAttachPermission(RoleRequest $request,$roleId)
+    {
+        $permissions = $request->get('permissionIds');
+        $this->roleService->coverAttachPermission($permissions,$roleId);
+        $resource = new Item($this->roleService->find($roleId),new RoleTransformer());
+        $this->setData($resource);
+        return $this->response();
+    }
+
+
+    /**
+     * @param $roleId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getPermissionByRole($roleId)
+    {
+        $result = $this->roleService->find($roleId);
+        $resource = new Item($result,new RolePermissionListTransformer());
         $this->setData($resource);
         return $this->response();
     }

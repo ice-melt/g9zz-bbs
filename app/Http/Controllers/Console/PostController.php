@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Console;
 
 use App\Http\Requests\Console\PostRequest;
 use App\Services\Console\PostService;
+use App\Transformers\PopPostTransformer;
+use App\Transformers\PostReplyTransformer;
 use App\Transformers\PostTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -60,6 +62,7 @@ class PostController extends Controller
     public function show($hid)
     {
         $data = $this->postService->hidFind($hid);
+        $this->postService->readAdd($data);
         $resource = new Item($data,new PostTransformer());
         $this->setData($resource);
         return $this->response();
@@ -88,6 +91,36 @@ class PostController extends Controller
     {
         $result = $this->postService->hidDelete($hid);
         if ($result) return $this->response();
+    }
+
+    /**
+     * @param $postHid
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getReply($postHid)
+    {
+        $paginate = $this->postService->getReply($postHid);
+        $page = $this->request->get('page');
+        if ($page) {
+            $i = ($page - 1) * per_page() + 1;
+        } else {
+            $i = 1;
+        }
+        $resource = new Collection($paginate,new PostReplyTransformer($i));
+        $resource->setPaginator(new IlluminatePaginatorAdapter($paginate));
+        $this->setData($resource);
+        return $this->response();
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getPopPost()
+    {
+        $result = $this->postService->getPopPost();
+        $resource = new Collection($result,new PopPostTransformer());
+        $this->setData($resource);
+        return $this->response();
     }
 
 }

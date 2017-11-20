@@ -12,17 +12,25 @@ namespace App\Services\Console;
 
 use App\Exceptions\TryException;
 use App\Repositories\Contracts\PostRepositoryInterface;
+use App\Repositories\Contracts\ReplyRepositoryInterface;
 use App\Services\BaseService;
 use HyperDown\Parser;
+use Illuminate\Http\Request;
 use Vinkla\Hashids\Facades\Hashids;
 
 class PostService extends BaseService
 {
+    protected $request;
     protected $postRepository;
+    protected $replyRepository;
 
-    public function __construct(PostRepositoryInterface $postRepository)
+    public function __construct(Request $request,
+                                PostRepositoryInterface $postRepository,
+                                ReplyRepositoryInterface $replyRepository)
     {
+        $this->request = $request;
         $this->postRepository = $postRepository;
+        $this->replyRepository = $replyRepository;
     }
 
     /**
@@ -32,9 +40,6 @@ class PostService extends BaseService
      */
     public function paginate($request)
     {
-        if (empty($request)) {
-            return $this->postRepository->paginate(per_page());
-        }
         $request['replyCount']= $this->order($request,'replyCount');
         $request['viewCount']= $this->order($request,'viewCount');
         $request['voteCount']= $this->order($request,'voteCount');
@@ -51,6 +56,11 @@ class PostService extends BaseService
         $query = $this->allOrderBy($request,$query,'isExcellent');
         $query = $this->allOrderBy($request,$query,'isBlocked');
         $query = $this->allOrderBy($request,$query,'isTagged');
+        $query = $query->orderBy('last_reply_activated_at','desc')
+            ->orderBy('created_at','desc');
+        if (!empty($this->request->get('node'))) {
+            $query =  $query->whereNodeHid($this->request->get('node'));
+        }
 
         return $query->paginate(per_page());
 
@@ -107,17 +117,13 @@ class PostService extends BaseService
         $parser = new Parser();
         $create['content'] = $parser->makeHtml($create['body_original']);
         $this->log('service.request to '.__METHOD__,['create' => $create]);
-//dd($create);
+
         try {
             \DB::beginTransaction();
             $result = $this->postRepository->create($create);
-            $update['hid'] = Hashids::connection('post')->encode($result->id);
-            $this->log('service.request to '.__METHOD__,['update' => $update]);
-            $this->postRepository->update($update,$result->id);
-//            dd(22);
-//            $nodeId = Hashids::connection('node')->decode($request->get('nodeHid'));
-//            $this->postRepository->attachNode($result->id,$nodeId);
-
+            $result->hid = Hashids::connection('post')->encode($result->id);
+            $result->node_hid = $request->get('nodeHid');
+            $result->save();
             \DB::commit();
         } catch (\Exception $e) {
             $this->log('"service.error" to listener "' . __METHOD__ . '".', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()]);
@@ -125,7 +131,7 @@ class PostService extends BaseService
             throw new TryException(json_encode($e->getMessage()),(int)$e->getCode());
         }
 
-        return $this->postRepository->find($result->id);
+        return $result;
     }
 
     /**
@@ -138,6 +144,17 @@ class PostService extends BaseService
     }
 
     /**
+     * @param $post
+     * @return mixed
+     */
+    public function readAdd($post)
+    {
+        $post->view_count++;
+        return $post->save();
+    }
+
+
+    /**
      * @param $request
      * @param $hid
      * @return mixed
@@ -146,7 +163,8 @@ class PostService extends BaseService
     {
         $update = [
             'title' => $request->get('title'),
-            'body_original' => $request->get('content')
+            'body_original' => $request->get('content'),
+            'node_hid' => $request->get('nodeHid')
         ];
         $parser = new Parser();
         $update['content'] = $parser->makeHtml($update['body_original']);
@@ -154,10 +172,10 @@ class PostService extends BaseService
         try {
             \DB::beginTransaction();
             $result = $this->postRepository->hidUpdate($update,$hid);
-            $nodeId = Hashids::connection('node')->decode($request->get('nodeHid'));
-            $this->log('"service.error" to listener "' . __METHOD__ . '".', ['nodeId' => $nodeId]);
-            $result->node_hid = $nodeId[0];
-            $result->save();
+//            $nodeId = Hashids::connection('node')->decode($request->get('nodeHid'));
+//            $this->log('"service.log" to listener "' . __METHOD__ . '".', ['nodeId' => $nodeId]);
+//            $result->node_hid = $nodeId[0];
+//            $result->save();
             \DB::commit();
         } catch (\Exception $e) {
             $this->log('"service.error" to listener "' . __METHOD__ . '".', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()]);
@@ -175,4 +193,19 @@ class PostService extends BaseService
     {
         return $this->postRepository->hidDelete($hid);
     }
+
+    /**
+     * @param $postHid
+     * @return mixed
+     */
+    public function getReply($postHid)
+    {
+        return $this->replyRepository->getReply($postHid);
+    }
+
+    public function getPopPost()
+    {
+        return $this->postRepository->getPostByReplyCount();
+    }
+
 }

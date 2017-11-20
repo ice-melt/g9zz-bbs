@@ -21,14 +21,39 @@ Route::group(['prefix' => 'test'],function() {
     Route::get('/', 'TestController@index')->name('test.index');
 });
 
+Route::group(['middleware' => ['g9zz'],'prefix' => 'me'],function() {
+        Route::get('/','Auth\MeController@index')->name('console.me.index');
+});
+
+
 Route::group(['middleware' => ['g9zz','permission']],function(){
     Route::group(['prefix' => 'user','middleware' => 'idDecode'],function(){
         Route::get('/','Console\UserController@index')->name('console.user.index');
-        Route::post('/{userId}/role/{roleId}','Console\UserController@attachRole')->name('console.user.attach.role');
+        Route::get('/{hid}','Console\UserController@show')->name('console.user.show');
+        Route::post('/{userHid}/role/{roleId}','Console\UserController@attachRole')->name('console.user.attach.role');
 
-        Route::get('/{userId}/post','Console\UserController@getPostByUser')->name('console.all.post.by.user');
-        Route::get('/{userId}/reply','Console\UserController@getReplyByUser')->name('console.all.reply.by.user');
+        Route::get('/{userHid}/post','Console\UserController@getPostByUser')->name('console.all.post.by.user');
+        Route::get('/{userHid}/reply','Console\UserController@getReplyByUser')->name('console.all.reply.by.user');
+
+        Route::delete('/{userHid}','Console\UserController@destroy')->name('console.user.delete');
+        Route::post('/{userHid}/closure','Console\UserController@closure')->name('console.user.closure');
+        Route::post('/{userHid}/verify','Console\UserController@doVerify')->name('console.user.do.verify');
+
+
     });
+
+    Route::group(['prefix' => 'notify'],function() {
+        //获取所有通知
+        Route::get('/','Console\NotifyController@getNotify')->name('console.user.get.notify');
+        Route::get('/unreadNum','Console\NotifyController@getUnreadNotifyNum')->name('console.user.notify.unread.num');
+//        Route::get('/notify/unread','Console\NotifyController@getUnReadNotify')->name('console.user.get.unread.notify');
+//        Route::get('/notify/read','Console\NotifyController@getHadReadNotify')->name('console.user.get.had.read.notify');
+        //标记某个通知已读
+        Route::post('/set/{notifyId}/read','Console\NotifyController@setNotifyRead')->name('console.user.set.notify.read');
+        //标记所有通知已读
+        Route::post('/set/allRead','Console\NotifyController@setAllNotifyRead')->name('console.user.set.all.notify.read');
+    });
+
 
     Route::group(['prefix' => 'post'],function() {
         Route::get('/','Console\PostController@index')->name('console.post.index');
@@ -36,6 +61,8 @@ Route::group(['middleware' => ['g9zz','permission']],function(){
         Route::get('/{hid}','Console\PostController@show')->name('console.post.show');
         Route::put('/{hid}','Console\PostController@update')->name('console.post.put');
         Route::delete('/{hid}','Console\PostController@destroy')->name('console.post.destroy');
+
+        Route::get('/{postHid}/reply','Console\PostController@getReply')->name('console.post.get.reply');
     });
 
     Route::group(['prefix' => 'node'],function() {
@@ -63,14 +90,15 @@ Route::group(['middleware' => ['g9zz','permission']],function(){
         Route::get('/{hid}','Index\ReplyController@show')->name('console.reply.show');
         Route::put('/{hid}','Index\ReplyController@update')->name('console.reply.put');
         Route::delete('/{hid}','Index\ReplyController@destroy')->name('console.reply.destroy');
+        Route::post('/{hid}/block','Index\ReplyController@block')->name('console.reply.block');
     });
 
     Route::group(['prefix' => 'append'],function() {
         Route::get('/','Index\AppendController@index')->name('console.append.index');
         Route::post('/','Index\AppendController@store')->name('console.append.store');
         Route::get('/{hid}','Index\AppendController@show')->name('console.append.show');
-//    Route::put('/{id}','Index\AppendController@update')->name('console.append.put');
-//    Route::delete('/{id}','Index\AppendController@destroy')->name('console.append.destroy');
+//        Route::put('/{id}','Index\AppendController@update')->name('console.append.put');
+        Route::delete('/{id}','Index\AppendController@destroy')->name('console.append.destroy');
     });
 
     Route::group(['prefix' => 'permission'],function() {
@@ -89,11 +117,13 @@ Route::group(['middleware' => ['g9zz','permission']],function(){
         Route::delete('/{id}','Console\RoleController@destroy')->name('console.role.destroy');
 
         Route::post('/{roleId}/permission','Console\RoleController@attachPermission')->name('console.role.attach.permission');
+        Route::post('/{roleId}/cover/permission','Console\RoleController@coverAttachPermission')->name('console.role.cover.attach.permission');
+        Route::get('/{roleId}/permission','Console\RoleController@getPermissionByRole')->name('console.role.get.permission');
 
     });
 
     Route::group(['prefix' => 'code'],function() {
-        Route::get('/','Console\InviteCodeController@index')->name('console.code.store');
+        Route::get('/','Console\InviteCodeController@index')->name('console.code.index');
         Route::get('/ownCode','Console\InviteCodeController@getOwnCode')->name('console.code.own.code');
         Route::post('/','Console\InviteCodeController@store')->name('console.code.store');
     });

@@ -9,10 +9,13 @@
 
 namespace App\Services\Auth;
 
+use App\Exceptions\CodeException;
 use App\Exceptions\TryException;
+use App\Jobs\SendMail;
 use App\Repositories\Contracts\GithubUserRepositoryInterface;
 use App\Repositories\Contracts\InviteCodeRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\WeiBoUserRepositoryInterface;
 use App\Services\BaseService;
 use Vinkla\Hashids\Facades\Hashids;
 
@@ -21,17 +24,21 @@ class UserService extends BaseService
 
     protected $inviteCodeRepository;
     protected $githubUserRepository;
+    protected $weiBoUserRepository;
     protected $userRepository;
     protected $isInvite;
 
     public function __construct(UserRepositoryInterface $userRepository,
+                                WeiBoUserRepositoryInterface $weiBoUserRepository,
                                 InviteCodeRepositoryInterface $inviteCodeRepository,
                                 GithubUserRepositoryInterface $githubUserRepository
+
     )
     {
         $this->isInvite = config('g9zz.invite_code.is_invite');
         $this->inviteCodeRepository = $inviteCodeRepository;
         $this->githubUserRepository = $githubUserRepository;
+        $this->weiBoUserRepository = $weiBoUserRepository;
         $this->userRepository = $userRepository;
 
     }
@@ -49,15 +56,12 @@ class UserService extends BaseService
         try {
             \DB::beginTransaction();
             $user = $this->userRepository->create($create);
-            $update['hid'] = Hashids::connection('user')->encode($user->id);
-            $this->log('service.request to '.__METHOD__,['user_update' => $update]);
-            $this->userRepository->update($update,$user->id);
-
+            $user->hid = Hashids::connection('user')->encode($user->id);
+            $user->save();
             if ($this->isInvite) {
                 $inviteCode = $this->inviteCodeRepository->getInviteCodeByCode($other['invite_code']);
                 if (empty($inviteCode)) {
-                    $this->setCode(config('validation.validation.register')['inviteCode.exists']);
-                    return $this->response();
+                    throw new CodeException(config('validation.register')['inviteCode.exists']);
                 }
                 $inviteCodeUpdate = [
                     'status' => 'used',
@@ -68,14 +72,57 @@ class UserService extends BaseService
                 $this->inviteCodeRepository->update($inviteCodeUpdate,$inviteCode->id);
             }
 
-            $result = $this->userRepository->find($user->id);
+            $this->verifyEmail($create['email'],$create['name'],$user->id);
+
             \DB::commit();
         } catch (\Exception $e) {
             $this->log('"service.error" to listener "' . __METHOD__ . '".', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()]);
             \DB::rollBack();
             throw new TryException(json_encode($e->getMessage()),(int)$e->getCode());
         }
-        return $result;
+        $token = Hashids::connection('console_token')->encode([$user->id, time()]);
+        $data = new \stdClass();
+        $data->token = $token;
+        $data->hid = $user->hid;
+        return $data;
+    }
+
+    /**
+     * @param $email
+     * @param $name
+     * @param $id
+     * @return bool
+     */
+    public function verifyEmail($email,$name,$id)
+    {
+        $message = [$id,time(),3];
+        $param = Hashids::connection('code')->encode($message);
+        $this->log('service.note to '.__METHOD__,['note' => '邮件发送队列']);
+        dispatch((new SendMail('verify_account',
+            is_local() ? 'g9zz@g9zz.com' : $email,
+//                'g9zz@g9zz.com',
+            "邮箱激活",
+            $name,
+            config('app.url').'/verify?token='.$param))->onQueue('send-email'));
+        return true;
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getUserById($id)
+    {
+        return $this->userRepository->getUserById($id);
+    }
+
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    public function updateVerify($userId)
+    {
+        return $this->userRepository->update(['verified' => 'true'],$userId);
     }
 
     /**
@@ -86,6 +133,16 @@ class UserService extends BaseService
     {
         return $this->userRepository->findUserByEmail($email);
     }
+
+    /**
+     * @param $email
+     * @return mixed
+     */
+    public function checkUserByEmail($email)
+    {
+        return $this->userRepository->checkUserByEmail($email);
+    }
+
 
     /**
      * @param $requestPwd
@@ -108,6 +165,16 @@ class UserService extends BaseService
     {
         return  $this->githubUserRepository->getGithub($githubId);
     }
+
+    /**
+     * @param $weiboId
+     * @return mixed
+     */
+    public function checkIsWeibo($weiboId)
+    {
+        return $this->weiBoUserRepository->getWeibo($weiboId);
+    }
+
 
     /**
      * @param $user
@@ -145,18 +212,37 @@ class UserService extends BaseService
             $this->log('service.request to '.__METHOD__,['github_create' => $create]);
             $result = $this->githubUserRepository->create($create);
 
-            $userCreate = [
-                'email' => $create['email'],
-                'github_id' => $result->id,
-                'name' => empty($create['display_name']) ? $create['github_name'] : $create['display_name'],
-                'avatar' => $create['avatar'],
-                'register_source' => 'github'
-            ];
-            $this->log('service.request to '.__METHOD__,['user_create' => $userCreate]);
-            $userResult = $this->userRepository->create($userCreate);
-            $update['hid'] = Hashids::connection('user')->encode($userResult->id);
-            $this->log('service.request to '.__METHOD__,['user_update' => $update]);
-            $this->userRepository->update($update,$userResult->id);
+            \DB::commit();
+        } catch (\Exception $e) {
+            $this->log('"service.error" to listener "' . __METHOD__ . '".', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()]);
+            \DB::rollBack();
+            throw new TryException(json_encode($e->getMessage()),(int)$e->getCode());
+        }
+        $now = time();
+        $oauth = config('g9zz.oauth.auth.github');
+        $param = [$result->id,$now,$oauth];
+        $auth = Hashids::connection('user')->encode($param);
+
+        return redirect()->route('new.auth',['auth' => $auth]);
+    }
+
+    /**
+     * @param $user
+     * @return mixed
+     */
+    public function storeWeibo($user)
+    {
+        $data = $user->user;
+
+        $data['weibo_id'] = $data['id'];
+        $data['weibo_idstr'] = $data['idstr'];
+        $data['weibo_created_at'] = date('Y-m-d H:i:s',strtotime($data['created_at']));
+
+        try {
+            \DB::beginTransaction();
+            $this->log('service.request to '.__METHOD__,['weibo_create' => $data]);
+            $result = $this->weiBoUserRepository->create($data);
+
             \DB::commit();
         } catch (\Exception $e) {
             $this->log('"service.error" to listener "' . __METHOD__ . '".', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()]);
@@ -164,7 +250,22 @@ class UserService extends BaseService
             throw new TryException(json_encode($e->getMessage()),(int)$e->getCode());
         }
 
-        return $this->userRepository->find($userResult->id);
+        $now = time();
+        $oauth = config('g9zz.oauth.auth.weibo');
+        $param = [$result->id,$now,$oauth];
+        $auth = Hashids::connection('user')->encode($param);
+
+        return redirect()->route('web.get.login',['auth' => $auth]);
+    }
+
+    /**
+     * @param $oauthId
+     * @param $type
+     * @return mixed
+     */
+    public function checkExistsOauth($oauthId,$type)
+    {
+        return $this->userRepository->findWhere([$type => $oauthId])->first();
     }
 
     /**
@@ -174,6 +275,15 @@ class UserService extends BaseService
     public function findUserByGithubId($githubId)
     {
         return $this->userRepository->findUserByGithubId($githubId);
+    }
+
+    /**
+     * @param $weiboId
+     * @return mixed
+     */
+    public function findUserByWeiboId($weiboId)
+    {
+        return $this->userRepository->findUserByWeiboId($weiboId);
     }
 
     /**

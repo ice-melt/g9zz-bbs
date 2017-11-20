@@ -61,4 +61,60 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function getReplyByUser($userHid);
+
+    /**
+     * 通过ID获取用户
+     * @param $id
+     * @return mixed
+     */
+    public function getUserById($id);
+
+    /**
+     * 通过weibo_user 的id 查找user 表里数据
+     * @param $weiboId
+     * @return mixed
+     */
+    public function findUserByWeiboId($weiboId);
+
+    /**
+     * @param $xcxId
+     * @return mixed
+     */
+    public function getUserByXcxId($xcxId);
+
+    /**
+     * 通过HID查询用户角色
+     * @param $hid
+     * @return mixed
+     */
+    public function getRoleByUserHid($hid);
+
+    /**
+     * 通过用户ID获取用户的角色ID列表
+     * @param $id
+     * @return mixed
+     */
+    public function getUserRoleIdsByUserId($id);
+
+
+    /**
+     * 通过用户ID获取用户角色等级列表
+     * @param $userId
+     * @return mixed
+     */
+    public function getRoleLevelsByUserId($userId);
+
+    /**
+     * 通过邮箱或者正常状态的用户
+     * @param $email
+     * @return mixed
+     */
+    public function checkUserByEmail($email);
+
+    /**
+     * 通过name查找用户
+     * @param $name
+     * @return mixed
+     */
+    public function findUserByName($name);
 }

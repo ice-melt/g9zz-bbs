@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\verifyAccount;
+use App\Mail\VerifyAccount;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -37,7 +37,8 @@ class SendMail implements ShouldQueue
     {
         switch ($this->type){
             case 'verify_account':
-                \Mail::to($this->user)->send(new verifyAccount($this->subject,$this->userName,$this->verifyUrl));
+                \Log::info('正式开始发送邮件');
+                \Mail::to($this->user)->send(new VerifyAccount($this->subject,$this->userName,$this->verifyUrl));
                 break;
         }
     }

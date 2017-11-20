@@ -11,6 +11,7 @@ return [
         'some.error' => 400000000,
         'data.null' => 400000001,
         'need.login' => 400000002,
+        'need.bindAccount' => 400000004,
     ],
     'post' => [
         'title.required' =>  401000000,
@@ -72,6 +73,8 @@ return [
         'description.max' => 408000004,
         'permissionIds.required' => 408000005,
         'has.user' => 408000006,
+        'level.required' => 408000007,
+        'level.integer' => 408000008,
     ],
     'invite_code' => [
         'max.num' => 409000000,
@@ -90,7 +93,8 @@ return [
         'email.unique' => 410000010,
         'password.required' => 410000011,
         'password.min' => 410000012,
-        'needInvite.notSocialite' => 410000013
+        'needInvite.notSocialite' => 410000013,
+        'name.unique' => 410000014,
     ],
     'token' => [
         'token.isNull' => 411000000,
@@ -104,5 +108,26 @@ return [
         'password.string' => 412000001,
         'login.error' => 412000000,
         'loginWay.error' =>  412000002,
+        'verify.failed' => 412000003,
+        'had.verified' => 412000004,
+        'oauth.failed' => 412000005,
+        'had.oauth' => 412000006,
+        'captcha.required' => 412000007,
+        'auth.required' => 412000008,
+        'x-auth-uuid.required' => 414000000,
+        'verify_email.too_much' => 412000009,
+    ],
+    'notify' => [
+        'noSet.other' => 413000000
+    ],
+    'captcha' => [
+        'uuid.required' => 414000000,
+        'captcha.error' => 414000001,
+    ],
+    'user' => [
+        'upload_avatar.failed' => 415000000,
+        'upload_avatar.null' => 415000001,
+        'upload_avatar.format_error' => 415000002,
+        'upload_avatar.size_over' => 415000003,
     ],
 ];

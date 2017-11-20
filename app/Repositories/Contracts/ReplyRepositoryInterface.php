@@ -16,4 +16,10 @@ interface ReplyRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function noBlocked();
+
+    /**
+     * @param $postHid
+     * @return mixed
+     */
+    public function getReply($postHid);
 }

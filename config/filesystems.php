@@ -63,6 +63,19 @@ return [
             'bucket' => env('AWS_BUCKET'),
         ],
 
+        'qiniu' => [
+            'driver'  => 'qiniu',
+            'domains' => [
+                'default'   => 'image.iphpt.com', //你的七牛域名
+                'https'     => 'image.iphpt.com',         //你的HTTPS域名
+                'custom'    => 'image.iphpt.com',     //你的自定义域名
+            ],
+            'access_key'=> env('QINIUACCESSKEY'),  //AccessKey
+            'secret_key'=> env('QINIUSECRETKEY'),  //SecretKey
+            'bucket'    => env('QINIUBUCKET','image'),  //Bucket名字
+            'notify_url'=> env('QINIUNOTIFYURL',''),  //持久化处理回调地址
+        ],
+
     ],
 
 ];

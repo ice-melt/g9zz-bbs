@@ -16,8 +16,10 @@ class ConsoleLoginRequest extends BaseRequest
     public function rules()
     {
         $rule = [
-            'email' => 'required|email|exists:users,email,status,activited',
-            'password' => 'required|string'
+            'email' => 'required|email|exists:users,email,status,activated',
+            'password' => 'required|string',
+            'captcha' => 'required',
+//            'x-auth-uuid' => 'required'
         ];
         return $rule;
     }

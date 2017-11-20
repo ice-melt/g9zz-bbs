@@ -5,10 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Requests\Auth\MyRegisterRequest;
 use App\Services\Auth\RegisterService;
 use App\Services\Auth\UserService;
-use App\Transformers\UserTransformer;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use League\Fractal\Resource\Item;
 
 class MyRegisterController extends Controller
 {
@@ -34,8 +31,8 @@ class MyRegisterController extends Controller
     public function store(MyRegisterRequest $request)
     {
         $result = $this->registerService->store($request);
-        $resource = new Item($result,new UserTransformer());
-        $this->setData($resource);
+        $this->setData($result);
+        $this->setCode(200);
         return $this->response();
     }
 

@@ -81,4 +81,16 @@ class ReplyController extends Controller
         $result = $this->replyService->hidDelete($hid);
         if ($result) return $this->response();
     }
+
+    /**
+     * @param $hid
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function block($hid)
+    {
+        $result = $this->replyService->blockReply($hid);
+        $resource = new Item($result,new ReplyTransformer());
+        $this->setData($resource);
+        return $this->response();
+    }
 }

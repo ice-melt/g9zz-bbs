@@ -38,13 +38,16 @@ class G9zz
 
         $token = Hashids::connection('console_token')->decode($g9zz);
         if (empty($token) || !is_array($token) || count($token) < 2) {
+            $this->log('header.error to '.__METHOD__,['error_message' => '[g9zz中间件]token错误']);
             $code = config('validation.token')['token.invalid'];
             return $this->handleRes($code);
         }
 
         $id = $token[0];
         $user = $this->userService->findUserByToken($id);
+        $this->log('header.request to '.__METHOD__,['user' => $user]);
         if (empty($user)) {
+            $this->log('header.error to '.__METHOD__,['error_message' => '[g9zz中间件]用户不存在']);
             $code = config('validation.token')['token.invalid'];
             return $this->handleRes($code);
         }
@@ -53,6 +56,7 @@ class G9zz
         $beginTime = $token[1];
         $limitTime = config('g9zz.token.valid_time');
         if ($now - $beginTime > $limitTime) {
+            $this->log('header.error to '.__METHOD__,['error_message' => '[g9zz中间件]token失效']);
             $code = config('validation.token')['token.invalid'];
             return $this->handleRes($code);
         }

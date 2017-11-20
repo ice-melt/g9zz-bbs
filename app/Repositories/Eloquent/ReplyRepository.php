@@ -27,4 +27,16 @@ class ReplyRepository extends BaseRepository implements ReplyRepositoryInterface
     {
         return $this->model->whereIsBlocked('no');
     }
+
+    /**
+     * @param $postHid
+     * @return mixed
+     */
+    public function getReply($postHid)
+    {
+        return $this->models()
+            ->wherePostHid($postHid)
+            ->orderBy('created_at','asc')
+            ->paginate(per_page(100));
+    }
 }

@@ -16,15 +16,19 @@ class ReplyTransformer extends BaseTransformer
 {
     public function transform(Replies $replies)
     {
+        $page = \Request::get('page') ? \Request::get('page') : 1;
+        $limit = per_page();
+        $i = ($page - 1) * $limit + 1;
         $return = [
+            'floor' => $i+1,
             'hid' => $replies->hid,
             'source' => $replies->source,
 //            'post_id' ,
 //            'user_id',
-//            'is_blocked',
+            'isBlocked' => $replies->is_blocked,
 //            'voteCount' => $replies->vote_count,
-            'content' => $replies->body,
-            'contentOriginal' => $replies->body_original,
+            'content' => $replies->is_blocked == 'yes' ? '该条因为一些原因被block,望周知' : $replies->body,
+            'contentOriginal' => $replies->is_blocked == 'yes' ? '该条因为一些原因被block,望周知' : $replies->body_original,
             'createdAt' => rfc_3339($replies->created_at),
             'created' => $replies->created_at->diffForHumans()
         ];
@@ -37,11 +41,19 @@ class ReplyTransformer extends BaseTransformer
         }
 
         if ($replies->user_hid) {
-            $return['user'] = [
-                'hid' => isset($replies->user->hid) ? $replies->user->hid : null,
-                'name' => isset($replies->user->name) ? $replies->user->name : null,
-                'avatar' => isset($replies->user->avatar) ? $replies->user->avatar : null
-            ];
+            if ($replies->is_blocked == 'yes') {
+                $return['user'] = [
+                    'hid' => config('g9zz.official.hid'),
+                    'name' => config('g9zz.official.name'),
+                    'avatar' => config('g9zz.official.avatar')
+                ];
+            } else {
+                $return['user'] = [
+                    'hid' => isset($replies->user->hid) ? $replies->user->hid : null,
+                    'name' => isset($replies->user->name) ? $replies->user->name : null,
+                    'avatar' => isset($replies->user->avatar) ? $replies->user->avatar : null
+                ];
+            }
         }
         return $return;
     }

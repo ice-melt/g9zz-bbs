@@ -18,7 +18,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         'Illuminate\Database\Events\QueryExecuted' => [
             'App\Listeners\QueryListener'
-        ]
+        ],
+        'SocialiteProviders\Manager\SocialiteWasCalled' => [
+            'SocialiteProviders\Weibo\WeiboExtendSocialite@handle',
+        ],
     ];
 
     /**
