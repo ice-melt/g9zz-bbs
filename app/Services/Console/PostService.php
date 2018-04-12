@@ -102,21 +102,24 @@ class PostService extends BaseService
     }
 
     /**
-     * @param $request
+     * @param Request $request
      * @return mixed
      */
     public function store($request)
     {
-        $create = [
-            'title' => $request->get('title'),
-            'body_original' => $request->get('content')
-        ];
+        $create = $request->only(['title','content','source']);
         if (!empty($request->get('isTop'))) $create['is_top'] = $request->get('isTop')== 'yes' ? 'yes' :'no';
 
         $create['user_hid'] = $request->get('g9zz_user_hid');
         $parser = new Parser();
         $create['content'] = $parser->makeHtml($create['body_original']);
         $this->log('service.request to '.__METHOD__,['create' => $create]);
+
+        if (!empty($create['source'])) {
+            if (in_array($create['source'],config('g9zz.via'))) {
+                $create['source'] = config('g9zz.via.'.$create['source']);
+            }
+        }
 
         try {
             \DB::beginTransaction();

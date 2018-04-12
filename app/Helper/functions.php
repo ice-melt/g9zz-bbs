@@ -36,9 +36,9 @@ if (!function_exists('string_parse_input')) {
  * 默认分页数
  */
 if (!function_exists('per_page')) {
-    function per_page($default = 20) {
+    function per_page($default = 50) {
         $limit = \Request::get('limit');
-        $limit = isset($limit) ? $limit : 20;
+        $limit = isset($limit) ? $limit : 50;
         return $default < $limit ? $default : $limit;
     }
 }
