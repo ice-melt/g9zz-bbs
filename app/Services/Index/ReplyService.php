@@ -49,7 +49,12 @@ class ReplyService extends BaseService
      */
     public function store($request)
     {
-        $create = $request->only(['postHid','g9zz_user_hid','content','source']);
+        $create = [
+            'post_hid' => $request->get('postHid'),
+            'user_hid' => $request->get('g9zz_user_hid'),
+            'body_original' => $request->get('content'),
+            'source' => $request->get('source'),
+        ];
         $this->log('"service.log" to listener "' . __METHOD__ . '".', ['request' => $create]);
 
         $parse = new Parser();
