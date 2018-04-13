@@ -18,6 +18,7 @@ use App\Repositories\Contracts\ReplyRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Services\BaseService;
 use HyperDown\Parser;
+use Illuminate\Http\Request;
 use Vinkla\Hashids\Facades\Hashids;
 
 class ReplyService extends BaseService
@@ -43,17 +44,13 @@ class ReplyService extends BaseService
     }
 
     /**
-     * @param $request
+     * @param Request $request
      * @return mixed
      */
     public function store($request)
     {
-        $create = [
-            'post_hid' => $request->get('postHid'),
-            'user_hid' => $request->get('g9zz_user_hid'),
-            'body_original' => $request->get('content'),
-//            'at_ids' => $request->get('atIds'),
-        ];
+        $create = $request->only(['postHid','g9zz_user_hid','content','source']);
+        $this->log('"service.log" to listener "' . __METHOD__ . '".', ['request' => $create]);
 
         $parse = new Parser();
         $body = $parse->makeHtml($create['body_original']);
@@ -80,6 +77,11 @@ class ReplyService extends BaseService
         }
 
         $create['body'] = $body;
+        if (!empty($create['source'])) {
+            if (in_array($create['source'],config('g9zz.via'))) {
+                $create['source'] = config('g9zz.via.'.$create['source']);
+            }
+        }
         try {
             \DB::beginTransaction();
             $result = $this->replyRepository->create($create);
