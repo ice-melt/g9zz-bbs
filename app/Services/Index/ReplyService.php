@@ -82,6 +82,13 @@ class ReplyService extends BaseService
         }
 
         $create['body'] = $body;
+        $this->log('"service.log" to listener "' . __METHOD__ . '".', [
+            'create_source' => $create['source'],
+            'in_array' => in_array($create['source'],config('g9zz.via')),
+            'note' => config('g9zz.via'),
+            'note2' => config('g9zz.via')[$create['source']]
+        ]);
+
         if (!empty($create['source'])) {
             if (in_array($create['source'],config('g9zz.via'))) {
                 $create['source'] = config('g9zz.via')[$create['source']];
