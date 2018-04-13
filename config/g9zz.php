@@ -62,7 +62,7 @@ return [
         'avatar' => ['jpg','png','jpeg']
     ],
     'via' => [
-        'miniProgram' => 'http://image.iphpt.com/via_miniprogram3.png.png',
+        'miniProgram' => 'http://image.iphpt.com/via_miniprogram3.png',
         'apple' => 'http://image.iphpt.com/via_apple.png',
         'windows' => 'http://image.iphpt.com/via_windows.png',
         'android' => 'http://image.iphpt.com/via_android.png',
