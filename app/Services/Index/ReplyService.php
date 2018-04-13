@@ -90,7 +90,7 @@ class ReplyService extends BaseService
         ]);
 
         if (!empty($create['source'])) {
-            if (in_array($create['source'],config('g9zz.via'))) {
+            if (!empty(config('g9zz.via')[$create['source']])) {
                 $create['source'] = config('g9zz.via')[$create['source']];
             } else {
                 $create['source'] = '';

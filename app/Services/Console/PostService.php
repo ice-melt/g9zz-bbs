@@ -116,8 +116,10 @@ class PostService extends BaseService
         $this->log('service.request to '.__METHOD__,['create' => $create]);
 
         if (!empty($create['source'])) {
-            if (in_array($create['source'],config('g9zz.via'))) {
-                $create['source'] = config('g9zz.via.'.$create['source']);
+            if (!empty(config('g9zz.via')[$create['source']])) {
+                $create['source'] = config('g9zz.via')[$create['source']];
+            } else {
+                $create['source'] = '';
             }
         }
 
