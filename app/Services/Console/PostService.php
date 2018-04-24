@@ -109,7 +109,8 @@ class PostService extends BaseService
     {
         $create = $request->only(['title','content','source']);
         if (!empty($request->get('isTop'))) $create['is_top'] = $request->get('isTop')== 'yes' ? 'yes' :'no';
-
+        $create['body_original'] = $create['content'];
+        
         $create['user_hid'] = $request->get('g9zz_user_hid');
         $parser = new Parser();
         $create['content'] = $parser->makeHtml($create['body_original']);
