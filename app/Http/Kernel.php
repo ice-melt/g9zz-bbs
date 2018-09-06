@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AccessControlAllowOrigin;
 use App\Http\Middleware\CaptchaMiddleware;
 use App\Http\Middleware\G9zz;
 use App\Http\Middleware\IdDecode;
@@ -22,6 +23,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        AccessControlAllowOrigin::class,
     ];
 
     /**
