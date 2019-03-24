@@ -20,3 +20,14 @@
 - [x] `验证码`
 - 
     
+
+##  知乎上看到的项目，先fork
+https://www.zhihu.com/question/67171606/answer/249999064
+目前测试基本功能阶段 G9ZZ
+后端用的是 Laravel5.4,因为当时5.5还没出来!
+前台页面 用的是 ElementUI,后台用的是 Iview的UI组件! 都是vue的,
+前后端分离的后台过段时间再发吧!
+后端PHP代码:g9zz/g9zz-bbs
+前台代码: g9zz/g9zz-ele-index
+后台代码: g9zz/yeluo-iview-backend
+然后六月份顺手写了一个小程序版本:g9zz/g9zz-xcx
